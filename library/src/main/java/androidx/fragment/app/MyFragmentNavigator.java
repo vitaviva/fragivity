@@ -31,7 +31,10 @@ import androidx.navigation.fragment.FragmentNavigator;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import static androidx.fragment.app.FragmentTransaction.OP_ADD;
 
 @Navigator.Name("ignore")
 public class MyFragmentNavigator extends FragmentNavigator {
@@ -98,14 +101,10 @@ public class MyFragmentNavigator extends FragmentNavigator {
         }
 
         //ft.replace(mContainerId, frag)
-
         ft.add(mContainerId, frag, generateBackStackName(mBackStack.size(), destination.getId()));
-        Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
-        if (fragment != null) {
-            mFragmentManager.hideFragment(fragment);
-//            ft.hide(fragment);
-        }
 
+        final Fragment preFrag = mFragmentManager.getPrimaryNavigationFragment();
+//
         ft.setPrimaryNavigationFragment(frag);
 
         final @IdRes int destId = destination.getId();
@@ -121,15 +120,28 @@ public class MyFragmentNavigator extends FragmentNavigator {
         } else if (isSingleTopReplacement) {
             // Single Top means we only want one instance on the back stack
             if (mBackStack.size() > 1) {
-                // If the Fragment to be replaced is on the FragmentManager's
-                // back stack, a simple replace() isn't enough so we
-                // remove it from the back stack and put our replacement
-                // on the back stack in its place
-                mFragmentManager.popBackStack(
-                        generateBackStackName(mBackStack.size(), mBackStack.peekLast()),
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                ft.addToBackStack(generateBackStackName(mBackStack.size(), destId));
-                mIsPendingBackStackOperation = true;
+//                // If the Fragment to be replaced is on the FragmentManager's
+//                // back stack, a simple replace() isn't enough so we
+//                // remove it from the back stack and put our replacement
+//                // on the back stack in its place
+//                mFragmentManager.popBackStack(
+//                        generateBackStackName(mBackStack.size(), mBackStack.peekLast()),
+//                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                ft.addToBackStack(generateBackStackName(mBackStack.size(), destId));
+
+
+                // Don't use mFragmentManager.removeFragment(fragment) because of animation
+//                mFragmentManager.removeFragment(preFrag);
+                ft.remove(preFrag);
+                if (mFragmentManager.mBackStack.size() > 0) {
+                    List<FragmentTransaction.Op> ops =
+                            mFragmentManager.mBackStack.get(mFragmentManager.mBackStack.size() - 1).mOps;
+                    for (FragmentTransaction.Op op : ops) {
+                        if (op.mCmd == OP_ADD && op.mFragment == preFrag) {
+                            op.mFragment = frag;
+                        }
+                    }
+                }
             }
             isAdded = false;
         } else {
@@ -137,6 +149,13 @@ public class MyFragmentNavigator extends FragmentNavigator {
             mIsPendingBackStackOperation = true;
             isAdded = true;
         }
+
+        if (isAdded) {
+            if (preFrag != null) {
+                ft.hide(preFrag);
+            }
+        }
+
         if (navigatorExtras instanceof Extras) {
             Extras extras = (Extras) navigatorExtras;
             for (Map.Entry<View, String> sharedElement : extras.getSharedElements().entrySet()) {
@@ -213,7 +232,6 @@ public class MyFragmentNavigator extends FragmentNavigator {
                                 fragment.performPause();
                                 fragment.performStop();
                                 ((ReportFragment) fragment).setShow(false);
-                                mFragmentManager.hideFragment(fragment);
                             }
                         }
                         return;

@@ -60,10 +60,15 @@ internal fun NavHostFragment.showFragmentStackHierarchyView(context: Context) {
         )
 
         var res = "NavGraph "
-        navController.mBackStack.forEach {
-            it.destination.let { des ->
+
+        check(childFragmentManager.fragments.size == navController.mBackStack.size - 1) {
+            "childFragmentManager.fragments.size != mBackStack.size"
+        }
+        navController.mBackStack.forEachIndexed { index, entry ->
+            entry.destination.let { des ->
                 if (des is FragmentNavigator.Destination) {
-                    res += "\n +- ${des.className}:${des.id}"
+                    val frag = childFragmentManager.fragments[index - 1]
+                    res += "\n +- ${des.className}\n     [tag]${frag.tag}  [hash]${frag.hashCode()}"
                 }
             }
         }

@@ -23,12 +23,12 @@ class HomeFragment : AbsBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btn_standard.setOnClickListener {
+        btn_playground.setOnClickListener {
             push(FirstFragment::class)
         }
 
-        btn_singletop.setOnClickListener {
-            push(SecondFragment::class)
+        btn_launchmode.setOnClickListener {
+            push(LaunchModeFragment::class)
         }
 
     }

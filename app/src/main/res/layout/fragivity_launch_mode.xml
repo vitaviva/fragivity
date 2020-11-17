@@ -2,25 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <TextView
-        style="@style/DemoTitle"
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Fragivity Sample" />
+        style="@style/DemoTitle"
+        android:text="Launch Mode"/>
 
     <Button
         android:id="@+id/btn_playground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Playground" />
+        android:text="standard"/>
+
 
     <Button
         android:id="@+id/btn_launchmode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Launch Mode" />
+        android:text="single top"/>
 
+    <Button
+        android:id="@+id/btn_singletask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="single task"/>
 
 </LinearLayout>
