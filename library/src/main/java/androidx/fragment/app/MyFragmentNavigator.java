@@ -100,7 +100,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
             ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim);
         }
 
-        //ft.replace(mContainerId, frag)
+//        ft.replace(mContainerId, frag);
         ft.add(mContainerId, frag, generateBackStackName(mBackStack.size(), destination.getId()));
 
         final Fragment preFrag = mFragmentManager.getPrimaryNavigationFragment();

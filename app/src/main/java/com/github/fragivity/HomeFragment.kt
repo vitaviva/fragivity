@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.fragivity.listscreen.Leaderboard
 import com.my.example.R
 import kotlinx.android.synthetic.main.freenav_fragment_home.*
 
@@ -29,6 +30,10 @@ class HomeFragment : AbsBaseFragment() {
 
         btn_launchmode.setOnClickListener {
             push(LaunchModeFragment::class)
+        }
+
+        btn_transition.setOnClickListener {
+            push(Leaderboard::class)
         }
 
     }

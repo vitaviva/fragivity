@@ -22,5 +22,9 @@
         android:layout_height="wrap_content"
         android:text="Launch Mode" />
 
-
+    <Button
+        android:id="@+id/btn_transition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Transition" />
 </LinearLayout>

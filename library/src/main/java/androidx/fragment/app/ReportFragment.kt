@@ -2,6 +2,7 @@ package androidx.fragment.app
 
 import android.content.Context
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,7 +51,8 @@ class ReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.report_layout, container, false)
-
+        sharedElementEnterTransition = _realFragment.sharedElementEnterTransition
+        sharedElementReturnTransition = _realFragment.sharedElementReturnTransition
         return view
     }
 

@@ -1,6 +1,7 @@
 package com.github.fragivity
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentProvider
 import androidx.fragment.app.MyFragmentNavigator
@@ -12,23 +13,23 @@ import androidx.navigation.fragment.findNavController
 import kotlin.reflect.KClass
 
 
-object nav_graph {
-
-    const val id = 1 // graph id
-
-    object dest {
-        const val home = 2
-        const val first = 3
-    }
-
-    object action {
-        const val to_first = 4
-    }
-
-    object args {
-        const val plant_id = "plantId"
-    }
-}
+//object nav_graph {
+//
+//    const val id = 1 // graph id
+//
+//    object dest {
+//        const val home = 2
+//        const val first = 3
+//    }
+//
+//    object action {
+//        const val to_first = 4
+//    }
+//
+//    object args {
+//        const val plant_id = "plantId"
+//    }
+//}
 
 fun NavController.putFragment(clazz: KClass<out Fragment>): FragmentNavigator.Destination {
     val destId = clazz.hashCode()
@@ -57,6 +58,7 @@ fun NavController.putFragment(clazz: KClass<out Fragment>): FragmentNavigator.De
 fun Fragment.push(
     clazz: KClass<out Fragment>,
     args: Bundle? = null,
+    extras: Navigator.Extras? = null,
     optionsBuilder: NavOptions.Builder.() -> Unit = {}
 ) {
 
@@ -71,6 +73,23 @@ fun Fragment.push(
     )
 }
 
+fun View.push(
+    clazz: KClass<out Fragment>,
+    args: Bundle? = null,
+    extras: Navigator.Extras? = null,
+    optionsBuilder: NavOptions.Builder.() -> Unit = {}
+) {
+    val controller = this.findNavController()
+
+    val node = controller.putFragment(clazz)
+
+    controller.navigate(
+        node.id, args,
+        NavOptions.Builder().apply(optionsBuilder).build(),
+        extras
+    )
+
+}
 
 inline fun <reified T : Fragment> Fragment.push(
     noinline optionsBuilder: NavOptions.Builder.() -> Unit = {},
@@ -116,20 +135,21 @@ fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>, id: Int) {
             )
         )
         val startDestId = clazz.hashCode()
-        graph = createGraph(nav_graph.id, startDestId) {
+        graph = createGraph(startDestination = startDestId) {
 
-            destination(FragmentNavigatorDestinationBuilder(
-                provider[MyFragmentNavigator::class],
-                startDestId,
-                clazz
-            ).apply {
+            destination(
+                FragmentNavigatorDestinationBuilder(
+                    provider[MyFragmentNavigator::class],
+                    startDestId,
+                    clazz
+                ).apply {
                 label = "home"
-                argument(nav_graph.args.plant_id) {
-                    type = NavType.StringType
-                }
-                action(nav_graph.action.to_first) {
-                    destinationId = nav_graph.dest.first
-                }
+//                argument(nav_graph.args.plant_id) {
+//                    type = NavType.StringType
+//                }
+//                action(nav_graph.action.to_first) {
+//                    destinationId = nav_graph.dest.first
+//                }
             })
 
         }
