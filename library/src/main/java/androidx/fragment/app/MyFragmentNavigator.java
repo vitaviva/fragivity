@@ -41,14 +41,11 @@ public class MyFragmentNavigator extends FragmentNavigator {
     private static final String TAG = "MyFragmentNavigator";
     private static final String KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds";
 
-    @SuppressWarnings("WeakerAccess") /* synthetic access */
-            ArrayDeque<Integer> mBackStack = new ArrayDeque<>();
-    @SuppressWarnings("WeakerAccess") /* synthetic access */
-            boolean mIsPendingBackStackOperation = false;
-
+    private ArrayDeque<Integer> mBackStack = new ArrayDeque<>();
+    private boolean mIsPendingAddToBackStackOperation = false;
+    private boolean mIsPendingPopBackStackOperation = false;
 
     private final Context mContext;
-    @SuppressWarnings("WeakerAccess") /* synthetic access */
     private final FragmentManager mFragmentManager;
     private final int mContainerId;
 
@@ -58,6 +55,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
         mContext = context;
         mFragmentManager = manager;
         mContainerId = containerId;
+        mFragmentManager.addOnBackStackChangedListener(mOnBackStackChangedListener);
     }
 
     @NonNull
@@ -104,7 +102,6 @@ public class MyFragmentNavigator extends FragmentNavigator {
         ft.add(mContainerId, frag, generateBackStackName(mBackStack.size(), destination.getId()));
 
         final Fragment preFrag = mFragmentManager.getPrimaryNavigationFragment();
-//
         ft.setPrimaryNavigationFragment(frag);
 
         final @IdRes int destId = destination.getId();
@@ -146,7 +143,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
             isAdded = false;
         } else {
             ft.addToBackStack(generateBackStackName(mBackStack.size() + 1, destId));
-            mIsPendingBackStackOperation = true;
+            mIsPendingAddToBackStackOperation = true;
             isAdded = true;
         }
 
@@ -195,23 +192,12 @@ public class MyFragmentNavigator extends FragmentNavigator {
             mFragmentManager.popBackStack(
                     generateBackStackName(mBackStack.size(), mBackStack.peekLast()),
                     FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            mIsPendingBackStackOperation = true;
+            mIsPendingPopBackStackOperation = true;
         } // else, we're on the first Fragment, so there's nothing to pop from FragmentManager
         mBackStack.removeLast();
 
         return true;
 
-    }
-
-    @Override
-    protected void onBackPressAdded() {
-        super.onBackPressAdded();
-        mFragmentManager.addOnBackStackChangedListener(mOnBackStackChangedListener);
-    }
-
-    @Override
-    protected void onBackPressRemoved() {
-        mFragmentManager.removeOnBackStackChangedListener(mOnBackStackChangedListener);
     }
 
 
@@ -222,8 +208,8 @@ public class MyFragmentNavigator extends FragmentNavigator {
                 public void onBackStackChanged() {
                     // If we have pending operations made by us then consume this change, otherwise
                     // detect a pop in the back stack to dispatch callback.
-                    if (mIsPendingBackStackOperation) {
-                        mIsPendingBackStackOperation = !isBackStackEqual();
+                    if (mIsPendingAddToBackStackOperation) {
+                        mIsPendingAddToBackStackOperation = !isBackStackEqual();
 
                         if (mFragmentManager.getFragments().size() > 1) {
                             // 切到后台时的生命周期
@@ -234,21 +220,8 @@ public class MyFragmentNavigator extends FragmentNavigator {
                                 ((ReportFragment) fragment).setShow(false);
                             }
                         }
-                        return;
-                    }
-
-                    // The initial Fragment won't be on the back stack, so the
-                    // real count of destinations is the back stack entry count + 1
-                    int newCount = mFragmentManager.getBackStackEntryCount() + 1;
-
-                    if (newCount < mBackStack.size()) {
-                        // Handle cases where the user hit the system back button
-                        while (mBackStack.size() > newCount) {
-                            mBackStack.removeLast();
-                        }
-                        dispatchOnNavigatorBackPress();
-
-
+                    } else if (mIsPendingPopBackStackOperation) {
+                        mIsPendingPopBackStackOperation = !isBackStackEqual();
                         // 回到前台时的生命周期
                         Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
                         if (fragment instanceof ReportFragment) {

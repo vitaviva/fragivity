@@ -27,4 +27,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Transition" />
+
+    <Button
+        android:id="@+id/btn_deeplink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Deep link" />
+
+    <Button
+        android:id="@+id/btn_communication"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Communication" />
+
+    <Button
+        android:id="@+id/btn_backpress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back Pressed" />
+
+    <Button
+        android:id="@+id/btn_swipeback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Swipe Back" />
 </LinearLayout>
