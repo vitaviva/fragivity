@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.fragivity.deeplink.sendNotification
 import com.github.fragivity.listscreen.Leaderboard
 import com.my.example.R
 import kotlinx.android.synthetic.main.freenav_fragment_home.*
@@ -36,6 +37,10 @@ class HomeFragment : AbsBaseFragment() {
             push(Leaderboard::class)
         }
 
+        btn_deeplink.setOnClickListener {
+            context?.sendNotification()
+            finish()
+        }
     }
 
 }

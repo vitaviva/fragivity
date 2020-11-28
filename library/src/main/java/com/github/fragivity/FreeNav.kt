@@ -10,6 +10,7 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.github.fragivity.deeplink.getRouteUri
 import kotlin.reflect.KClass
 
 
@@ -41,9 +42,11 @@ fun NavController.putFragment(clazz: KClass<out Fragment>): FragmentNavigator.De
             clazz
         ).apply {
             label = clazz.qualifiedName
-//                argument(nav_graph.args.plant_id) {
-//                    type = NavType.StringType
-//                }
+            getRouteUri(clazz)?.let {
+                deepLink {
+                    uriPattern = it
+                }
+            }
         }).build()
         graph.plusAssign(destination)
     } else {
@@ -121,6 +124,14 @@ fun Fragment.pop() {
 
 
 /**
+ * finish Activity
+ */
+fun Fragment.finish() {
+    requireActivity().finish()
+}
+
+
+/**
  * load root fragment
  */
 fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>, id: Int) {
@@ -143,20 +154,19 @@ fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>, id: Int) {
                     startDestId,
                     clazz
                 ).apply {
-                label = "home"
+                    label = "home"
 //                argument(nav_graph.args.plant_id) {
 //                    type = NavType.StringType
 //                }
 //                action(nav_graph.action.to_first) {
 //                    destinationId = nav_graph.dest.first
 //                }
-            })
+                })
 
         }
 
     }
 }
-
 
 //class GardenActivity : AppCompatActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {

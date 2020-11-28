@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        style="@style/DemoTitle"
+        style="@style/SampleTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="first" />

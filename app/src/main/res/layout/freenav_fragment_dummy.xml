@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/title"
-        style="@style/DemoTitle"
+        style="@style/SampleTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

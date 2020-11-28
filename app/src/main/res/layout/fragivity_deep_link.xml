@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <TextView
-        style="@style/SampleTitle"
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="first first" />
+        style="@style/SampleTitle"
+        android:text="Deep links"/>
 
     <TextView
-        android:id="@+id/from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/back"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="back" />
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        style="@style/SampleDescription"
+        android:text="This sample showcases how to implement a deep link with fragivity"/>
 
 </LinearLayout>
