@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.fragivity.backpress.BackPressFragment
 import com.github.fragivity.deeplink.sendNotification
 import com.github.fragivity.listscreen.Leaderboard
 import com.my.example.R
@@ -40,6 +41,10 @@ class HomeFragment : AbsBaseFragment() {
         btn_deeplink.setOnClickListener {
             context?.sendNotification()
             finish()
+        }
+
+        btn_backpress.setOnClickListener {
+            push(BackPressFragment::class)
         }
     }
 

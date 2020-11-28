@@ -33,7 +33,7 @@
     <style name="SampleDescription">
         <item name="android:layout_marginStart">24dp</item>
         <item name="android:layout_marginEnd">24dp</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">36dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textSize">18dp</item>
     </style>

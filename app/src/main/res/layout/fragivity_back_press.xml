@@ -11,12 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/SampleTitle"
-        android:text="Deep Links"/>
+        android:text="Back Press"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         style="@style/SampleDescription"
-        android:text="This sample showcases how to implement a deep link with fragivity"/>
+        android:text="Pressing back will not return immediately, but show a toast"/>
 
 </LinearLayout>
