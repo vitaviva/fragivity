@@ -51,4 +51,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Swipe Back" />
+
+
+    <Button
+        android:id="@+id/btn_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dialog" />
 </LinearLayout>

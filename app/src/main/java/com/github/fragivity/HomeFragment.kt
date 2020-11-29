@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.fragivity.backpress.BackPressFragment
 import com.github.fragivity.communicate.CommFragment
-import com.github.fragivity.communicate.viewmodel.CheckListFragment
 import com.github.fragivity.deeplink.sendNotification
+import com.github.fragivity.dialog.DialogFragment
+import com.github.fragivity.dialog.showDialog
 import com.github.fragivity.listscreen.Leaderboard
 import com.github.fragivity.swipeback.SwipeBackFragment
 import com.my.example.R
@@ -56,6 +57,10 @@ class HomeFragment : AbsBaseFragment() {
 
         btn_swipeback.setOnClickListener {
             push(SwipeBackFragment::class)
+        }
+
+        btn_dialog.setOnClickListener {
+            showDialog(DialogFragment::class)
         }
     }
 

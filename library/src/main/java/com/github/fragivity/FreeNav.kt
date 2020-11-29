@@ -7,10 +7,7 @@ import android.view.View
 import androidx.annotation.Nullable
 import androidx.fragment.app.*
 import androidx.navigation.*
-import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.*
 import com.github.fragivity.deeplink.getRouteUri
 import kotlin.reflect.KClass
 
@@ -33,7 +30,8 @@ import kotlin.reflect.KClass
 //    }
 //}
 
-fun NavController.putFragment(clazz: KClass<out Fragment>): FragmentNavigator.Destination {
+@PublishedApi
+internal fun NavController.putFragment(clazz: KClass<out Fragment>): FragmentNavigator.Destination {
     val destId = clazz.hashCode()
     lateinit var destination: FragmentNavigator.Destination
     if (graph.findNode(destId) == null) {
@@ -56,22 +54,37 @@ fun NavController.putFragment(clazz: KClass<out Fragment>): FragmentNavigator.De
     return destination
 }
 
+
+internal fun NavController.putDialog(clazz: KClass<out DialogFragment>): DialogFragmentNavigator.Destination {
+    val destId = clazz.hashCode()
+    lateinit var destination: DialogFragmentNavigator.Destination
+    if (graph.findNode(destId) == null) {
+        destination = (DialogFragmentNavigatorDestinationBuilder(
+            navigatorProvider[DialogFragmentNavigator::class],
+            destId,
+            clazz
+        ).apply {
+            label = clazz.qualifiedName
+        }).build()
+        graph.plusAssign(destination)
+    } else {
+        destination = graph.findNode(destId) as DialogFragmentNavigator.Destination
+    }
+    return destination
+}
+
 /**
- * push a fragment to back stack
+ * Navigates to fragment of [clazz] by pushing it to back stack
  */
 fun Fragment.push(
     clazz: KClass<out Fragment>,
     args: Bundle? = null,
     extras: Navigator.Extras? = null,
     optionsBuilder: NavOptions.Builder.() -> Unit = {}
-) {
-
-    val controller = parentFragment!!.findNavController()
-
-    controller.putFragment(this::class)
-    val node = controller.putFragment(clazz)
-
-    controller.navigate(
+) = with(parentFragment!!.findNavController()) {
+    putFragment(this@push::class)
+    val node = putFragment(clazz)
+    navigate(
         node.id, args,
         NavOptions.Builder().apply(optionsBuilder).build()
     )
