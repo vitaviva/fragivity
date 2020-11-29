@@ -1,6 +1,13 @@
 package androidx.fragment.app
 
 internal class ReportFragmentManager : FragmentManager() {
+
+    init {
+        addOnBackStackChangedListener {
+            if (mBackStack.size > 1) throw IllegalStateException("ReportFragmentManager can't hold fragment more than one ")
+        }
+    }
+
     internal var isShow = true
     public override fun dispatchResume() {
         if (isShow) super.dispatchResume()

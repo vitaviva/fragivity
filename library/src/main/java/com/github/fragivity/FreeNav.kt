@@ -1,10 +1,11 @@
+@file:JvmName("Fragivity")
+
 package com.github.fragivity
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentProvider
-import androidx.fragment.app.MyFragmentNavigator
+import androidx.annotation.Nullable
+import androidx.fragment.app.*
 import androidx.navigation.*
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
@@ -166,6 +167,17 @@ fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>, id: Int) {
         }
 
     }
+}
+
+
+fun Fragment.requireParentFragmentManager() =
+    if (parentFragment is ReportFragment) parentFragment!!.parentFragmentManager else parentFragmentManager
+
+
+fun Fragment.requirePreviousFragment(): Fragment? {
+    val fragmentList: List<Fragment> = requireParentFragmentManager().fragments
+    val index = fragmentList.indexOf(parentFragment)
+    return if (index > 0) fragmentList[index - 1].childFragmentManager.fragments[0] else null
 }
 
 //class GardenActivity : AppCompatActivity() {

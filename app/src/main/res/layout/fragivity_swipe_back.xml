@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/SampleTitle"
+        android:text="Swipe Back"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/SampleDescription"
+        android:text="This is a showcase of Showing swipe-back from framgent"/>
+
+    <RadioGroup
+        android:id="@+id/swipe_enable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="40dp">
+
+        <RadioButton
+            android:id="@+id/swipe_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Swipe On"/>
+
+        <RadioButton
+            android:id="@+id/swipe_off"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Swipe Off"
+            android:checked="true"/>
+    </RadioGroup>
+
+</LinearLayout>

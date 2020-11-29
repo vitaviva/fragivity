@@ -2,18 +2,15 @@ package androidx.fragment.app
 
 import android.content.Context
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.fragivity.R
+import com.github.fragivity.swipeback.SwipeBackLayout
 
-/**
- * @author wangpeng.rocky@bytedance.com
- */
-class ReportFragment : Fragment() {
+internal class ReportFragment : Fragment() {
 
-    lateinit var className: String
+    internal lateinit var className: String
 
     private val _real: Class<out Fragment> by lazy {
         Class.forName(className) as Class<out Fragment>
@@ -23,6 +20,8 @@ class ReportFragment : Fragment() {
         FragmentProvider[className]?.invoke().also { FragmentProvider.remove(className) }
             ?: _real.newInstance()
     }
+
+    internal lateinit var _swipeBackLayout: SwipeBackLayout
 
     init {
         mChildFragmentManager = ReportFragmentManager()
@@ -50,12 +49,23 @@ class ReportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.report_layout, container, false)
+        _swipeBackLayout =
+            SwipeBackLayout(requireContext()).apply {
+                attachToFragment(
+                    this@ReportFragment,
+                    inflater.inflate(R.layout.report_layout, container, false)
+                )
+                setEnableGesture(false) //default false
+            }
         sharedElementEnterTransition = _realFragment.sharedElementEnterTransition
         sharedElementReturnTransition = _realFragment.sharedElementReturnTransition
-        return view
+        return _swipeBackLayout
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _swipeBackLayout.internalCallOnDestroyView()
+    }
 //    override fun onActivityCreated(savedInstanceState: Bundle?) {
 //        mChildFragmentManager.beginTransaction().apply {
 //            _realFragment.arguments = savedInstanceState

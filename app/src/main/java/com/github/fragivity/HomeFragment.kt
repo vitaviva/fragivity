@@ -9,6 +9,7 @@ import com.github.fragivity.communicate.CommFragment
 import com.github.fragivity.communicate.viewmodel.CheckListFragment
 import com.github.fragivity.deeplink.sendNotification
 import com.github.fragivity.listscreen.Leaderboard
+import com.github.fragivity.swipeback.SwipeBackFragment
 import com.my.example.R
 import kotlinx.android.synthetic.main.freenav_fragment_home.*
 
@@ -51,6 +52,10 @@ class HomeFragment : AbsBaseFragment() {
 
         btn_communication.setOnClickListener {
             push(CommFragment::class)
+        }
+
+        btn_swipeback.setOnClickListener {
+            push(SwipeBackFragment::class)
         }
     }
 

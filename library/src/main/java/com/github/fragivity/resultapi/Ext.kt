@@ -3,7 +3,7 @@ package com.github.fragivity.resultapi
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
-import androidx.fragment.app.ReportFragment
+import com.github.fragivity.requireParentFragmentManager
 
 /**
  * Sets the given result for the [requestKey]. This result will be delivered to a
@@ -17,14 +17,10 @@ import androidx.fragment.app.ReportFragment
  * @param result the result to be passed to another fragment or `null` if you want to
  *               clear out any pending result.
  */
-
-val Fragment.requireParentFragmentManager
-    get() = if (parentFragment is ReportFragment) parentFragment!!.parentFragmentManager else parentFragmentManager
-
 fun Fragment.setFragmentResult(
     requestKey: String,
     result: Bundle
-) = requireParentFragmentManager.setFragmentResult(requestKey, result)
+) = requireParentFragmentManager().setFragmentResult(requestKey, result)
 
 /**
  * Clears the stored result for the given requestKey.
@@ -38,7 +34,7 @@ fun Fragment.setFragmentResult(
  */
 fun Fragment.clearFragmentResult(
     requestKey: String
-) = requireParentFragmentManager.clearFragmentResult(requestKey)
+) = requireParentFragmentManager().clearFragmentResult(requestKey)
 
 /**
  * Sets the [FragmentResultListener] for a given [requestKey]. Once this Fragment is
@@ -56,7 +52,7 @@ fun Fragment.setFragmentResultListener(
     requestKey: String,
     listener: ((requestKey: String, bundle: Bundle) -> Unit)
 ) {
-    requireParentFragmentManager.setFragmentResultListener(
+    requireParentFragmentManager().setFragmentResultListener(
         requestKey,
         this,
         FragmentResultListener { requestKey, result -> listener(requestKey, result) })
@@ -75,4 +71,4 @@ fun Fragment.setFragmentResultListener(
  */
 fun Fragment.clearFragmentResultListener(
     requestKey: String
-) = requireParentFragmentManager.clearFragmentResultListener(requestKey)
+) = requireParentFragmentManager().clearFragmentResultListener(requestKey)
