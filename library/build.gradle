@@ -55,6 +55,6 @@ dependencies {
 
 configurations.all {
     resolutionStrategy {
-        force "androidx.fragment:fragment:$fragment_version"
+        force "androidx.fragment:fragment:1.3.0-beta01" //for compiling with result api
     }
 }

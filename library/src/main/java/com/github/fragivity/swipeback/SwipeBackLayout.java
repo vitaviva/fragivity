@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 import androidx.fragment.app.Fragment;
@@ -95,7 +96,7 @@ public class SwipeBackLayout extends FrameLayout {
     private Rect mTmpRect = new Rect();
 
     private int mEdgeFlag;
-    private boolean mEnable = true;
+    private Boolean mEnable = null;
     private int mCurrentSwipeOrientation;
     private float mParallaxOffset = DEFAULT_PARALLAX;
 
@@ -391,7 +392,7 @@ public class SwipeBackLayout extends FrameLayout {
         mContentView = view;
     }
 
-    public void setEnableGesture(boolean enable) {
+    public void setEnableGesture(@Nullable Boolean enable) {
         mEnable = enable;
     }
 
@@ -573,7 +574,10 @@ public class SwipeBackLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (!mEnable) return super.onInterceptTouchEvent(ev);
+        boolean enable = mEnable != null ?
+                mEnable : com.github.fragivity.swipeback.Fragivity.getEnableSwipeBack();
+        if (!enable)
+            return super.onInterceptTouchEvent(ev);
         try {
             return mHelper.shouldInterceptTouchEvent(ev);
         } catch (Exception ignored) {
@@ -584,7 +588,8 @@ public class SwipeBackLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!mEnable) return super.onTouchEvent(event);
+        if (!mEnable && !com.github.fragivity.swipeback.Fragivity.getEnableSwipeBack())
+            return super.onTouchEvent(event);
         try {
             mHelper.processTouchEvent(event);
             return true;
