@@ -1,6 +1,7 @@
 package androidx.fragment.app
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,8 @@ internal class ReportFragment : Fragment() {
                 attachToFragment(
                     this@ReportFragment,
                     inflater.inflate(R.layout.report_layout, container, false)
+                        .apply { appendBackground() } // add a default background color to make it opaque
+
                 )
                 setEnableGesture(false) //default false
             }
@@ -66,6 +69,15 @@ internal class ReportFragment : Fragment() {
         super.onDestroyView()
         _swipeBackLayout.internalCallOnDestroyView()
     }
+
+    private fun View.appendBackground() {
+        val a: TypedArray =
+            requireActivity().theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground))
+        val background = a.getResourceId(0, 0)
+        a.recycle()
+        setBackgroundResource(background)
+    }
+
 //    override fun onActivityCreated(savedInstanceState: Bundle?) {
 //        mChildFragmentManager.beginTransaction().apply {
 //            _realFragment.arguments = savedInstanceState
