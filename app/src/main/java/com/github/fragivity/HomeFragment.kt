@@ -10,6 +10,7 @@ import com.github.fragivity.deeplink.sendNotification
 import com.github.fragivity.dialog.DialogFragment
 import com.github.fragivity.dialog.showDialog
 import com.github.fragivity.listscreen.Leaderboard
+import com.github.fragivity.nested.NestedFragment
 import com.github.fragivity.swipeback.SwipeBackFragment
 import com.my.example.R
 import kotlinx.android.synthetic.main.freenav_fragment_home.*
@@ -61,6 +62,10 @@ class HomeFragment : AbsBaseFragment() {
 
         btn_dialog.setOnClickListener {
             showDialog(DialogFragment::class)
+        }
+
+        btn_nested.setOnClickListener {
+            push(NestedFragment::class)
         }
     }
 

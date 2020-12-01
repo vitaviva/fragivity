@@ -10,52 +10,71 @@
         android:layout_height="wrap_content"
         android:text="Fragivity Sample" />
 
-    <Button
-        android:id="@+id/btn_playground"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Playground" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_launchmode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Launch Mode" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_transition"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Transition" />
+            <Button
+                android:id="@+id/btn_playground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Playground" />
 
-    <Button
-        android:id="@+id/btn_deeplink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Deep link" />
+            <Button
+                android:id="@+id/btn_launchmode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Launch Mode" />
 
-    <Button
-        android:id="@+id/btn_communication"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Communication" />
+            <Button
+                android:id="@+id/btn_transition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transition" />
 
-    <Button
-        android:id="@+id/btn_backpress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back Pressed" />
+            <Button
+                android:id="@+id/btn_deeplink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deep link" />
 
-    <Button
-        android:id="@+id/btn_swipeback"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Swipe Back" />
+            <Button
+                android:id="@+id/btn_communication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Communication" />
+
+            <Button
+                android:id="@+id/btn_backpress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Back Pressed" />
+
+            <Button
+                android:id="@+id/btn_swipeback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Swipe Back" />
 
 
-    <Button
-        android:id="@+id/btn_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Dialog" />
+            <Button
+                android:id="@+id/btn_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dialog" />
+
+
+            <Button
+                android:id="@+id/btn_nested"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nested" />
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
