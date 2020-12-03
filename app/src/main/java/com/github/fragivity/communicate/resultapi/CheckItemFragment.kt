@@ -39,6 +39,9 @@ class CheckItemFragment : AbsBaseFragment() {
         setFragmentResult(REQUEST_KEY, bundleOf(RESULT_KEY to Item(_id, _check)))
     }
 
+    override val titleName: String?
+        get() = "Communication"
+
     companion object {
         const val ARGUMENTS_ID = "id"
         const val ARGUMENTS_CHECKED = "checked"

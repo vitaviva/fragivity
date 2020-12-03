@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.freenav_fragment_home.*
 /**
  * @author wangpeng.rocky@bytedance.com
  */
-class HomeFragment : AbsBaseFragment() {
+class HomeFragment : AbsBaseFragment(false) {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,5 +68,9 @@ class HomeFragment : AbsBaseFragment() {
             push(NestedFragment::class)
         }
     }
+
+    override var titleName: String?
+        get() = "Fragivity"
+        set(value) {}
 
 }

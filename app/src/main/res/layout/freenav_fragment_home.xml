@@ -4,11 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/SampleTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fragivity Sample" />
+    <include layout="@layout/title_bar" />
 
     <ScrollView
         android:layout_width="match_parent"

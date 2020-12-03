@@ -30,5 +30,8 @@ class CheckItemFragment(
             _cb(_id, isChecked)
         }
     }
+
+    override val titleName: String?
+        get() = "Communication"
 }
 

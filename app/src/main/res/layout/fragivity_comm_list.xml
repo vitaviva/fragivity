@@ -6,12 +6,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/SampleTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Communication" />
+    <include layout="@layout/title_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"

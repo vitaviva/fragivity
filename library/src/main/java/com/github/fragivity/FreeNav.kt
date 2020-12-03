@@ -81,7 +81,7 @@ fun Fragment.push(
     args: Bundle? = null,
     extras: Navigator.Extras? = null,
     optionsBuilder: NavOptions.Builder.() -> Unit = {}
-) = with(parentFragment!!.findNavController()) {
+) = with(requireParentFragment().findNavController()) {
     putFragment(this@push::class)
     val node = putFragment(clazz)
     navigate(
@@ -114,7 +114,7 @@ inline fun <reified T : Fragment> Fragment.push(
 ) {
 
     val type = object : TypeToken<T>() {}.type
-    val controller = parentFragment!!.findNavController()
+    val controller = requireParentFragment().findNavController()
 
     controller.putFragment(this::class)
     val node = controller.putFragment((type as Class<out Fragment>).kotlin)
@@ -132,7 +132,7 @@ inline fun <reified T : Fragment> Fragment.push(
  * pop current fragment from back stack
  */
 fun Fragment.pop() {
-    val controller = parentFragment!!.findNavController()
+    val controller = requireParentFragment().findNavController()
     controller.popBackStack()
 }
 
@@ -184,7 +184,7 @@ fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>, id: Int) {
 
 
 fun Fragment.requireParentFragmentManager() =
-    if (parentFragment is ReportFragment) parentFragment!!.parentFragmentManager else parentFragmentManager
+    if (parentFragment is ReportFragment) requireParentFragment().parentFragmentManager else parentFragmentManager
 
 
 fun Fragment.requirePreviousFragment(): Fragment? {

@@ -25,4 +25,7 @@ class SwipeBackFragment : AbsBaseFragment() {
             swipeBackLayout.setEnableGesture(checkedId == R.id.swipe_on)
         }
     }
+
+    override val titleName: String?
+        get() = "Swipe Back"
 }

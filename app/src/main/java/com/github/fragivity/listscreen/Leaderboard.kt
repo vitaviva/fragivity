@@ -35,6 +35,7 @@ import com.my.example.R
  * Shows a static leaderboard with multiple users.
  */
 class Leaderboard : AbsBaseFragment() {
+    override val titleName: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

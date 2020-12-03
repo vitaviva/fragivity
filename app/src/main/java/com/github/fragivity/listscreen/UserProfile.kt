@@ -38,6 +38,9 @@ class UserProfile : AbsBaseFragment() {
 
     }
 
+    override val titleName: String?
+        get() = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 

@@ -29,4 +29,7 @@ class NestedFragment : AbsBaseFragment() {
 
         navHostFragment.loadRoot(HomeFragment::class, R.id.nav_nested_host)
     }
+
+    override val titleName: String?
+        get() = "Nested"
 }

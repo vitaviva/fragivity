@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/title_name"
+        style="@style/SampleTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fragivity Sample" />
+
+    <TextView
+        android:id="@+id/title_back"
+        style="@style/SampleTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0"
+        android:text="🔙"
+        android:visibility="gone"/>
+</FrameLayout>

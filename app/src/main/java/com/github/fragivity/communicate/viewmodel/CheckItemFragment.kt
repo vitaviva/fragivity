@@ -31,6 +31,9 @@ class CheckItemFragment : AbsBaseFragment() {
         }
     }
 
+    override val titleName: String?
+        get() = "Communication"
+
     companion object {
         const val ARGUMENTS_ID = "id"
         const val ARGUMENTS_CHECKED = "checked"

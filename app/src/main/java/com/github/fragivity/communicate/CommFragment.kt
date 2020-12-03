@@ -35,4 +35,7 @@ class CommFragment : AbsBaseFragment() {
             push(com.github.fragivity.communicate.callback.CheckListFragment::class)
         }
     }
+
+    override val titleName: String?
+        get() = "Communication"
 }

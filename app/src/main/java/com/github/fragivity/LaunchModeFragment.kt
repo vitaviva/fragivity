@@ -24,8 +24,6 @@ class LaunchModeFragment : AbsBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        arguments?.getString(FirstFirstFragment.ARGUMENTS_FROM)?.let { title.text = it }
-
         btn_playground.setOnClickListener {
             val bundle = bundleOf(FirstFirstFragment.ARGUMENTS_FROM to "Launched by Standard")
             push(LaunchModeFragment::class, bundle) {
@@ -48,4 +46,8 @@ class LaunchModeFragment : AbsBaseFragment() {
 //            }
         }
     }
+
+    override val titleName: String?
+        get() = "Launch Mode"
+
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.my.example.R
 import kotlinx.android.synthetic.main.freenav_fragment_first_first.back
 import kotlinx.android.synthetic.main.freenav_fragment_dummy.*
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.freenav_fragment_dummy.*
 class DummyFragment(
     private val _title: String = "DummyFragment",
     private val _next: DummyFragment.() -> Unit = {}
-) : AbsBaseFragment() {
+) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

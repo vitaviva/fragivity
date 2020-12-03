@@ -22,6 +22,8 @@ const val URI = "myapp://fragitiy.github.com/"
 
 @DeepLink(uri = URI)
 class DeepLinkFragment : AbsBaseFragment() {
+    override val titleName: String?
+        get() = "Deep Links"
 
     override fun onCreateView(
         inflater: LayoutInflater,

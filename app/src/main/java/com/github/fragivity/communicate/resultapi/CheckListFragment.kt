@@ -51,6 +51,9 @@ class CheckListFragment : AbsBaseFragment() {
         }
     }
 
+    override val titleName: String?
+        get() = "Communication"
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

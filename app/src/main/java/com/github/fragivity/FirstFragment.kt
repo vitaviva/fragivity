@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import com.github.fragivity.FirstFirstFragment.Companion.ARGUMENTS_FROM
 import com.my.example.R
 import kotlinx.android.synthetic.main.freenav_fragment_first.*
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.freenav_fragment_first.*
 /**
  * @author wangpeng.rocky@bytedance.com
  */
-class FirstFragment : AbsBaseFragment() {
+class FirstFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

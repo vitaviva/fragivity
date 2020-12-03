@@ -58,4 +58,7 @@ class CheckListFragment : AbsBaseFragment() {
             }
         })
     }
+
+    override val titleName: String?
+        get() = "Communication"
 }

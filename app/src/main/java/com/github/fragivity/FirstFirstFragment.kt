@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.my.example.R
 import kotlinx.android.synthetic.main.freenav_fragment_first_first.*
-import java.lang.RuntimeException
 
 /**
  * @author wangpeng.rocky@bytedance.com
  */
-class FirstFirstFragment : AbsBaseFragment() {
+class FirstFirstFragment : Fragment() {
 
     companion object {
         const val ARGUMENTS_FROM = "from"

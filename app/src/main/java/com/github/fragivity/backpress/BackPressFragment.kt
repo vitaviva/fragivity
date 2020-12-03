@@ -47,4 +47,7 @@ class BackPressFragment : AbsBaseFragment() {
         cb.remove() //not necessary
     }
 
+    override val titleName: String?
+        get() = "Back Press"
+
 }
