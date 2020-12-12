@@ -1,4 +1,4 @@
-package com.github.fragivity
+package com.github.fragivity.launchmode
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.my.example.R
-import kotlinx.android.synthetic.main.freenav_fragment_first_first.back
-import kotlinx.android.synthetic.main.freenav_fragment_dummy.*
+import kotlinx.android.synthetic.main.fragment_tonext.*
+import kotlinx.android.synthetic.main.title_bar.*
 
 /**
  * @author wangpeng.rocky@bytedance.com
  */
-class DummyFragment(
-    private val _title: String = "DummyFragment",
-    private val _next: DummyFragment.() -> Unit = {}
+class ToNextFragment(
+    private val _title: String = "ToNextFragment",
+    private val _next: ToNextFragment.() -> Unit = {}
 ) : Fragment() {
 
     override fun onCreateView(
@@ -22,17 +22,13 @@ class DummyFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.freenav_fragment_dummy, container, false)
+        return inflater.inflate(R.layout.fragment_tonext, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        back.setOnClickListener {
-            pop()
-        }
-
+        title_name.text = _title
         next.setOnClickListener { _next.invoke(this) }
 
-        title.text = _title
     }
 }

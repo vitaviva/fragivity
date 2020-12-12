@@ -4,7 +4,6 @@ package com.github.fragivity
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.Nullable
 import androidx.fragment.app.*
 import androidx.navigation.*
 import androidx.navigation.fragment.*
@@ -80,13 +79,14 @@ fun Fragment.push(
     clazz: KClass<out Fragment>,
     args: Bundle? = null,
     extras: Navigator.Extras? = null,
-    optionsBuilder: NavOptions.Builder.() -> Unit = {}
+    optionsBuilder: NavOptions.() -> Unit = {}
 ) = with(requireParentFragment().findNavController()) {
     putFragment(this@push::class)
     val node = putFragment(clazz)
     navigate(
         node.id, args,
-        NavOptions.Builder().apply(optionsBuilder).build()
+        convertNavOptions(clazz, NavOptions().apply(optionsBuilder)),
+        extras
     )
 }
 
@@ -94,22 +94,21 @@ fun View.push(
     clazz: KClass<out Fragment>,
     args: Bundle? = null,
     extras: Navigator.Extras? = null,
-    optionsBuilder: NavOptions.Builder.() -> Unit = {}
+    optionsBuilder: NavOptions.() -> Unit = {}
 ) {
     val controller = this.findNavController()
-
     val node = controller.putFragment(clazz)
 
     controller.navigate(
         node.id, args,
-        NavOptions.Builder().apply(optionsBuilder).build(),
+        convertNavOptions(clazz, NavOptions().apply(optionsBuilder)),
         extras
     )
 
 }
 
 inline fun <reified T : Fragment> Fragment.push(
-    noinline optionsBuilder: NavOptions.Builder.() -> Unit = {},
+    noinline optionsBuilder: NavOptions.() -> Unit = {},
     noinline block: () -> T
 ) {
 
@@ -123,7 +122,7 @@ inline fun <reified T : Fragment> Fragment.push(
 
     controller.navigate(
         node.id, null,
-        NavOptions.Builder().apply(optionsBuilder).build()
+        convertNavOptions(T::class, NavOptions().apply(optionsBuilder))
     )
 }
 
@@ -134,6 +133,15 @@ inline fun <reified T : Fragment> Fragment.push(
 fun Fragment.pop() {
     val controller = requireParentFragment().findNavController()
     controller.popBackStack()
+}
+
+
+/**
+ * Pop back stack to [clazz]
+ */
+fun Fragment.popTo(clazz: KClass<out Fragment>) {
+    val controller = requireParentFragment().findNavController()
+    controller.popBackStack(clazz.hashCode(), false)
 }
 
 
@@ -192,59 +200,3 @@ fun Fragment.requirePreviousFragment(): Fragment? {
     val index = fragmentList.indexOf(parentFragment)
     return if (index > 0) fragmentList[index - 1].childFragmentManager.fragments[0] else null
 }
-
-//class GardenActivity : AppCompatActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//
-////        action(nav_graph.action.to_plant_detail) {
-////            destinationId = nav_graph.dest.plant_detail
-////            navOptions {
-////                anim {
-////                    enter = R.anim.nav_default_enter_anim
-////                    exit = R.anim.nav_default_exit_anim
-////                    popEnter = R.anim.nav_default_pop_enter_anim
-////                    popExit = R.anim.nav_default_pop_exit_anim
-////                }
-////                popUpTo(nav_graph.dest.start_dest) {
-////                    inclusive = true // default false
-////                }
-////                // if popping exclusively, you can specify popUpTo as
-////                // a property. e.g. popUpTo = nav_graph.dest.start_dest
-////                launchSingleTop = true // default false
-////            }
-////        }
-//
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_garden)
-//
-//        val navHostFragment = supportFragmentManager
-//            .findFragmentById(R.id.nav_host) as NavHostFragment
-//
-//        navHostFragment.navController.apply {
-//            graph = createGraph(nav_graph.id, nav_graph.dest.home) {
-//                fragment<HomeViewPagerFragment>(nav_graph.dest.home) {
-//                    label = getString(R.string.home_title)
-//                    action(to_plant_detail) {
-//                        destinationId = nav_graph.dest.plant_detail
-//                    }
-//                }
-//                fragment<PlantDetailFragment>(nav_graph.dest.plant_detail) {
-//                    label = getString(R.string.plant_detail_title)
-//                    argument(nav_graph.args.plant_id) {
-//                        type = NavType.StringType
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun navigateToPlant(plantId: String) {
-//
-//        val args = bundleOf(nav_graph.args.plant_id to plantId)
-//
-//        findNavController().navigate(to_plant_detail, args)
-//    }
-//
-//}
-
-

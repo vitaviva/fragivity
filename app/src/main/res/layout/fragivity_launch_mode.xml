@@ -8,14 +8,14 @@
     <include layout="@layout/title_bar"/>
 
     <Button
-        android:id="@+id/btn_playground"
+        android:id="@+id/btn_standard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="standard"/>
 
 
     <Button
-        android:id="@+id/btn_launchmode"
+        android:id="@+id/btn_singletop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="single top"/>
@@ -25,5 +25,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="single task"/>
+
+
+    <Button
+        android:id="@+id/btn_poptohome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PopBack To Home"/>
 
 </LinearLayout>

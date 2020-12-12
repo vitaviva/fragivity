@@ -1,19 +1,18 @@
 package com.github.fragivity
 
-import androidx.navigation.NavOptions
 import com.my.example.R
 
-fun NavOptions.Builder.applySlideInOut() {
-    setEnterAnim(R.anim.slide_in)
-    setExitAnim(R.anim.slide_out)
-    setPopEnterAnim(R.anim.slide_in_pop)
-    setPopExitAnim(R.anim.slide_out_pop)
+fun NavOptions.applySlideInOut() {
+    enterAnim = R.anim.slide_in
+    exitAnim = R.anim.slide_out
+    popEnterAnim = R.anim.slide_in_pop
+    popExitAnim = R.anim.slide_out_pop
 }
 
 
-fun NavOptions.Builder.applyFadeInOut() {
-    setEnterAnim(R.anim.nav_default_enter_anim)
-    setExitAnim(R.anim.nav_default_exit_anim)
-    setPopEnterAnim(R.anim.nav_default_enter_anim)
-    setPopExitAnim(R.anim.nav_default_exit_anim)
+fun NavOptions.applyFadeInOut() {
+    enterAnim = R.anim.nav_default_enter_anim
+    exitAnim = R.anim.nav_default_exit_anim
+    popEnterAnim = R.anim.nav_default_enter_anim
+    popExitAnim = R.anim.nav_default_exit_anim
 }

@@ -29,19 +29,13 @@ class FirstFragment : Fragment() {
         val bundle = bundleOf(ARGUMENTS_FROM to this::class.java.simpleName)
         btn_first_first.setOnClickListener {
             push(FirstFirstFragment::class, bundle) {
-                setEnterAnim(R.anim.nav_default_enter_anim)
-                setExitAnim(R.anim.nav_default_exit_anim)
-                setPopEnterAnim(R.anim.nav_default_enter_anim)
-                setPopExitAnim(R.anim.nav_default_exit_anim)
+                applyFadeInOut()
             }
         }
 
         btn_first_second.setOnClickListener {
             push(FirstSecondFragment::class, bundle) {
-                setEnterAnim(R.anim.slide_in)
-                setExitAnim(R.anim.slide_out)
-                setPopEnterAnim(R.anim.slide_in_pop)
-                setPopExitAnim(R.anim.slide_out_pop)
+                applySlideInOut()
             }
         }
     }

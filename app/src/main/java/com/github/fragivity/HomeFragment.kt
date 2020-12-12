@@ -9,6 +9,7 @@ import com.github.fragivity.communicate.CommFragment
 import com.github.fragivity.deeplink.sendNotification
 import com.github.fragivity.dialog.DialogFragment
 import com.github.fragivity.dialog.showDialog
+import com.github.fragivity.launchmode.LaunchModeFragment
 import com.github.fragivity.listscreen.Leaderboard
 import com.github.fragivity.nested.NestedFragment
 import com.github.fragivity.swipeback.SwipeBackFragment
@@ -31,11 +32,11 @@ class HomeFragment : AbsBaseFragment(false) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btn_playground.setOnClickListener {
+        btn_standard.setOnClickListener {
             push(FirstFragment::class)
         }
 
-        btn_launchmode.setOnClickListener {
+        btn_singletop.setOnClickListener {
             push(LaunchModeFragment::class)
         }
 

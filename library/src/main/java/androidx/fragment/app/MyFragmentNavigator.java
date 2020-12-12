@@ -130,6 +130,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
                 // Don't use mFragmentManager.removeFragment(fragment) because of animation
 //                mFragmentManager.removeFragment(preFrag);
                 ft.remove(preFrag);
+                frag.mTag = generateBackStackName(mBackStack.size() - 1, destination.getId());
                 if (mFragmentManager.mBackStack.size() > 0) {
                     List<FragmentTransaction.Op> ops =
                             mFragmentManager.mBackStack.get(mFragmentManager.mBackStack.size() - 1).mOps;

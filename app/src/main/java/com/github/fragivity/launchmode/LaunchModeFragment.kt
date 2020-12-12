@@ -1,16 +1,14 @@
-package com.github.fragivity
+package com.github.fragivity.launchmode
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import com.github.fragivity.*
 import com.my.example.R
 import kotlinx.android.synthetic.main.fragivity_launch_mode.*
 
-/**
- * @author wangpeng.rocky@bytedance.com
- */
 class LaunchModeFragment : AbsBaseFragment() {
 
     override fun onCreateView(
@@ -24,26 +22,35 @@ class LaunchModeFragment : AbsBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btn_playground.setOnClickListener {
-            val bundle = bundleOf(FirstFirstFragment.ARGUMENTS_FROM to "Launched by Standard")
+        btn_standard.setOnClickListener {
+            val bundle = bundleOf(FirstFirstFragment.ARGUMENTS_FROM to "Launch with Standard")
             push(LaunchModeFragment::class, bundle) {
                 applySlideInOut()
             }
         }
 
-        btn_launchmode.setOnClickListener {
-            val bundle = bundleOf(FirstFirstFragment.ARGUMENTS_FROM to "Launched by SingleTop")
+        btn_singletop.setOnClickListener {
+            val bundle = bundleOf(FirstFirstFragment.ARGUMENTS_FROM to "Launch with SingleTop")
             push(LaunchModeFragment::class, bundle) {
-                setLaunchSingleTop(true)
+                launchMode = LaunchMode.SINGLE_TOP
                 applySlideInOut()
             }
-//            push {
-//                DummyFragment("from : ${this.javaClass.simpleName}") {
-//                    push(SecondFragment::class) {
-//                        setLaunchSingleTop(true)
-//                    }
-//                }
-//            }
+        }
+
+        btn_singletask.setOnClickListener {
+            val bundle = bundleOf(FirstFirstFragment.ARGUMENTS_FROM to "Launch with SingleTask")
+            push {
+                ToNextFragment {
+                    push(LaunchModeFragment::class, bundle) {
+                        launchMode = LaunchMode.SINGLE_TASK
+                        applySlideInOut()
+                    }
+                }
+            }
+        }
+
+        btn_poptohome.setOnClickListener {
+            popTo(HomeFragment::class)
         }
     }
 
