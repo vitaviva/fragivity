@@ -16,9 +16,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.R
 import kotlin.math.abs
 
-/**
- * @author wangpeng.rocky@bytedance.com
- */
 
 fun NavHostFragment.showDebugView(root: ViewGroup) {
     val context = root.context

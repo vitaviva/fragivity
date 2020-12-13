@@ -22,7 +22,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:context="com.github.fragivity.listscreen.UserProfile"
+    tools:context=".listscreen.UserProfile"
     tools:layout_editor_absoluteY="81dp">
 
     <ImageView
@@ -61,7 +61,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Ali Connors"
+        android:text="@string/profile_name_1"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="30sp"
