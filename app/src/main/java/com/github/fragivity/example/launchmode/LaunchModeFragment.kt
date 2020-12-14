@@ -10,6 +10,7 @@ import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.HomeFragment
 import com.github.fragivity.example.R
 import com.github.fragivity.example.applySlideInOut
+import com.github.fragivity.navigator
 import com.github.fragivity.popTo
 import com.github.fragivity.push
 import kotlinx.android.synthetic.main.fragment_launch_mode.*
@@ -29,14 +30,14 @@ class LaunchModeFragment : AbsBaseFragment() {
 
         btn_standard.setOnClickListener {
             val bundle = bundleOf(ARGUMENTS_FROM to "Launch with Standard")
-            push(LaunchModeFragment::class, bundle) {
+            navigator.push(LaunchModeFragment::class, bundle) {
                 applySlideInOut()
             }
         }
 
         btn_singletop.setOnClickListener {
             val bundle = bundleOf(ARGUMENTS_FROM to "Launch with SingleTop")
-            push(LaunchModeFragment::class, bundle) {
+            navigator.push(LaunchModeFragment::class, bundle) {
                 launchMode = LaunchMode.SINGLE_TOP
                 applySlideInOut()
             }
@@ -44,9 +45,9 @@ class LaunchModeFragment : AbsBaseFragment() {
 
         btn_singletask.setOnClickListener {
             val bundle = bundleOf(ARGUMENTS_FROM to "Launch with SingleTask")
-            push {
+            navigator.push {
                 ToNextFragment {
-                    push(LaunchModeFragment::class, bundle) {
+                    navigator.push(LaunchModeFragment::class, bundle) {
                         launchMode = LaunchMode.SINGLE_TASK
                         applySlideInOut()
                     }
@@ -55,7 +56,7 @@ class LaunchModeFragment : AbsBaseFragment() {
         }
 
         btn_poptohome.setOnClickListener {
-            popTo(HomeFragment::class)
+            navigator.popTo(HomeFragment::class)
         }
     }
 

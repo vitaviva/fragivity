@@ -14,6 +14,7 @@ import com.github.fragivity.example.communicate.Item
 import com.github.fragivity.example.communicate.originList
 import com.github.fragivity.example.communicate.resultapi.CheckItemFragment.Companion.REQUEST_KEY
 import com.github.fragivity.example.communicate.resultapi.CheckItemFragment.Companion.RESULT_KEY
+import com.github.fragivity.navigator
 import com.github.fragivity.push
 import com.github.fragivity.resultapi.setFragmentResultListener
 import kotlinx.android.synthetic.main.fragment_comm_list.*
@@ -23,7 +24,7 @@ class CheckListFragment : AbsBaseFragment() {
     private val _list = originList
     private val _adapter by lazy {
         CheckListAdapter { id, checked ->
-            push(
+            navigator.push(
                 CheckItemFragment::class,
                 bundleOf(
                     CheckItemFragment.ARGUMENTS_ID to id,

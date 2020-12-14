@@ -26,7 +26,7 @@ class NestedFragment : AbsBaseFragment() {
         val navHostFragment = childFragmentManager
             .findFragmentById(R.id.nav_nested_host) as NavHostFragment
 
-        navHostFragment.loadRoot(HomeFragment::class, R.id.nav_nested_host)
+        navHostFragment.loadRoot(HomeFragment::class)
     }
 
     override val titleName: String?

@@ -1,9 +1,12 @@
+@file:JvmName("NavHostUtil")
+
 package com.github.fragivity.deeplink
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.os.Handler
 import androidx.annotation.MainThread
+import androidx.navigation.NavHost
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.putFragment
 
@@ -14,7 +17,7 @@ private val _isRouteInit by lazy(LazyThreadSafetyMode.NONE) {
 }
 
 @MainThread
-fun NavHostFragment.handleDeepLink(intent: Intent) {
+fun NavHost.handleDeepLink(intent: Intent) {
 
     with(intent) {
         if (ACTION_VIEW == action && _isRouteInit) {

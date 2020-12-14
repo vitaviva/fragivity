@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
+import com.github.fragivity.navigator
 import com.github.fragivity.pop
 
 
@@ -21,7 +22,7 @@ class BackPressFragment : AbsBaseFragment() {
                     Toast.makeText(context, "Click again to return", Toast.LENGTH_SHORT).show()
                     extime = System.currentTimeMillis()
                 } else {
-                    pop()
+                    navigator.pop()
                 }
             }
         }

@@ -26,6 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
+import com.github.fragivity.navigator
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
 import com.github.fragivity.example.applySlideInOut
@@ -97,7 +98,7 @@ class MyAdapter(private val myDataset: Array<String>) :
         holder.item.setOnClickListener {
             val bundle = bundleOf(USERNAME_KEY to myDataset[position])
 
-            holder.item.push(
+            holder.item.navigator.push(
                 UserProfile::class,
                 bundle,
                 FragmentNavigatorExtras(imageView to "imageView")

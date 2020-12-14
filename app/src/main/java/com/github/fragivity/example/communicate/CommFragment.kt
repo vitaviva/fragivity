@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
+import com.github.fragivity.navigator
 import com.github.fragivity.push
 import kotlinx.android.synthetic.main.fragment_comm.*
 
@@ -24,15 +25,15 @@ class CommFragment : AbsBaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         btn_viewmodel.setOnClickListener {
-            push(com.github.fragivity.example.communicate.viewmodel.CheckListFragment::class)
+            navigator.push(com.github.fragivity.example.communicate.viewmodel.CheckListFragment::class)
         }
 
         btn_resultapi.setOnClickListener {
-            push(com.github.fragivity.example.communicate.resultapi.CheckListFragment::class)
+            navigator.push(com.github.fragivity.example.communicate.resultapi.CheckListFragment::class)
         }
 
         btn_callback.setOnClickListener {
-            push(com.github.fragivity.example.communicate.callback.CheckListFragment::class)
+            navigator.push(com.github.fragivity.example.communicate.callback.CheckListFragment::class)
         }
     }
 

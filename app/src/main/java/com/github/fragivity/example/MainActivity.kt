@@ -18,10 +18,9 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host) as NavHostFragment
 
-        navHostFragment.loadRoot(HomeFragment::class, R.id.nav_host)
+        navHostFragment.loadRoot(HomeFragment::class)
         navHostFragment.handleDeepLink(intent)
         navHostFragment.showDebugView(container)
-
 
     }
 }

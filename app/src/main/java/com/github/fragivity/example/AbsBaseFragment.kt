@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.github.fragivity.navigator
 import com.github.fragivity.pop
 import kotlinx.android.synthetic.main.title_bar.*
 
@@ -25,7 +26,7 @@ abstract class AbsBaseFragment(private val _supportBack: Boolean = true) : Fragm
             title_back?.let {
                 it.visibility = View.VISIBLE
                 it.setOnClickListener {
-                    pop()
+                    navigator.pop()
                 }
             }
         }

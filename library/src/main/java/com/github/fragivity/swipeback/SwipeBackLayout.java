@@ -20,8 +20,9 @@ import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavHost;
 
-import com.github.fragivity.Fragivity;
+import com.github.fragivity.NavHostUtil;
 import com.github.fragivity.R;
 
 import java.lang.annotation.Retention;
@@ -508,7 +509,8 @@ public class SwipeBackLayout extends FrameLayout {
 
                     if (!((Fragment) mFragment).isDetached()) {
                         onDragFinished();
-                        Fragivity.pop(mFragment);
+                        NavHost navHost = com.github.fragivity.Fragivity.getNavigator(mFragment);
+                        NavHostUtil.pop(navHost);
                     }
                 } else {
                     if (!mActivity.isFinishing()) {
