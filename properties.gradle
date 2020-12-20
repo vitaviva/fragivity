@@ -1,0 +1,12 @@
+ext.codeDepend = loadLocalProperties()
+
+boolean loadLocalProperties() {
+    File file = rootProject.file('local.properties')
+    if (file.exists()) {
+        Properties properties = new Properties()
+        properties.load(rootProject.file('local.properties').newDataInputStream())
+        return (properties.get("code_depend", 'true') == 'true')
+
+    }
+    return true
+}

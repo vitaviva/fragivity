@@ -1,1 +1,1 @@
-# Fragivity : use fragment instead of activity
+# Fragivity : Use Fragment like Activity
