@@ -3,9 +3,9 @@
 package com.github.fragivity
 
 import android.os.Bundle
-import androidx.fragment.app.FragivityNavigator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentProvider
+import androidx.fragment.app.MyFragmentNavigator
 import androidx.navigation.*
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
@@ -73,7 +73,7 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
 
     navController.apply {
         navigatorProvider.addNavigator(
-            FragivityNavigator(
+            MyFragmentNavigator(
                 context,
                 childFragmentManager,
                 id
@@ -84,7 +84,7 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
 
             destination(
                 FragmentNavigatorDestinationBuilder(
-                    provider[FragivityNavigator::class],
+                    provider[MyFragmentNavigator::class],
                     startDestId,
                     root
                 ).apply {
@@ -103,7 +103,7 @@ internal fun NavController.putFragment(clazz: KClass<out Fragment>): FragmentNav
     lateinit var destination: FragmentNavigator.Destination
     if (graph.findNode(destId) == null) {
         destination = (FragmentNavigatorDestinationBuilder(
-            navigatorProvider[FragivityNavigator::class],
+            navigatorProvider[MyFragmentNavigator::class],
             destId,
             clazz
         ).apply {

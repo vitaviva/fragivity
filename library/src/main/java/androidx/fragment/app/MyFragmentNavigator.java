@@ -35,9 +35,10 @@ import java.util.List;
 import java.util.Map;
 
 import static androidx.fragment.app.FragmentTransaction.OP_ADD;
+import static androidx.fragment.app.ReportFragment.REAL_FRAGMENT;
 
 @Navigator.Name("ignore")
-public class FragivityNavigator extends FragmentNavigator {
+public class MyFragmentNavigator extends FragmentNavigator {
     private static final String TAG = "FragivityNavigator";
     private static final String KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds";
 
@@ -49,8 +50,8 @@ public class FragivityNavigator extends FragmentNavigator {
     private final FragmentManager mFragmentManager;
     private final int mContainerId;
 
-    public FragivityNavigator(@NonNull Context context, @NonNull FragmentManager manager,
-                              int containerId) {
+    public MyFragmentNavigator(@NonNull Context context, @NonNull FragmentManager manager,
+                               int containerId) {
         super(context, manager, containerId);
         mContext = context;
         mFragmentManager = manager;
@@ -63,7 +64,12 @@ public class FragivityNavigator extends FragmentNavigator {
     public Fragment instantiateFragment(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull String className, @Nullable Bundle args) {
         Fragment fragment = super.instantiateFragment(context, fragmentManager, "androidx.fragment.app.ReportFragment", args);
         if (fragment instanceof ReportFragment) {
-            ((ReportFragment) fragment).className = className;
+            Bundle bundle = new Bundle();
+            bundle.putString(REAL_FRAGMENT, className);
+            if (args != null) bundle.putAll(args);
+            fragment.setArguments(bundle);
+        } else {
+            fragment.setArguments(args);
         }
         return fragment;
     }
@@ -83,7 +89,7 @@ public class FragivityNavigator extends FragmentNavigator {
         }
         final Fragment frag = instantiateFragment(mContext, mFragmentManager,
                 className, args);
-        frag.setArguments(args);
+//        frag.setArguments(args);
         final FragmentTransaction ft = mFragmentManager.beginTransaction();
 
         int enterAnim = navOptions != null ? navOptions.getEnterAnim() : -1;

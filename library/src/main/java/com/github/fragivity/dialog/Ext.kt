@@ -26,13 +26,13 @@ private fun NavController.putDialog(clazz: KClass<out DialogFragment>): DialogFr
     val destId = clazz.hashCode()
     lateinit var destination: DialogFragmentNavigator.Destination
     if (graph.findNode(destId) == null) {
-        destination = (DialogFragmentNavigatorDestinationBuilder(
+        destination = DialogFragmentNavigatorDestinationBuilder(
             navigatorProvider[DialogFragmentNavigator::class],
             destId,
             clazz
         ).apply {
             label = clazz.qualifiedName
-        }).build()
+        }.build()
         graph.plusAssign(destination)
     } else {
         destination = graph.findNode(destId) as DialogFragmentNavigator.Destination
