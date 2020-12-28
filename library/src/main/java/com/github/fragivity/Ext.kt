@@ -10,15 +10,15 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 
 val Fragment.navigator
-    get() = NavHost {
+    get() = MyNavHost(requireContext(), NavHost {
         val clazz = this::class
         requireParentFragment().findNavController().apply {
-            putFragment(clazz) //make sure the fragment in back stack
+            putFragment(requireActivity(), clazz) //make sure the fragment in back stack
         }
-    }
+    })
 
 val View.navigator
-    get() = NavHost { findNavController() }
+    get() = MyNavHost(context, NavHost { findNavController() })
 
 
 internal fun Fragment.requireParentFragmentManager() =

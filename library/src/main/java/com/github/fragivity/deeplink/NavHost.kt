@@ -8,6 +8,7 @@ import android.os.Handler
 import androidx.annotation.MainThread
 import androidx.navigation.NavHost
 import androidx.navigation.fragment.NavHostFragment
+import com.github.fragivity.MyNavHost
 import com.github.fragivity.putFragment
 
 private val _isRouteInit by lazy(LazyThreadSafetyMode.NONE) {
@@ -17,12 +18,12 @@ private val _isRouteInit by lazy(LazyThreadSafetyMode.NONE) {
 }
 
 @MainThread
-fun NavHost.handleDeepLink(intent: Intent) {
+fun NavHostFragment.handleDeepLink(intent: Intent) {
 
     with(intent) {
         if (ACTION_VIEW == action && _isRouteInit) {
             getFragmentInfo(data.toString())?.let {
-                navController.putFragment(it)
+                navController.putFragment(requireActivity(), it)
                 //post用来确保HomeFragment已进入fragmentManager，才能获取并对其进行hide
                 Handler().post { navController.navigate(data!!) }
             }
