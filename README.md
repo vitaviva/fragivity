@@ -1,7 +1,7 @@
 # Fragivity  :  Use Fragment like Activity
 ![Bintray](https://img.shields.io/bintray/v/vitaviva/maven/core)  ![Language](https://img.shields.io/badge/language-kotlin-green.svg)  ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-<img src="app/src/main/res/drawable-xxxhdpi/ic_launcher.png" width=150 align=right>
+<img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
 - **符合预期的Lifecycle：** 在页面跳转、返回等过程中，生命周期行为与Activity一致
 - **多种launchMode：** 支持Standard、SingleTop、SingleTask等多种LaunchMode
@@ -56,17 +56,17 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
-### 3. navigate to any target Fragment 
+### 3. navigate to destination Fragment 
 ```kotlin
 //in HomeFragment
-val bundle = bundleOf(KEY_ARGUMENT1 to "Hello", KEY_ARGUMENT2 to "World")
-navigator.push(TargetFragment::class, bundle)
+val bundle = bundleOf(KEY_ARGUMENT1 to "arg1", KEY_ARGUMENT2 to "arg2")
+navigator.push(DestinationFragment::class, bundle)
 ```
 
 ## Launch Mode
 Support multiple startup modes
 ```kotlin
-navigator.push(TargetFragment::class, bundle) {
+navigator.push(DestinationFragment::class, bundle) {
   launchMode = LaunchMode.STANDARD //default
   //launchMode = LaunchMode.SINGLE_TOP
   //launchMode = LaunchMode.SINGLE_TASK
@@ -82,11 +82,12 @@ navigator.push(LaunchModeFragment::class) {
     popExitAnim = R.anim.slide_out_pop
 }
 ```
-<img src="screenshot/transition.gif" width=200 align=left>
+<img src="screenshot/transition.gif" width=250 >
+
 
 ## Communication
 You can simply setup communication between two fragments
-### 1. start target Fragment with a callback
+### 1. start destination Fragment with a callback
 ```kotlin
 class HomeFragment : Fragment(){
   private val cb: (Int) -> Unit = { checked ->
@@ -96,14 +97,14 @@ class HomeFragment : Fragment(){
   //...
 
   navigator.push {
-      TargetFragment(cb)
+      DestinationFragment(cb)
   }
   //...
 }
 ```
 ### 2. callback to source Fragment
 ```kotlin
-class TargetFragment(val cb: (Int) -> Unit : Fragment() {
+class DestinationFragment(val cb: (Int) -> Unit : Fragment() {
     //...
     cb.invoke(xxx)
     //...
