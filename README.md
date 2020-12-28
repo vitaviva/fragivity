@@ -3,11 +3,13 @@
 
 <img src="app/src/main/res/drawable-xxxhdpi/ic_launcher.png" width=150 align=right>
 
-- 无需配置NavGraph即可实现页面跳转
-- 支持多种launchMode
-- 支持Transiton、SharedElement动画
-- Fragment之间更高效的通信方式
-- 支持backPress事件拦截、滑动返回
+- **符合预期的Lifecycle：** 在页面跳转、返回等过程中，生命周期行为与Activity一致
+- **多种launchMode：** 支持Standard、SingleTop、SingleTask等多种LaunchMode
+- **转场动画：** 支持Transition、SharedElement等动画方式实现页面跳转
+- **更高效的通信：** 可以基于Callback通信，简单直接
+- **BackPress：** 支持OnBackPressed事件拦截、支持滑动返回
+- **Deep Links：** 通过URI跳转到指定Fragment
+- **Dialog：** 支持DialogFragment显示
 
 
 ## Installation
@@ -80,7 +82,7 @@ navigator.push(LaunchModeFragment::class) {
     popExitAnim = R.anim.slide_out_pop
 }
 ```
-
+<img src="screenshot/transition.gif" width=200 align=left>
 
 ## Communication
 You can simply setup communication between two fragments
