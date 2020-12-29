@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import com.github.fragivity.R
 import com.github.fragivity.swipeback.SwipeBackLayout
 
 internal class ReportFragment : Fragment() {
+
+    private val _vm: FragmentViewModel by viewModels()
 
     private val className by lazy {
         requireNotNull(arguments?.getString(REAL_FRAGMENT))
@@ -19,12 +22,22 @@ internal class ReportFragment : Fragment() {
         Class.forName(className) as Class<out Fragment>
     }
 
-    private val _realFragment by lazy {
-        FragmentProvider[className]?.invoke().also { FragmentProvider.remove(className) }
-            ?: _real.newInstance()
-    }
+
+    internal val _realFragment: Fragment
+        get() {
+            return _vm.fragment ?: run {
+                val frag = FragmentProvider[className]?.invoke()
+                    .also { FragmentProvider.remove(className) }
+                    ?: _real.newInstance()
+                frag.apply {
+                    retainInstance = FRAGMENT_RETAIN_INSTANCE
+                }
+            }.also { _vm.fragment = it }
+        }
+
 
     internal lateinit var _swipeBackLayout: SwipeBackLayout
+
 
     init {
         mChildFragmentManager = ReportFragmentManager()
@@ -46,6 +59,7 @@ internal class ReportFragment : Fragment() {
             commitNow()
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,4 +98,13 @@ internal class ReportFragment : Fragment() {
         const val REAL_FRAGMENT = "real"
     }
 
+//    override fun performDetach() {
+//        super.performDetach()
+//        mChildFragmentManager = reportFragmentManager.apply { dispatchDestroy() }
+//    }
+
+
+    data class FragmentViewModel(var fragment: Fragment? = null) : ViewModel()
 }
+
+const val FRAGMENT_RETAIN_INSTANCE = true

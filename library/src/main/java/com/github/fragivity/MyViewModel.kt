@@ -18,3 +18,9 @@ internal fun FragmentActivity.saveToViewModel(destination: FragmentNavigator.Des
         }) return
     vm.nodes.put(destination.id, destination)
 }
+
+
+internal fun FragmentActivity.removeFromViewModel(id: Int) {
+    val vm = ViewModelProvider(this)[MyViewModel::class.java]
+    vm.nodes.remove(id)
+}

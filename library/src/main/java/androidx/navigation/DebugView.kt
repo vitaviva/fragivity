@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.ReportFragment
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.R
@@ -65,7 +66,7 @@ internal fun NavHostFragment.showFragmentStackHierarchyView(context: Context) {
             entry.destination.let { des ->
                 if (des is FragmentNavigator.Destination) {
                     val frag = childFragmentManager.fragments[index - 1]
-                    res += "\n +- ${des.className}\n     [tag]${frag.tag}  [hash]${frag.hashCode()}"
+                    res += "\n +- ${des.className}\n     [tag]${frag.tag}  [hash]${(frag as ReportFragment)._realFragment.hashCode()}"
                 }
             }
         }
