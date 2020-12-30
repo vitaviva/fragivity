@@ -54,10 +54,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
     implementation "androidx.fragment:fragment:$fragment_version"
     if (codeDepend) {
-        implementation project(path: ':library')
+        implementation 'com.github.fragivity:processor:0.1.0'
         implementation project(path: ':processor')
     } else {
-        implementation 'com.github.fragivity:core:0.1.0'
+        implementation 'com.github.fragivity:core:0.1.1'
         implementation project(path: ':processor')
     }
     testImplementation 'junit:junit:4.12'
