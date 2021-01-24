@@ -52,6 +52,9 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host) as NavHostFragment
 
         navHostFragment.loadRoot(HomeFragment::class)
+        
+        //or load root with factory
+        //navHostFragment.loadRoot{ HomeFragment() }
 
     }
 }
@@ -167,7 +170,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 4. start Activity with uri
+### 4. start Activity with URI
 
 ```kotlin
 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://fragitiy.github.com/"))
