@@ -48,21 +48,16 @@ fun MyNavHost.push(
     )
 }
 
-
+/**
+ * Navigates to a fragment by its factory
+ */
 inline fun <reified T : Fragment> MyNavHost.push(
     noinline optionsBuilder: NavOptions.() -> Unit = {},
     noinline block: () -> T
 ) {
-
-    val type = object : TypeToken<T>() {}.type
-    val node = navController.putFragment(requireActivity(), (type as Class<out Fragment>).kotlin)
-
-    FragmentProvider[type.name] = block
-
-    navController.navigate(
-        node.id, null,
-        convertNavOptions(T::class, NavOptions().apply(optionsBuilder))
-    )
+    val clazz = T::class
+    FragmentProvider[clazz.qualifiedName!!] = block
+    push(clazz, optionsBuilder = optionsBuilder)
 }
 
 
@@ -83,7 +78,7 @@ fun NavHost.popTo(clazz: KClass<out Fragment>) {
 
 
 /**
- * load root fragment
+ * Load root fragment
  */
 fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
     val context = activity ?: return
@@ -118,6 +113,17 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
         }
 
     }
+}
+
+/**
+ * Load root fragment by factory
+ */
+inline fun <reified T : Fragment> NavHostFragment.loadRoot(
+    noinline block: () -> T
+) {
+    val clazz = T::class
+    FragmentProvider[clazz.qualifiedName!!] = block
+    loadRoot(T::class)
 }
 
 

@@ -42,9 +42,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.2'
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"
-    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    api 'androidx.navigation:navigation-fragment:2.3.2'
+    api "androidx.navigation:navigation-fragment-ktx:2.3.2"
+    implementation 'androidx.navigation:navigation-ui:2.3.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
     testImplementation 'junit:junit:4.12'
@@ -61,7 +61,6 @@ configurations.all {
 }
 
 
-
 publish {
     userOrg = USER_ORG
     groupId = ARTIFACT_GROUP
@@ -69,6 +68,6 @@ publish {
     publishVersion = ARTIFACT_VERSION
     desc = 'Use Fragment like Activity'
     website = WEB_SITE
-    bintrayUser = BINTRAY_USER
-    bintrayKey = BINTRAY_KEY
+    bintrayUser = properties.get("BINTRAY_USER", "")
+    bintrayKey = properties.get("BINTRAY_KEY", "")
 }

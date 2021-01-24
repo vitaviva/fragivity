@@ -1,3 +1,7 @@
+
+## 0.1.2
+* Support loading root with factory 
+
 ## 0.1.1
 * Make Fragivity working when configuration changes
 
