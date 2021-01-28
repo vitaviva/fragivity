@@ -53,7 +53,9 @@ class HomeFragment : AbsBaseFragment(false) {
         }
 
         btn_swipeback.setOnClickListener {
-            navigator.push(SwipeBackFragment::class)
+            navigator.push(SwipeBackFragment::class) {
+                applySlideInOut()
+            }
         }
 
         btn_dialog.setOnClickListener {

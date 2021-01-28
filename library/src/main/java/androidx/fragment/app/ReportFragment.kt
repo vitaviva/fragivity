@@ -1,5 +1,7 @@
 package androidx.fragment.app
 
+import android.animation.Animator
+import android.animation.AnimatorInflater
 import android.content.Context
 import android.content.res.TypedArray
 import android.os.Bundle
@@ -22,7 +24,6 @@ internal class ReportFragment : Fragment() {
         Class.forName(className) as Class<out Fragment>
     }
 
-
     internal val _realFragment: Fragment
         get() {
             return _vm.fragment ?: run {
@@ -38,6 +39,10 @@ internal class ReportFragment : Fragment() {
 
     internal lateinit var _swipeBackLayout: SwipeBackLayout
 
+
+    //fix https://github.com/vitaviva/fragivity/issues/7
+    @JvmField
+    internal var disable_anim_once = false
 
     init {
         mChildFragmentManager = ReportFragmentManager()
@@ -94,17 +99,27 @@ internal class ReportFragment : Fragment() {
         setBackgroundResource(background)
     }
 
+    override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
+        if (nextAnim == 0) return super.onCreateAnimator(transit, enter, nextAnim)
+
+        if (disable_anim_once) {
+            disable_anim_once = false
+            val animator = AnimatorInflater.loadAnimator(context, R.animator.no_anim)
+            if (animator != null) {
+                return animator
+            }
+        }
+
+        return super.onCreateAnimator(transit, enter, nextAnim)
+
+    }
+
+    data class FragmentViewModel(var fragment: Fragment? = null) : ViewModel()
+
     internal companion object {
         const val REAL_FRAGMENT = "real"
     }
 
-//    override fun performDetach() {
-//        super.performDetach()
-//        mChildFragmentManager = reportFragmentManager.apply { dispatchDestroy() }
-//    }
-
-
-    data class FragmentViewModel(var fragment: Fragment? = null) : ViewModel()
 }
 
 const val FRAGMENT_RETAIN_INSTANCE = true

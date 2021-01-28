@@ -46,14 +46,16 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.activity:activity-ktx:1.2.0-rc01"
     implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
     if (codeDepend) {
         implementation project(':library')
         implementation project(':processor')
         kapt project(':processor')
     } else {
-        implementation 'com.github.fragivity:core:0.1.2'
+        implementation "com.github.fragivity:core:$ARTIFACT_VERSION"
         implementation 'com.github.fragivity:processor:0.1.0'
         kapt 'com.github.fragivity:processor:0.1.0'
     }

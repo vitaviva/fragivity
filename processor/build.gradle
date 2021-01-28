@@ -25,6 +25,6 @@ publish {
     publishVersion = ARTIFACT_VERSION
     desc = 'Use Fragment like Activity'
     website = WEB_SITE
-    bintrayUser = properties.get("BINTRAY_USER", "")
-    bintrayKey = properties.get("BINTRAY_KEY", "")
+    bintrayUser = BINTRAY_USER
+    bintrayKey = BINTRAY_KEY
 }

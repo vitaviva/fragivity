@@ -1,12 +1,9 @@
-ext.codeDepend = loadLocalProperties()
+File file = rootProject.file('local.properties')
 
-boolean loadLocalProperties() {
-    File file = rootProject.file('local.properties')
-    if (file.exists()) {
-        Properties properties = new Properties()
-        properties.load(rootProject.file('local.properties').newDataInputStream())
-        return (properties.get("code_depend", 'true') == 'true')
-
-    }
-    return true
+if (file.exists()) {
+    Properties properties = new Properties()
+    properties.load(rootProject.file('local.properties').newDataInputStream())
+    ext.codeDepend = (properties.get("code_depend", 'true') == 'true')
+    ext.BINTRAY_USER = properties.get("BINTRAY_USER", '')
+    ext.BINTRAY_KEY = properties.get("BINTRAY_KEY", '')
 }

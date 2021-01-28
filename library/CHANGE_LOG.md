@@ -1,3 +1,5 @@
+## 0.1.3
+* fix https://github.com/vitaviva/fragivity/issues/7
 
 ## 0.1.2
 * Support loading root with factory 

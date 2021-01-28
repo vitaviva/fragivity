@@ -20,8 +20,10 @@ import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.ReportFragment;
 import androidx.navigation.NavHost;
 
+import com.github.fragivity.FragivityUtil;
 import com.github.fragivity.NavHostUtil;
 import com.github.fragivity.R;
 
@@ -30,6 +32,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -507,9 +510,14 @@ public class SwipeBackLayout extends FrameLayout {
                 if (mFragment != null) {
                     if (mCallOnDestroyView) return;
 
-                    if (!((Fragment) mFragment).isDetached()) {
+                    if (!mFragment.isDetached()) {
                         onDragFinished();
-                        NavHost navHost = com.github.fragivity.Fragivity.getNavigator(mFragment);
+
+                        //https://github.com/vitaviva/fragivity/issues/7
+                        ((ReportFragment)mFragment).disable_anim_once = true;
+                        ((ReportFragment) Objects.requireNonNull(FragivityUtil.requirePreviousFragment(mFragment))).disable_anim_once = true;
+
+                        NavHost navHost = FragivityUtil.getNavigator(mFragment);
                         NavHostUtil.pop(navHost);
                     }
                 } else {
@@ -577,7 +585,7 @@ public class SwipeBackLayout extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         boolean enable = mEnable != null ?
-                mEnable : com.github.fragivity.swipeback.Fragivity.getEnableSwipeBack();
+                mEnable : SwipeBackUtil.enableSwipeBack;
         if (!enable)
             return super.onInterceptTouchEvent(ev);
         try {
@@ -590,7 +598,7 @@ public class SwipeBackLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!mEnable && !com.github.fragivity.swipeback.Fragivity.getEnableSwipeBack())
+        if (!mEnable && !SwipeBackUtil.enableSwipeBack)
             return super.onTouchEvent(event);
         try {
             mHelper.processTouchEvent(event);

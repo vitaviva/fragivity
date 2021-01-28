@@ -1,4 +1,4 @@
-@file:JvmName("Fragivity")
+@file:JvmName("SwipeBackUtil")
 
 package com.github.fragivity.swipeback
 
@@ -15,4 +15,5 @@ val Fragment.swipeBackLayout
 /**
  * Global config for enabling swipe back
  */
-var enableSwipeBack = false
+@JvmField
+internal var enableSwipeBack = false

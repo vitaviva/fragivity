@@ -1,4 +1,4 @@
-@file:JvmName("Fragivity")
+@file:JvmName("FragivityUtil")
 
 package com.github.fragivity
 
@@ -25,7 +25,8 @@ internal fun Fragment.requireParentFragmentManager() =
     if (parentFragment is ReportFragment) requireParentFragment().parentFragmentManager else parentFragmentManager
 
 
-fun Fragment.requirePreviousFragment(): Fragment? {
+internal fun Fragment.requirePreviousFragment(): Fragment? {
+    if (this is ReportFragment) return parentFragmentManager.fragments.firstOrNull()
     val fragmentList: List<Fragment> = requireParentFragmentManager().fragments
     val index = fragmentList.indexOf(parentFragment)
     return if (index > 0) fragmentList[index - 1].childFragmentManager.fragments[0] else null
