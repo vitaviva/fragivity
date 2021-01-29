@@ -14,6 +14,8 @@ class CheckListAdapter(
     private val onItemClick: (id: Int, check: Boolean) -> Unit
 ) : ListAdapter<Item, CheckListAdapter.ViewHolder>(DIFF_CALLBACK) {
 
+    internal var datas : List<Item>? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(android.R.layout.simple_list_item_checked, parent, false)
@@ -29,6 +31,11 @@ class CheckListAdapter(
                 onItemClick(item.id, item.checked)
             }
         }
+    }
+
+    override fun submitList(list: List<Item>?) {
+        super.submitList(list)
+        datas = list
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)

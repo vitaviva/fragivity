@@ -17,12 +17,14 @@ import kotlinx.android.synthetic.main.fragment_comm_list.*
 
 class CheckListFragment : AbsBaseFragment() {
 
-    private val _list = originList
     private val _cb: (Int, Boolean) -> Unit = { id, checked ->
-        _adapter.submitList(_list.mapIndexed { index: Int, item: Item ->
-            if (index == id) item.copy(checked = checked)
-            else item
-        })
+        _adapter.datas?.let {
+            _adapter.submitList(it.mapIndexed { index: Int, item: Item ->
+                if (index == id) item.copy(checked = checked)
+                else item
+            })
+        }
+
     }
     private val _adapter by lazy {
         CheckListAdapter { id, checked ->
@@ -52,7 +54,7 @@ class CheckListFragment : AbsBaseFragment() {
                 )
             )
             adapter = _adapter.apply {
-                submitList(_list)
+                submitList(_adapter.datas ?: originList)
             }
         }
 

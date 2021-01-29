@@ -21,18 +21,18 @@ import kotlin.math.abs
 fun NavHostFragment.showDebugView(root: ViewGroup) {
     val context = root.context
     val stackView = ImageView(context)
-    stackView.setImageResource(R.drawable.fragmentation_ic_stack)
+    stackView.setImageResource(R.drawable.ic_stack)
     val dp18 = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         18f,
         context.resources.displayMetrics
     ).toInt()
     val params = FrameLayout.LayoutParams(
-        ViewGroup.LayoutParams.WRAP_CONTENT,
+        dp18 * 3,
         ViewGroup.LayoutParams.WRAP_CONTENT
     ).apply {
         gravity = Gravity.END
-        topMargin = dp18 * 7
+        topMargin = dp18 * 30
         rightMargin = dp18
     }
     stackView.layoutParams = params
