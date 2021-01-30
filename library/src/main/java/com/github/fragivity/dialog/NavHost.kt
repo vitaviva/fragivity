@@ -2,13 +2,12 @@ package com.github.fragivity.dialog
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
-import androidx.navigation.*
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
+import androidx.navigation.get
+import androidx.navigation.plusAssign
 import com.github.fragivity.MyNavHost
-import com.github.fragivity.requireActivity
-import com.github.fragivity.saveToViewModel
 import kotlin.reflect.KClass
 
 /**
@@ -18,7 +17,7 @@ fun MyNavHost.showDialog(
     clazz: KClass<out DialogFragment>,
     args: Bundle? = null
 ) = with(navController) {
-    val node = putDialog(requireActivity(), clazz)
+    val node = putDialog(clazz)
     navigate(
         node.id, args,
         NavOptions.Builder().build()
@@ -26,24 +25,22 @@ fun MyNavHost.showDialog(
 }
 
 
-private fun NavController.putDialog(
-    activity: FragmentActivity,
+private fun MyNavHost.putDialog(
     clazz: KClass<out DialogFragment>
 ): DialogFragmentNavigator.Destination {
     val destId = clazz.hashCode()
-    lateinit var destination: DialogFragmentNavigator.Destination
-    if (graph.findNode(destId) == null) {
+    val graph = navController.graph
+    var destination = graph.findNode(destId) as? DialogFragmentNavigator.Destination
+    if (destination == null) {
         destination = DialogFragmentNavigatorDestinationBuilder(
-            navigatorProvider[DialogFragmentNavigator::class],
+            navController.navigatorProvider[DialogFragmentNavigator::class],
             destId,
             clazz
         ).apply {
             label = clazz.qualifiedName
         }.build()
         graph.plusAssign(destination)
-        activity.saveToViewModel(destination)
-    } else {
-        destination = graph.findNode(destId) as DialogFragmentNavigator.Destination
+        saveToViewModel(destination)
     }
     return destination
 }

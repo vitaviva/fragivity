@@ -3,23 +3,139 @@
 package com.github.fragivity
 
 import android.view.View
+import androidx.collection.valueIterator
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentProvider
+import androidx.fragment.app.MyFragmentNavigator
 import androidx.fragment.app.ReportFragment
-import androidx.navigation.NavHost
-import androidx.navigation.findNavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.*
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.github.fragivity.deeplink.getRouteUri
+import kotlin.reflect.KClass
 
-val Fragment.navigator
-    get() = MyNavHost(requireContext(), NavHost {
-        val clazz = this::class
-        requireParentFragment().findNavController().apply {
-            putFragment(requireActivity(), clazz) //make sure the fragment in back stack
+private val _fragNavHostMap = mutableMapOf<Fragment, MyNavHost>()
+private val _ViewNavHostMap = mutableMapOf<View, MyNavHost>()
+
+val Fragment.navigator: MyNavHost
+    get() {
+        return _fragNavHostMap.getOrPut(this) {
+            MyNavHost(requireContext(), NavHost {
+                if (this is NavHostFragment) navController
+                else requireParentFragment().findNavController()
+            }).apply {//make sure the fragment in back stack
+                putFragment(this@navigator::class)
+            }.also {//clean when no longer needed
+                this@navigator.lifecycle.addObserver(LifecycleEventObserver { lifecycleOwner, event ->
+                    if (Lifecycle.Event.ON_DESTROY == event) {
+                        _fragNavHostMap.remove(this@navigator)
+                    }
+                })
+            }
         }
-    })
+    }
 
-val View.navigator
-    get() = MyNavHost(context, NavHost { findNavController() })
 
+val View.navigator: MyNavHost
+    get() {
+        return _ViewNavHostMap.getOrPut(this) {
+            MyNavHost(context, NavHost { findNavController() })
+                .also { //clean
+                    this.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+                        override fun onViewAttachedToWindow(v: View?) {
+                        }
+
+                        override fun onViewDetachedFromWindow(v: View?) {
+                            _ViewNavHostMap.remove(this@navigator)
+                        }
+                    })
+                }
+        }
+    }
+
+
+
+
+/**
+ * Load root fragment
+ */
+fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
+    val context = activity ?: return
+
+    navController.apply {
+        navigatorProvider.addNavigator(
+            MyFragmentNavigator(
+                context,
+                childFragmentManager,
+                id
+            )
+        )
+        val startDestId = root.hashCode()
+        graph = createGraph(startDestination = startDestId) {
+
+            destination(
+                FragmentNavigatorDestinationBuilder(
+                    provider[MyFragmentNavigator::class],
+                    startDestId,
+                    root
+                ).apply {
+                    label = "home"
+                })
+
+        }.also { graph ->
+            //restore destination from vm for NavController#mBackStackToRestore
+            val activity = requireActivity()
+            val vm = ViewModelProvider(
+                activity,
+                SavedStateViewModelFactory(activity.application, activity)
+            ).get(MyViewModel::class.java).also {
+                it.navController = this
+            }
+            vm.nodes.valueIterator().forEach {
+                it.removeFromParent()
+                graph += it
+            }
+        }
+
+
+    }
+}
+
+/**
+ * Load root fragment by factory
+ */
+inline fun <reified T : Fragment> NavHostFragment.loadRoot(
+    noinline block: () -> T
+) {
+    val clazz = T::class
+    FragmentProvider[clazz.qualifiedName!!] = block
+    loadRoot(T::class)
+}
+
+
+internal fun NavController.createNavDestination(
+    destId: Int,
+    clazz: KClass<out Fragment>
+): FragmentNavigator.Destination {
+    return (FragmentNavigatorDestinationBuilder(
+        navigatorProvider[MyFragmentNavigator::class],
+        destId,
+        clazz
+    ).apply {
+        label = clazz.qualifiedName
+        getRouteUri(clazz)?.let {
+            deepLink {
+                uriPattern = it
+            }
+        }
+    }).build()
+}
 
 internal fun Fragment.requireParentFragmentManager() =
     if (parentFragment is ReportFragment) requireParentFragment().parentFragmentManager else parentFragmentManager

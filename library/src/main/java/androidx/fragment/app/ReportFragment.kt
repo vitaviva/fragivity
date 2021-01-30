@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.github.fragivity.R
 import com.github.fragivity.swipeback.SwipeBackLayout
+import java.lang.reflect.Constructor
 
 internal class ReportFragment : Fragment() {
 
@@ -29,7 +30,13 @@ internal class ReportFragment : Fragment() {
             return _vm.fragment ?: run {
                 val frag = FragmentProvider[className]?.invoke()
                     .also { FragmentProvider.remove(className) }
-                    ?: _real.newInstance()
+                    ?: run {
+                        val constructor = findMatchingConstructor(_real)
+                            ?: throw IllegalStateException(
+                                "${_real.simpleName} need a empty constructor, otherwise it cannot be rebuilt after process killed"
+                            )
+                        constructor.newInstance()
+                    }
                 frag.apply {
                     retainInstance = FRAGMENT_RETAIN_INSTANCE
                 }
@@ -118,8 +125,20 @@ internal class ReportFragment : Fragment() {
 
     internal companion object {
         const val REAL_FRAGMENT = "real"
+        private const val FRAGMENT_RETAIN_INSTANCE = true
     }
 
 }
 
-const val FRAGMENT_RETAIN_INSTANCE = true
+
+private fun <T> findMatchingConstructor(
+    modelClass: Class<T>
+): Constructor<T>? {
+    for (constructor in modelClass.constructors) {
+        val parameterTypes = constructor.parameterTypes
+        if (parameterTypes.isEmpty()) {
+            return constructor as Constructor<T>
+        }
+    }
+    return null
+}

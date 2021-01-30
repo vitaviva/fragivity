@@ -4,31 +4,58 @@ package com.github.fragivity
 
 import android.content.Context
 import android.os.Bundle
-import android.view.View
-import androidx.collection.valueIterator
+import androidx.collection.keyIterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentProvider
-import androidx.fragment.app.MyFragmentNavigator
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.*
+import androidx.navigation.NavDestination
+import androidx.navigation.NavHost
+import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
-import androidx.navigation.fragment.NavHostFragment
-import com.github.fragivity.deeplink.getRouteUri
-import kotlin.collections.forEach
+import androidx.navigation.plusAssign
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
 
+/**
+ * NavHost with viewModel to store NavDestination
+ */
 class MyNavHost(
-    @PublishedApi internal val context: Context, navHost: NavHost
-) : NavHost by navHost
+    context: Context, navHost: NavHost
+) : NavHost by navHost {
 
+    private val _activity = context as FragmentActivity
 
-@PublishedApi
-internal fun MyNavHost.requireActivity(): FragmentActivity =
-    context as FragmentActivity
+    private val _vm: MyViewModel by ViewModelLazy(
+        MyViewModel::class,
+        { _activity.viewModelStore },
+        { assertionFactory }
+    )
+
+    internal fun saveToViewModel(destination: NavDestination) {
+        with(_vm) {
+            if (nodes.keyIterator().asSequence().any {
+                    it == destination.id
+                }) return
+            nodes.put(destination.id, destination)
+        }
+    }
+
+    internal fun removeFromViewModel(id: Int) {
+        _vm.nodes.remove(id)
+    }
+
+    companion object {
+        private val assertionFactory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                throw IllegalStateException("${modelClass.simpleName} should be created in loadRoot.")
+            }
+        }
+    }
+}
 
 
 /**
@@ -40,7 +67,7 @@ fun MyNavHost.push(
     extras: Navigator.Extras? = null,
     optionsBuilder: NavOptions.() -> Unit = {}
 ) = with(navController) {
-    val node = putFragment(requireActivity(), clazz)
+    val node = putFragment(clazz)
     navigate(
         node.id, args,
         convertNavOptions(clazz, NavOptions().apply(optionsBuilder)),
@@ -64,7 +91,7 @@ inline fun <reified T : Fragment> MyNavHost.push(
 /**
  * pop current fragment from back stack
  */
-fun NavHost.pop() {
+fun MyNavHost.pop() {
     navController.popBackStack()
 }
 
@@ -72,85 +99,21 @@ fun NavHost.pop() {
 /**
  * Pop back stack to [clazz]
  */
-fun NavHost.popTo(clazz: KClass<out Fragment>) {
+fun MyNavHost.popTo(clazz: KClass<out Fragment>) {
     navController.popBackStack(clazz.hashCode(), false)
 }
 
 
-/**
- * Load root fragment
- */
-fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
-    val context = activity ?: return
-
-    navController.apply {
-        navigatorProvider.addNavigator(
-            MyFragmentNavigator(
-                context,
-                childFragmentManager,
-                id
-            )
-        )
-        val startDestId = root.hashCode()
-        graph = createGraph(startDestination = startDestId) {
-
-            destination(
-                FragmentNavigatorDestinationBuilder(
-                    provider[MyFragmentNavigator::class],
-                    startDestId,
-                    root
-                ).apply {
-                    label = "home"
-                })
-
-        }.also { graph ->
-            //for NavController#mBackStackToRestore
-            val vm = ViewModelProvider(requireActivity()).get(MyViewModel::class.java)
-            vm.nodes.valueIterator().forEach {
-                it.removeFromParent()
-                graph += it
-            }
-        }
-
-    }
-}
-
-/**
- * Load root fragment by factory
- */
-inline fun <reified T : Fragment> NavHostFragment.loadRoot(
-    noinline block: () -> T
-) {
-    val clazz = T::class
-    FragmentProvider[clazz.qualifiedName!!] = block
-    loadRoot(T::class)
-}
-
-
-@PublishedApi
-internal fun NavController.putFragment(
-    activity: FragmentActivity,
+internal fun MyNavHost.putFragment(
     clazz: KClass<out Fragment>
 ): FragmentNavigator.Destination {
     val destId = clazz.hashCode()
-    lateinit var destination: FragmentNavigator.Destination
-    if (graph.findNode(destId) == null) {
-        destination = (FragmentNavigatorDestinationBuilder(
-            navigatorProvider[MyFragmentNavigator::class],
-            destId,
-            clazz
-        ).apply {
-            label = clazz.qualifiedName
-            getRouteUri(clazz)?.let {
-                deepLink {
-                    uriPattern = it
-                }
-            }
-        }).build()
+    val graph = navController.graph
+    var destination = graph.findNode(destId) as? FragmentNavigator.Destination
+    if (destination == null) {
+        destination = navController.createNavDestination(destId, clazz)
         graph.plusAssign(destination)
-        activity.saveToViewModel(destination)
-    } else {
-        destination = graph.findNode(destId) as FragmentNavigator.Destination
+        saveToViewModel(destination)
     }
     return destination
 }
