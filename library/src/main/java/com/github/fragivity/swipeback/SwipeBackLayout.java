@@ -514,8 +514,8 @@ public class SwipeBackLayout extends FrameLayout {
                         onDragFinished();
 
                         //https://github.com/vitaviva/fragivity/issues/7
-                        ((ReportFragment)mFragment).disable_anim_once = true;
-                        ((ReportFragment) Objects.requireNonNull(FragivityUtil.requirePreviousFragment(mFragment))).disable_anim_once = true;
+                        ((ReportFragment)mFragment).disableAnimOnce = true;
+                        ((ReportFragment) Objects.requireNonNull(FragivityUtil.requirePreviousFragment(mFragment))).disableAnimOnce = true;
 
                         MyNavHost navHost = FragivityUtil.getNavigator(mFragment);
                         NavHostUtil.pop(navHost);

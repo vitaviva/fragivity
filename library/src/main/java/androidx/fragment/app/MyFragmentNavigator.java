@@ -222,7 +222,6 @@ public class MyFragmentNavigator extends FragmentNavigator {
                             // 切到后台时的生命周期
                             Fragment fragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 2);
                             if (fragment instanceof ReportFragment) {
-                                fragment.performPause();
                                 fragment.performStop();
                                 ((ReportFragment) fragment).setShow(false);
                             }
@@ -233,7 +232,6 @@ public class MyFragmentNavigator extends FragmentNavigator {
                         Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
                         if (fragment instanceof ReportFragment) {
                             ((ReportFragment) fragment).setShow(true);
-                            fragment.performStart();
                             fragment.performResume();
                         }
                     }

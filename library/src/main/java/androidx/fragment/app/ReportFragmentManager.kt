@@ -4,32 +4,43 @@ internal class ReportFragmentManager : FragmentManager() {
 
     init {
         addOnBackStackChangedListener {
-            if (mBackStack.size > 1) throw IllegalStateException("ReportFragmentManager can't hold fragment more than one ")
+            check(mBackStack.size > 1) { "ReportFragmentManager can't hold fragment more than one " }
         }
     }
 
-    internal var isShow = true
-    public override fun dispatchResume() {
+    private val reportFragment by lazy {
+        parent as ReportFragment
+    }
+
+    private val isShow
+        get() = reportFragment.isShow
+
+    override fun dispatchResume() {
         if (isShow) super.dispatchResume()
     }
 
-    public override fun dispatchStart() {
+    override fun dispatchStart() {
         if (isShow) super.dispatchStart()
     }
 
-    public override fun dispatchDestroyView() {
-        if (isShow) super.dispatchDestroyView()
-    }
-
-    public override fun dispatchCreate() {
+    override fun dispatchCreate() {
         if (isShow) super.dispatchCreate()
     }
 
-    public override fun dispatchPause() {
+    override fun dispatchActivityCreated() {
+        if (isShow) super.dispatchActivityCreated()
+    }
+
+    override fun dispatchPause() {
         if (isShow) super.dispatchPause()
     }
 
-    public override fun dispatchActivityCreated() {
-        if (isShow) super.dispatchPause()
+    override fun dispatchStop() {
+        if (isShow) super.dispatchStop()
     }
+
+    override fun dispatchDestroyView() {
+        if (isShow) super.dispatchDestroyView()
+    }
+
 }

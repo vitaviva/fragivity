@@ -46,32 +46,39 @@ internal class ReportFragment : Fragment() {
 
     internal lateinit var _swipeBackLayout: SwipeBackLayout
 
-
     //fix https://github.com/vitaviva/fragivity/issues/7
     @JvmField
-    internal var disable_anim_once = false
+    internal var disableAnimOnce = false
+
+    @PublishedApi
+    internal var isShow: Boolean
+        set(value) {
+            _vm.isShowing = value
+        }
+        get() {
+            return _vm.isShowing
+        }
 
     init {
         mChildFragmentManager = ReportFragmentManager()
     }
 
-    var isShow: Boolean
-        set(value) {
-            (mChildFragmentManager as ReportFragmentManager).isShow = value
-        }
-        get() {
-            return (mChildFragmentManager as ReportFragmentManager).isShow
-        }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        if (!_vm.isRecreating) {
+            addRealFragment()
+        } else {
+            _vm.isRecreating = false
+        }
+    }
+
+    private fun addRealFragment() {
         mChildFragmentManager.beginTransaction().apply {
             _realFragment.arguments = arguments
             add(R.id.container, _realFragment)
             commitNow()
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -98,6 +105,17 @@ internal class ReportFragment : Fragment() {
         _swipeBackLayout.internalCallOnDestroyView()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        /**
+         * https://github.com/vitaviva/fragivity/issues/4
+         * this flag used to avoid [_realFragment] to perform onCreate as configuration changed
+         */
+        _vm.isRecreating = requireActivity().isChangingConfigurations
+
+    }
+
+
     private fun View.appendBackground() {
         val a: TypedArray =
             requireActivity().theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground))
@@ -109,8 +127,8 @@ internal class ReportFragment : Fragment() {
     override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
         if (nextAnim == 0) return super.onCreateAnimator(transit, enter, nextAnim)
 
-        if (disable_anim_once) {
-            disable_anim_once = false
+        if (disableAnimOnce) {
+            disableAnimOnce = false
             val animator = AnimatorInflater.loadAnimator(context, R.animator.no_anim)
             if (animator != null) {
                 return animator
@@ -121,7 +139,11 @@ internal class ReportFragment : Fragment() {
 
     }
 
-    data class FragmentViewModel(var fragment: Fragment? = null) : ViewModel()
+    data class FragmentViewModel(
+        var fragment: Fragment? = null,
+        var isRecreating: Boolean = false,
+        var isShowing: Boolean = true
+    ) : ViewModel()
 
     internal companion object {
         const val REAL_FRAGMENT = "real"
