@@ -74,7 +74,11 @@ internal class ReportFragment : Fragment() {
 
     private fun addRealFragment() {
         mChildFragmentManager.beginTransaction().apply {
-            _realFragment.arguments = arguments
+            _realFragment.arguments = requireNotNull(arguments).apply {
+                if (_realFragment.arguments != null) {
+                    putAll(_realFragment.arguments)
+                }
+            }
             add(R.id.container, _realFragment)
             commitNow()
         }
