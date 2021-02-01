@@ -66,7 +66,7 @@ internal fun NavHostFragment.showFragmentStackHierarchyView(context: Context) {
             entry.destination.let { des ->
                 if (des is FragmentNavigator.Destination) {
                     val frag = childFragmentManager.fragments[index - 1]
-                    res += "\n +- ${des.className}\n     [tag]${frag.tag}  [hash]${(frag as ReportFragment)._realFragment.hashCode()}"
+                    res += "\n +- ${des.className}\n     [tag]${frag.tag}  [hash]${frag.childFragmentManager.fragments.first().hashCode()}"
                 }
             }
         }

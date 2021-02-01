@@ -1,18 +1,25 @@
 # Fragivity  :  Use Fragment like Activity
 
-English | [中文文档](https://github.com/vitaviva/fragivity/blob/master/README_zh.md)
+[English](https://github.com/vitaviva/fragivity/blob/master/README.md) | 中文文档
 
 ![Bintray](https://img.shields.io/bintray/v/vitaviva/maven/core)  ![Language](https://img.shields.io/badge/language-kotlin-green.svg)  ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 <img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
-- **More reasonable Lifecycle：** Lifecycle is consistent with Activity when screen changed
-- **Multiple LaunchModes：** Supports multiple modes, such as Standard, SingleTop and SingleTask
-- **Transition animation：** Supports Transition or SharedElement animation when switching screens
-- **Efficient communication：** Simple and direct communication based on callback
-- **Friendly Backpress：** Supports onBackPressed interception and SwipeBack
-- **Deep Links：** Routes to the specified screen by URI
-- **Dialog：** Supports DialogFragment
+- **更合理的Lifecycle：** 页面跳转、返回等Lifecycle表现与Activity一致
+- **多种启动模式：** 支持Standard、SingleTop、SingleTask等多种LaunchMode
+- **转场动画：** 支持Transition、SharedElement等动画方式实现页面切换
+- **更高效的通信：** 可以基于Callback通信，简单直接
+- **更友好的回退处理：** 支持OnBackPressed事件拦截、支持滑动返回
+- **Deep Links：** 通过URI跳转到指定Fragment
+- **Dialog：** 支持DialogFragment显示
+
+参考文档:
+
+- [Fragivity：像使用Activity一样使用Fragment](https://juejin.cn/post/6918693610359619592)
+- [Fragivity：对Fragment生命周期的优化处理](https://juejin.cn/post/6924320585325477895)
+- [Fragivity：如何处理BackStack的销毁重建](https://juejin.cn/post/6924323543043801101)
+
 
 ## Installation
 

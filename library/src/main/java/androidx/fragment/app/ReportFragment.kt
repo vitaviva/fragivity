@@ -51,7 +51,7 @@ internal class ReportFragment : Fragment() {
     internal var disableAnimOnce = false
 
     @PublishedApi
-    internal var isShow: Boolean
+    internal var isInForeground: Boolean
         set(value) {
             _vm.isShowing = value
         }

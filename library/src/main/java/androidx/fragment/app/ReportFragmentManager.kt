@@ -12,35 +12,35 @@ internal class ReportFragmentManager : FragmentManager() {
         parent as ReportFragment
     }
 
-    private val isShow
-        get() = reportFragment.isShow
+    private val isInForeground
+        get() = reportFragment.isInForeground
 
     override fun dispatchResume() {
-        if (isShow) super.dispatchResume()
+        if (isInForeground) super.dispatchResume()
     }
 
     override fun dispatchStart() {
-        if (isShow) super.dispatchStart()
+        if (isInForeground) super.dispatchStart()
     }
 
     override fun dispatchCreate() {
-        if (isShow) super.dispatchCreate()
+        if (isInForeground) super.dispatchCreate()
     }
 
     override fun dispatchActivityCreated() {
-        if (isShow) super.dispatchActivityCreated()
+        if (isInForeground) super.dispatchActivityCreated()
     }
 
     override fun dispatchPause() {
-        if (isShow) super.dispatchPause()
+        if (isInForeground) super.dispatchPause()
     }
 
     override fun dispatchStop() {
-        if (isShow) super.dispatchStop()
+        if (isInForeground) super.dispatchStop()
     }
 
     override fun dispatchDestroyView() {
-        if (isShow) super.dispatchDestroyView()
+        if (isInForeground) super.dispatchDestroyView()
     }
 
 }

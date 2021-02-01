@@ -223,7 +223,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
                             Fragment fragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 2);
                             if (fragment instanceof ReportFragment) {
                                 fragment.performStop();
-                                ((ReportFragment) fragment).setShow(false);
+                                ((ReportFragment) fragment).setInForeground(false);
                             }
                         }
                     } else if (mIsPendingPopBackStackOperation) {
@@ -231,7 +231,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
                         // 回到前台时的生命周期
                         Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
                         if (fragment instanceof ReportFragment) {
-                            ((ReportFragment) fragment).setShow(true);
+                            ((ReportFragment) fragment).setInForeground(true);
                             fragment.performResume();
                         }
                     }

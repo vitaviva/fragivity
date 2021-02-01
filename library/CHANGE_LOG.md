@@ -1,5 +1,5 @@
 ## 0.1.4
-* Optimize the performance of recreating when configurations changed. see fix https://github.com/vitaviva/fragivity/issues/4
+* Optimize the performance of recreating when configurations changed. see https://github.com/vitaviva/fragivity/issues/4
 
 ## 0.1.3
 * fix https://github.com/vitaviva/fragivity/issues/7
