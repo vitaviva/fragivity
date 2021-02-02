@@ -6,7 +6,9 @@ English | [中文文档](https://github.com/vitaviva/fragivity/blob/master/READM
 
 <img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
-- **More reasonable Lifecycle：** Lifecycle is consistent with Activity when screen changed
+Fragivity is a library used to build APP with "Single Activity + Multi-Fragments" Architecture
+
+- **Reasonable Lifecycle：** Lifecycle is consistent with Activity when screen changed
 - **Multiple LaunchModes：** Supports multiple modes, such as Standard, SingleTop and SingleTask
 - **Transition animation：** Supports Transition or SharedElement animation when switching screens
 - **Efficient communication：** Simple and direct communication based on callback
@@ -23,7 +25,7 @@ implementation 'com.github.fragivity:core:$latest_version'
 ## Quick start
 
 ### 1. declare NavHostFragment in layout
-Like Navigation, Fragivity needs a `NavHostFragment` as the host of ChildFragments
+Like `Navigation`, Fragivity needs a `NavHostFragment` as the host of ChildFragments
 
 ```xml
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -178,6 +180,9 @@ class MainActivity : AppCompatActivity() {
 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://fragitiy.github.com/"))
 startActivity(intent)
 ```
+
+## FAQ
+[Frequently Asked Question](https://github.com/vitaviva/fragivity/blob/master/FAQ.md)
 
 ## License
 Fragivity is licensed under the [MIT License](LICENSE).

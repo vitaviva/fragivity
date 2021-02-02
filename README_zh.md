@@ -6,6 +6,8 @@
 
 <img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
+Fragivity可以帮助开发者基于Fragment打造单Activty架构的APP
+
 - **更合理的Lifecycle：** 页面跳转、返回等Lifecycle表现与Activity一致
 - **多种启动模式：** 支持Standard、SingleTop、SingleTask等多种LaunchMode
 - **转场动画：** 支持Transition、SharedElement等动画方式实现页面切换
@@ -30,7 +32,7 @@ implementation 'com.github.fragivity:core:$latest_version'
 ## Quick start
 
 ### 1. declare NavHostFragment in layout
-Like Navigation, Fragivity needs a `NavHostFragment` as the host of ChildFragments
+Like `Navigation`, Fragivity needs a `NavHostFragment` as the host of ChildFragments
 
 ```xml
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -185,6 +187,9 @@ class MainActivity : AppCompatActivity() {
 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://fragitiy.github.com/"))
 startActivity(intent)
 ```
+
+## FAQ
+[常见问题解答](https://github.com/vitaviva/fragivity/blob/master/FAQ_zh.md)
 
 ## License
 Fragivity is licensed under the [MIT License](LICENSE).
