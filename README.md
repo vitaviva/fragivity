@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         navHostFragment.loadRoot(HomeFragment::class)
         
-        //or load root with factory
+        //or loadRoot with factory
         //navHostFragment.loadRoot{ HomeFragment() }
 
     }
@@ -66,29 +66,36 @@ class MainActivity : AppCompatActivity() {
 ### 3. navigate to destination Fragment 
 ```kotlin
 //in HomeFragment
-val bundle = bundleOf(KEY_ARGUMENT1 to "arg1", KEY_ARGUMENT2 to "arg2")
-navigator.push(DestinationFragment::class, bundle)
+navigator.push(DestinationFragment::class) {
+    arguments = bundleOf(KEY_ARGUMENT1 to "arg1", KEY_ARGUMENT2 to "arg2")
+    //or applyArguments(KEY_ARGUMENT1 to "arg1", KEY_ARGUMENT2 to "arg2")
+
+}
 ```
 
 ## Launch Mode
 Support multiple launch modes
 ```kotlin
-navigator.push(DestinationFragment::class, bundle) {
-  launchMode = LaunchMode.STANDARD //default
-  //launchMode = LaunchMode.SINGLE_TOP
-  //launchMode = LaunchMode.SINGLE_TASK
+navigator.push(DestinationFragment::class) {
+    launchMode = LaunchMode.STANDARD //default
+    //or LaunchMode.SINGLE_TOP, LaunchMode.SINGLE_TASK
 }
 ```
 
 ## Transition Animation
 ```kotlin
-navigator.push(LaunchModeFragment::class) {
+navigator.push(DestinationFragment::class) {
+    //animator
     enterAnim = R.anim.slide_in
     exitAnim = R.anim.slide_out
     popEnterAnim = R.anim.slide_in_pop
     popExitAnim = R.anim.slide_out_pop
+    
+    //sharedElements
+    sharedElements = sharedElementsOf(imageView to "id")
 }
 ```
+
 <img src="screenshot/transition.gif" width=250 >
 
 
@@ -97,21 +104,24 @@ You can simply setup communication between two fragments
 ### 1. start destination Fragment with a callback
 ```kotlin
 class HomeFragment : Fragment(){
-  private val cb: (Int) -> Unit = { checked ->
+    private val cb: (Int) -> Unit = { checked ->
+        //...
+    }
+
     //...
-  }
 
-  //...
-
-  navigator.push {
-      DestinationFragment(cb)
-  }
-  //...
+    fun startDestination() {
+        navigator.push {
+            DestinationFragment(cb)
+        }
+    }
+  
+    //...
 }
 ```
 ### 2. callback to source Fragment
 ```kotlin
-class DestinationFragment(val cb: (Int) -> Unit : Fragment() {
+class DestinationFragment(val cb: (Int) -> Unit) : Fragment() {
     //...
     cb.invoke(xxx)
     //...

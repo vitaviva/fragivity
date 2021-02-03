@@ -5,7 +5,7 @@ package com.github.fragivity
 import android.view.View
 import androidx.collection.valueIterator
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentProvider
+import androidx.fragment.app.FragmentProviderMap
 import androidx.fragment.app.MyFragmentNavigator
 import androidx.fragment.app.ReportFragment
 import androidx.lifecycle.Lifecycle
@@ -32,7 +32,7 @@ val Fragment.navigator: MyNavHost
             }).apply {//make sure the fragment in back stack
                 putFragment(this@navigator::class)
             }.also {//clean when no longer needed
-                this@navigator.lifecycle.addObserver(LifecycleEventObserver { lifecycleOwner, event ->
+                this@navigator.lifecycle.addObserver(LifecycleEventObserver { _, event ->
                     if (Lifecycle.Event.ON_DESTROY == event) {
                         _fragNavHostMap.remove(this@navigator)
                     }
@@ -114,7 +114,7 @@ inline fun <reified T : Fragment> NavHostFragment.loadRoot(
     noinline block: () -> T
 ) {
     val clazz = T::class
-    FragmentProvider[clazz.qualifiedName!!] = block
+    FragmentProviderMap[clazz.qualifiedName!!] = block
     loadRoot(T::class)
 }
 

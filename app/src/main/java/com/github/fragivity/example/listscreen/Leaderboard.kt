@@ -22,15 +22,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
-import com.github.fragivity.navigator
+import com.github.fragivity.*
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
-import com.github.fragivity.example.applySlideInOut
-import com.github.fragivity.push
 
 /**
  * Shows a static leaderboard with multiple users.
@@ -96,18 +92,11 @@ class MyAdapter(private val myDataset: Array<String>) :
         ViewCompat.setTransitionName(imageView, position.toString() + "_image");
 
         holder.item.setOnClickListener {
-            val bundle = bundleOf(USERNAME_KEY to myDataset[position])
-
-            holder.item.navigator.push(
-                UserProfile::class,
-                bundle,
-                FragmentNavigatorExtras(imageView to "imageView")
-            ) {
+            holder.item.navigator.push(UserProfile::class) {
+                applyArguments(USERNAME_KEY to myDataset[position])
                 applySlideInOut()
+                applySharedElements(imageView to "imageView")
             }
-//            holder.item.findNavController().navigate(
-//                    R.id.action_leaderboard_to_userProfile,
-//                bundle)
         }
     }
 

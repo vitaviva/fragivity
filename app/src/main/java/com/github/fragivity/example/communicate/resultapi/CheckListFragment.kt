@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.fragivity.applyArguments
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
 import com.github.fragivity.example.communicate.CheckListAdapter
@@ -24,13 +25,12 @@ class CheckListFragment : AbsBaseFragment() {
     private val _list = originList
     private val _adapter by lazy {
         CheckListAdapter { id, checked ->
-            navigator.push(
-                CheckItemFragment::class,
-                bundleOf(
+            navigator.push(CheckItemFragment::class) {
+                applyArguments(
                     CheckItemFragment.ARGUMENTS_ID to id,
                     CheckItemFragment.ARGUMENTS_CHECKED to checked
                 )
-            )
+            }
         }
     }
 
@@ -43,7 +43,7 @@ class CheckListFragment : AbsBaseFragment() {
 //                else item
 //            })
 //        })
-        setFragmentResultListener(REQUEST_KEY)  { requestKey, bundle ->
+        setFragmentResultListener(REQUEST_KEY) { requestKey, bundle ->
             val result = checkNotNull(bundle.getParcelable<Item>(RESULT_KEY))
             _adapter.submitList(_list.mapIndexed { index: Int, item: Item ->
                 if (index == result.id) result

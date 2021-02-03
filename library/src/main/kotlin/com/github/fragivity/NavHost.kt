@@ -3,17 +3,15 @@
 package com.github.fragivity
 
 import android.content.Context
-import android.os.Bundle
 import androidx.collection.keyIterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentProvider
+import androidx.fragment.app.FragmentProviderMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHost
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.plusAssign
 import kotlin.collections.set
@@ -35,6 +33,7 @@ class MyNavHost(
         { assertionFactory }
     )
 
+    @JvmSynthetic
     internal fun saveToViewModel(destination: NavDestination) {
         with(_vm) {
             if (nodes.keyIterator().asSequence().any {
@@ -44,6 +43,7 @@ class MyNavHost(
         }
     }
 
+    @JvmSynthetic
     internal fun removeFromViewModel(id: Int) {
         _vm.nodes.remove(id)
     }
@@ -63,15 +63,14 @@ class MyNavHost(
  */
 fun MyNavHost.push(
     clazz: KClass<out Fragment>,
-    args: Bundle? = null,
-    extras: Navigator.Extras? = null,
     optionsBuilder: NavOptions.() -> Unit = {}
 ) = with(navController) {
     val node = putFragment(clazz)
+    val navOptions = `$NavOptionsDefault`().apply(optionsBuilder)
     navigate(
-        node.id, args,
-        convertNavOptions(clazz, NavOptions().apply(optionsBuilder)),
-        extras
+        node.id, navOptions.toBundle(),
+        navOptions.totOptions(clazz),
+        navOptions.totExtras()
     )
 }
 
@@ -83,7 +82,7 @@ inline fun <reified T : Fragment> MyNavHost.push(
     noinline block: () -> T
 ) {
     val clazz = T::class
-    FragmentProvider[clazz.qualifiedName!!] = block
+    FragmentProviderMap[clazz.qualifiedName!!] = block
     push(clazz, optionsBuilder = optionsBuilder)
 }
 

@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.fragivity.applyArguments
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
 import com.github.fragivity.example.communicate.CheckListAdapter
@@ -21,13 +21,12 @@ class CheckListFragment : AbsBaseFragment() {
     private val _viewModel: ListViewModel by activityViewModels()
     private val _adapter by lazy {
         CheckListAdapter { id, checked ->
-            navigator.push(
-                CheckItemFragment::class,
-                bundleOf(
+            navigator.push(CheckItemFragment::class) {
+                applyArguments(
                     CheckItemFragment.ARGUMENTS_ID to id,
                     CheckItemFragment.ARGUMENTS_CHECKED to checked
                 )
-            )
+            }
         }
     }
 

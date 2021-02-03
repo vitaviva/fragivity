@@ -5,14 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import com.github.fragivity.LaunchMode
+import com.github.fragivity.*
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.HomeFragment
 import com.github.fragivity.example.R
-import com.github.fragivity.example.applySlideInOut
-import com.github.fragivity.navigator
-import com.github.fragivity.popTo
-import com.github.fragivity.push
 import kotlinx.android.synthetic.main.fragment_launch_mode.*
 
 class LaunchModeFragment : AbsBaseFragment() {
@@ -29,17 +25,15 @@ class LaunchModeFragment : AbsBaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         btn_standard.setOnClickListener {
-            val bundle = bundleOf(ARGUMENTS_FROM to "Launch with Standard")
-            navigator.push(LaunchModeFragment::class, bundle) {
-                applySlideInOut()
+            navigator.push(LaunchModeFragment::class) {
+                applyArguments(ARGUMENTS_FROM to "Launch with Standard")
             }
         }
 
         btn_singletop.setOnClickListener {
-            val bundle = bundleOf(ARGUMENTS_FROM to "Launch with SingleTop")
-            navigator.push(LaunchModeFragment::class, bundle) {
-                launchMode = LaunchMode.SINGLE_TOP
-                applySlideInOut()
+            navigator.push(LaunchModeFragment::class) {
+                applyLaunchMode(LaunchMode.SINGLE_TOP)
+                applyArguments(ARGUMENTS_FROM to "Launch with SingleTop")
             }
         }
 
@@ -47,9 +41,9 @@ class LaunchModeFragment : AbsBaseFragment() {
             val bundle = bundleOf(ARGUMENTS_FROM to "Launch with SingleTask")
             navigator.push {
                 ToNextFragment {
-                    navigator.push(LaunchModeFragment::class, bundle) {
-                        launchMode = LaunchMode.SINGLE_TASK
-                        applySlideInOut()
+                    navigator.push(LaunchModeFragment::class) {
+                        applyLaunchMode(LaunchMode.SINGLE_TASK)
+                        applyArguments(ARGUMENTS_FROM to "Launch with SingleTask")
                     }
                 }
             }

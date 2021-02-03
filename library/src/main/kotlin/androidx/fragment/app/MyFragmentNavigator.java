@@ -76,7 +76,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
 
     @Nullable
     @Override
-    public NavDestination navigate(@NonNull FragmentNavigator.Destination destination, @Nullable Bundle args,
+    public NavDestination navigate(@NonNull Destination destination, @Nullable Bundle args,
                                    @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
         if (mFragmentManager.isStateSaved()) {
             Log.i(TAG, "Ignoring navigate() call: FragmentManager has already"

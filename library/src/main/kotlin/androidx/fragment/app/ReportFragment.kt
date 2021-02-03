@@ -28,8 +28,8 @@ internal class ReportFragment : Fragment() {
     internal val _realFragment: Fragment
         get() {
             return _vm.fragment ?: run {
-                val frag = FragmentProvider[className]?.invoke()
-                    .also { FragmentProvider.remove(className) }
+                val frag = FragmentProviderMap[className]?.invoke()
+                    .also { FragmentProviderMap.remove(className) }
                     ?: run {
                         val constructor = findMatchingConstructor(_real)
                             ?: throw IllegalStateException(
