@@ -17,7 +17,7 @@ internal fun getFragmentInfo(uri: String): KClass<out Fragment>? =
  *  Add URI info for Fragment
  */
 fun addRoute(uriStr: String, clazz: KClass<out Fragment>) {
-    check(_routeMap.getOrPut(uriStr) { clazz } != clazz) {
+    check(_routeMap.getOrPut(uriStr) { clazz } == clazz) {
         """Deep links "$uriStr" duplicated !!"""
     }
 }

@@ -2,12 +2,6 @@ package androidx.fragment.app
 
 internal class ReportFragmentManager : FragmentManager() {
 
-    init {
-        addOnBackStackChangedListener {
-            check(mBackStack.size > 1) { "ReportFragmentManager can't hold fragment more than one " }
-        }
-    }
-
     private val reportFragment by lazy {
         parent as ReportFragment
     }

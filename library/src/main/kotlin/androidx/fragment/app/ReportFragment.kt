@@ -73,6 +73,9 @@ internal class ReportFragment : Fragment() {
     }
 
     private fun addRealFragment() {
+        check(mChildFragmentManager.fragments.isEmpty()) {
+            "ReportFragmentManager can't hold fragment more than one "
+        }
         mChildFragmentManager.beginTransaction().apply {
             _realFragment.arguments = requireNotNull(arguments).apply {
                 if (_realFragment.arguments != null) {
