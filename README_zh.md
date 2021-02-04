@@ -198,6 +198,9 @@ val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://fragitiy.github.com/"
 startActivity(intent)
 ```
 
+## 使用Java进行开发
+Fragivity支持使用Java进行开发。参考:[APIs For Java](https://github.com/vitaviva/fragivity/blob/master/USE_JAVA.md)
+
 ## FAQ
 [常见问题解答](https://github.com/vitaviva/fragivity/blob/master/FAQ_zh.md)
 

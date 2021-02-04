@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.fragivity.applySlideInOut
 import com.github.fragivity.dialog.showDialog
 import com.github.fragivity.example.backpress.BackPressFragment
 import com.github.fragivity.example.communicate.CommFragment

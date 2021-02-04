@@ -1,8 +1,9 @@
+@file:JvmName("DialogUtil")
+
 package com.github.fragivity.dialog
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
 import androidx.navigation.get
@@ -18,10 +19,7 @@ fun MyNavHost.showDialog(
     args: Bundle? = null
 ) = with(navController) {
     val node = putDialog(clazz)
-    navigate(
-        node.id, args,
-        NavOptions.Builder().build()
-    )
+    navigate(node.id, args)
 }
 
 

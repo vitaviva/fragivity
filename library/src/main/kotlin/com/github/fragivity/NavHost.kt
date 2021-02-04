@@ -1,4 +1,5 @@
-@file:JvmName("NavHostUtil")
+@file:JvmName("FragivityUtil")
+@file:JvmMultifileClass
 
 package com.github.fragivity
 
@@ -64,15 +65,8 @@ class MyNavHost(
 fun MyNavHost.push(
     clazz: KClass<out Fragment>,
     optionsBuilder: NavOptions.() -> Unit = {}
-) = with(navController) {
-    val node = putFragment(clazz)
-    val navOptions = `$NavOptionsDefault`().apply(optionsBuilder)
-    navigate(
-        node.id, navOptions.toBundle(),
-        navOptions.totOptions(clazz),
-        navOptions.totExtras()
-    )
-}
+) =
+    pushInternal(clazz, `$NavOptionsDefault`().apply(optionsBuilder))
 
 /**
  * Navigates to a fragment by its factory
@@ -84,6 +78,21 @@ inline fun <reified T : Fragment> MyNavHost.push(
     val clazz = T::class
     FragmentProviderMap[clazz.qualifiedName!!] = block
     push(clazz, optionsBuilder = optionsBuilder)
+}
+
+internal fun MyNavHost.pushInternal(
+    clazz: KClass<out Fragment>,
+    navOptions: NavOptions?
+) = with(navController) {
+    val node = putFragment(clazz)
+    if (navOptions == null)
+        navigate(node.id)
+    else
+        navigate(
+            node.id, navOptions.toBundle(),
+            navOptions.totOptions(clazz),
+            navOptions.totExtras()
+        )
 }
 
 

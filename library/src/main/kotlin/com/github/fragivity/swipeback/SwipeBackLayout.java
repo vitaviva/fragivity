@@ -24,7 +24,6 @@ import androidx.fragment.app.ReportFragment;
 
 import com.github.fragivity.FragivityUtil;
 import com.github.fragivity.MyNavHost;
-import com.github.fragivity.NavHostUtil;
 import com.github.fragivity.R;
 
 import java.lang.annotation.Retention;
@@ -518,7 +517,7 @@ public class SwipeBackLayout extends FrameLayout {
                         ((ReportFragment) Objects.requireNonNull(FragivityUtil.requirePreviousFragment(mFragment))).disableAnimOnce = true;
 
                         MyNavHost navHost = FragivityUtil.getNavigator(mFragment);
-                        NavHostUtil.pop(navHost);
+                        FragivityUtil.pop(navHost);
                     }
                 } else {
                     if (!mActivity.isFinishing()) {

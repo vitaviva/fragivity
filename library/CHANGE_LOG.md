@@ -1,3 +1,6 @@
+## 0.1.5
+* Provides APIs Used in Java and its UT
+
 ## 0.1.4
 * Optimize the performance of recreating when configurations changed. see https://github.com/vitaviva/fragivity/issues/4
 

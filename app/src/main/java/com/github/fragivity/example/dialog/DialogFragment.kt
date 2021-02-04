@@ -14,7 +14,6 @@ class DialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_dialog, container, false)
-        return root
+        return inflater.inflate(R.layout.fragment_dialog, container, false)
     }
 }
