@@ -16,7 +16,8 @@ private const val NAV_DEST_NODES_KEY = "NavDestKey"
 
 internal class MyViewModel(
     //fix https://github.com/vitaviva/fragivity/issues/9
-    private val _handle: SavedStateHandle) : ViewModel() {
+    private val _handle: SavedStateHandle
+) : ViewModel() {
 
     lateinit var navController: NavController
 
@@ -33,17 +34,25 @@ internal class MyViewModel(
         nodes
     }
 
+    internal fun saveState() {
+        val list = ArrayList<NavDestinationBundle>().apply {
+            nodes.valueIterator().forEach { add(NavDestinationBundle((it))) }
+        }
+        _handle.set(NAV_DEST_NODES_KEY, Bundle().apply { putParcelableArrayList(null, list) })
+    }
+
     init {
         /**
          *  当杀进程重启（例如不保留活动等）时，NavGraph中的nodes信息也需要重建，
          *  所以需要借助SavedStateHandle对ViewModel数据持久化
          */
-        _handle.setSavedStateProvider(NAV_DEST_NODES_KEY) {
-            val list = ArrayList<NavDestinationBundle>().apply {
-                nodes.valueIterator().forEach { add(NavDestinationBundle((it))) }
-            }
-            Bundle().apply { putParcelableArrayList(null, list) }
-        }
+        //TODO(using after 2.3.0)
+//        _handle.setSavedStateProvider(NAV_DEST_NODES_KEY) {
+//            val list = ArrayList<NavDestinationBundle>().apply {
+//                nodes.valueIterator().forEach { add(NavDestinationBundle((it))) }
+//            }
+//            Bundle().apply { putParcelableArrayList(null, list) }
+//        }
     }
 
 }

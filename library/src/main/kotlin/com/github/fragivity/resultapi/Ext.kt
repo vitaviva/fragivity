@@ -17,6 +17,7 @@ import com.github.fragivity.requireParentFragmentManager
  * @param result the result to be passed to another fragment or `null` if you want to
  *               clear out any pending result.
  */
+@Deprecated("using after fragment 1.3.0")
 fun Fragment.setFragmentResult(
     requestKey: String,
     result: Bundle
@@ -48,6 +49,7 @@ fun Fragment.clearFragmentResult(
  * @param listener listener for result changes or `null` to remove any previously
  *                 registered listener.
  */
+@Deprecated("using after fragment 1.3.0")
 fun Fragment.setFragmentResultListener(
     requestKey: String,
     listener: ((requestKey: String, bundle: Bundle) -> Unit)

@@ -1,3 +1,6 @@
+## 0.1.6
+fix https://github.com/vitaviva/fragivity/issues/14
+
 ## 0.1.5
 * Provides APIs Used in Java and its UT
 

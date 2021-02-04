@@ -41,6 +41,7 @@ class MyNavHost(
                     it == destination.id
                 }) return
             nodes.put(destination.id, destination)
+            saveState()
         }
     }
 

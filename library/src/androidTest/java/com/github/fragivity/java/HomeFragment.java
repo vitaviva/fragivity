@@ -5,7 +5,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Supplier;
 import androidx.fragment.app.Fragment;
 
 import com.github.fragivity.Fragivity;
