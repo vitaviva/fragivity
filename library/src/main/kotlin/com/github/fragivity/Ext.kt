@@ -33,7 +33,8 @@ val Fragment.navigator: MyNavHost
             }).apply {//make sure the fragment in back stack
                 putFragment(this@navigator::class)
             }.also {//clean when no longer needed
-                this@navigator.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+                val lifecycle = view?.run { viewLifecycleOwner.lifecycle } ?: this.lifecycle
+                lifecycle.addObserver(LifecycleEventObserver { _, event ->
                     if (Lifecycle.Event.ON_DESTROY == event) {
                         _fragNavHostMap.remove(this@navigator)
                     }
@@ -59,8 +60,6 @@ val View.navigator: MyNavHost
                 }
         }
     }
-
-
 
 
 /**
