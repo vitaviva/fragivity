@@ -66,6 +66,7 @@ val View.navigator: MyNavHost
 /**
  * Load root fragment
  */
+@JvmSynthetic
 fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
     val context = activity ?: return
 
@@ -111,6 +112,7 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
 /**
  * Load root fragment by factory
  */
+@JvmSynthetic
 inline fun <reified T : Fragment> NavHostFragment.loadRoot(
     noinline block: () -> T
 ) {
@@ -119,7 +121,7 @@ inline fun <reified T : Fragment> NavHostFragment.loadRoot(
     loadRoot(T::class)
 }
 
-
+@JvmSynthetic
 internal fun NavController.createNavDestination(
     destId: Int,
     clazz: KClass<out Fragment>

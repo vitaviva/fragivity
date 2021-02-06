@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import kotlinx.android.parcel.Parcelize
 
@@ -60,7 +61,13 @@ internal class MyViewModel(
 @Parcelize
 internal data class NavDestinationBundle(val className: String) : Parcelable {
     companion object {
-        operator fun invoke(destination: NavDestination) =
-            NavDestinationBundle((destination as FragmentNavigator.Destination).className)
+        operator fun invoke(destination: NavDestination) = run {
+            val clazzName = when (destination) {
+                is FragmentNavigator.Destination -> destination.className
+                is DialogFragmentNavigator.Destination -> destination.className
+                else -> error("Invalid Destination")
+            }
+            NavDestinationBundle(clazzName)
+        }
     }
 }

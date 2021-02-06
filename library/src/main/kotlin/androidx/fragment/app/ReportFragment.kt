@@ -32,9 +32,7 @@ internal class ReportFragment : Fragment() {
                     .also { FragmentProviderMap.remove(className) }
                     ?: run {
                         val constructor = findMatchingConstructor(_real)
-                            ?: throw IllegalStateException(
-                                "${_real.simpleName} need a empty constructor, otherwise it cannot be rebuilt after process killed"
-                            )
+                            ?: error("${_real.simpleName} need a empty constructor, otherwise it cannot be rebuilt after process killed")
                         constructor.newInstance()
                     }
                 frag.apply {

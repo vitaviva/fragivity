@@ -18,7 +18,7 @@ Fragivity.loadRoot(navHostFragment, HomeFragment.class, () -> {
 ## Navigate to destination fragment
 
 ```java
-class HomeFragment extends Fagment {
+class MyFragment extends Fagment {
 
     //navigate with class
     Fragivity.of(this).push(DestinationFragment.class);
@@ -48,15 +48,21 @@ class HomeFragment extends Fagment {
 
 ```
 
+## Pop
+```java
+Fragivity.of(fragment).pop();
+```
+
+
 ## Show dialog
 ```java
 Fragivity.of(fragment).showDialog(DialogFragment.class, bundle);
 ```
 
-## enable SwipeBack
+## Enable SwipeBack
 
 ```java
-class XXXFragment extends Fragment {
+class MyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

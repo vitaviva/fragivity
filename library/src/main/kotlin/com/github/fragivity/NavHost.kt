@@ -1,6 +1,5 @@
 @file:JvmName("FragivityUtil")
 @file:JvmMultifileClass
-
 package com.github.fragivity
 
 import android.content.Context
@@ -63,6 +62,7 @@ class MyNavHost(
 /**
  * Navigates to fragment of [clazz] by pushing it to back stack
  */
+@JvmSynthetic
 fun MyNavHost.push(
     clazz: KClass<out Fragment>,
     optionsBuilder: NavOptions.() -> Unit = {}
@@ -72,6 +72,7 @@ fun MyNavHost.push(
 /**
  * Navigates to a fragment by its factory
  */
+@JvmSynthetic
 inline fun <reified T : Fragment> MyNavHost.push(
     noinline optionsBuilder: NavOptions.() -> Unit = {},
     noinline block: () -> T
@@ -81,6 +82,7 @@ inline fun <reified T : Fragment> MyNavHost.push(
     push(clazz, optionsBuilder = optionsBuilder)
 }
 
+@JvmSynthetic
 internal fun MyNavHost.pushInternal(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
@@ -100,6 +102,7 @@ internal fun MyNavHost.pushInternal(
 /**
  * pop current fragment from back stack
  */
+@JvmSynthetic
 fun MyNavHost.pop() {
     navController.popBackStack()
 }
@@ -108,11 +111,12 @@ fun MyNavHost.pop() {
 /**
  * Pop back stack to [clazz]
  */
+@JvmSynthetic
 fun MyNavHost.popTo(clazz: KClass<out Fragment>) {
     navController.popBackStack(clazz.hashCode(), false)
 }
 
-
+@JvmSynthetic
 internal fun MyNavHost.putFragment(
     clazz: KClass<out Fragment>
 ): FragmentNavigator.Destination {

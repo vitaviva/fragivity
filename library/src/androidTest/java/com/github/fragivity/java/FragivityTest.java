@@ -4,14 +4,25 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentOnAttachListener;
+import androidx.fragment.app.ReportFragment;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.github.fragivity.Fragivity;
+import com.github.fragivity.FragivityUtil;
 import com.github.fragivity.R;
 
 import org.junit.After;
@@ -136,6 +147,34 @@ public class FragivityTest {
         });
     }
 
+
+    @Test
+    public void pop() {
+        scenario.onFragment(host -> {
+            Fragivity.loadRoot(host, HomeFragment.class, () -> {
+                HomeFragment home = new HomeFragment();
+                home.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
+                    if (event == Lifecycle.Event.ON_START) {
+                        home.testPush();
+                    }
+                });
+                return home;
+
+            });
+
+            host.getChildFragmentManager().addFragmentOnAttachListener((fragmentManager, fragment) -> {
+                if (host.getChildFragmentManager().getFragments().size() == 2) {
+                    fragment.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
+                        if (event == Lifecycle.Event.ON_START) {
+                            Fragivity.of(fragment.getChildFragmentManager().getFragments().get(0)).pop();
+                            assertEquals(host.getNavController().getCurrentDestination().getId(), HomeFragment.class.hashCode());
+                        }
+                    });
+                }
+            });
+
+        });
+    }
 
     @Test
     public void showDialog() {
