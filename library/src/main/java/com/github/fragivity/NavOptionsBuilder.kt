@@ -12,6 +12,9 @@ class NavOptionsBuilder internal constructor() {
     fun setLaunchMode(mode: LaunchMode) =
         also { navOptions.launchMode = mode }
 
+    fun popSelf(enable: Boolean) =
+        also { navOptions.popSelf = enable}
+
     fun setArguments(bundle: Bundle) =
         also { navOptions.arguments = bundle }
 

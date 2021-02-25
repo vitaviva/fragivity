@@ -15,6 +15,9 @@ interface NavOptions {
     var launchMode: LaunchMode
 
     @set:JvmSynthetic
+    var popSelf: Boolean
+
+    @set:JvmSynthetic
     var arguments: Bundle
 
     @set:AnimRes
@@ -44,6 +47,7 @@ interface NavOptions {
 
 internal class `$NavOptionsDefault` : NavOptions {
     override var launchMode: LaunchMode = LaunchMode.STANDARD
+    override var popSelf: Boolean = false
     override var arguments: Bundle = Bundle.EMPTY
     override var enterAnim = -1
     override var exitAnim = -1

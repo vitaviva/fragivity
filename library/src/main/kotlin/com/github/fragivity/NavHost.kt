@@ -1,5 +1,6 @@
 @file:JvmName("FragivityUtil")
 @file:JvmMultifileClass
+
 package com.github.fragivity
 
 import android.content.Context
@@ -87,6 +88,9 @@ internal fun MyNavHost.pushInternal(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
 ) = with(navController) {
+    if (navOptions?.popSelf == true) {
+        navController.popBackStack()
+    }
     val node = putFragment(clazz)
     if (navOptions == null)
         navigate(node.id)
@@ -96,6 +100,7 @@ internal fun MyNavHost.pushInternal(
             navOptions.totOptions(clazz),
             navOptions.totExtras()
         )
+
 }
 
 
