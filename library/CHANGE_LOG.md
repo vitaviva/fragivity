@@ -1,3 +1,6 @@
+## 0.1.9
+fix https://github.com/vitaviva/fragivity/issues/19
+
 ## 0.1.8
 fix https://github.com/vitaviva/fragivity/issues/17
 

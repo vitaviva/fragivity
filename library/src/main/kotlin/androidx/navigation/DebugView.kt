@@ -11,7 +11,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.ReportFragment
+import androidx.fragment.app.getBackStack
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.R
@@ -59,7 +59,8 @@ internal fun NavHostFragment.showFragmentStackHierarchyView(context: Context) {
 
         var res = "NavGraph "
 
-        check(childFragmentManager.fragments.size == navController.mBackStack.size - 1) {
+
+        check(childFragmentManager.getBackStack().size == navController.mBackStack.size - 2) {
             "childFragmentManager.fragments.size != mBackStack.size"
         }
         navController.mBackStack.forEachIndexed { index, entry ->
