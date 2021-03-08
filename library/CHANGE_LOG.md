@@ -1,3 +1,6 @@
+## 0.1.8
+fix https://github.com/vitaviva/fragivity/issues/17
+
 ## 0.1.7
 push with popSelf, see https://github.com/vitaviva/fragivity/issues/15
 

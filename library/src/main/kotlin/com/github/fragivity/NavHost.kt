@@ -3,10 +3,9 @@
 
 package com.github.fragivity
 
-import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.collection.keyIterator
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentProviderMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelLazy
@@ -23,10 +22,8 @@ import kotlin.reflect.KClass
  * NavHost with viewModel to store NavDestination
  */
 class MyNavHost(
-    context: Context, navHost: NavHost
+    private val _activity: ComponentActivity, navHost: NavHost
 ) : NavHost by navHost {
-
-    private val _activity = context as FragmentActivity
 
     private val _vm: MyViewModel by ViewModelLazy(
         MyViewModel::class,

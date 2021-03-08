@@ -4,6 +4,7 @@
 package com.github.fragivity
 
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.collection.valueIterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentProviderMap
@@ -27,7 +28,7 @@ private val _ViewNavHostMap = mutableMapOf<View, MyNavHost>()
 val Fragment.navigator: MyNavHost
     get() {
         return _fragNavHostMap.getOrPut(this) {
-            MyNavHost(requireContext(), NavHost {
+            MyNavHost(requireActivity(), NavHost {
                 if (this is NavHostFragment) navController
                 else requireParentFragment().findNavController()
             }).apply {//make sure the fragment in back stack
@@ -47,7 +48,7 @@ val Fragment.navigator: MyNavHost
 val View.navigator: MyNavHost
     get() {
         return _ViewNavHostMap.getOrPut(this) {
-            MyNavHost(context, NavHost { findNavController() })
+            MyNavHost(context as ComponentActivity, NavHost { findNavController() })
                 .also { //clean
                     this.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
                         override fun onViewAttachedToWindow(v: View?) {
