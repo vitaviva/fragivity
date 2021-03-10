@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="hierarchy" type="id" />
+    <item name="is_expand" type="id" />
+</resources>
