@@ -9,10 +9,7 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.getBackStack
-import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.R
 import kotlin.math.abs
@@ -51,32 +48,15 @@ private var mStackDialog: AlertDialog? = null
 internal fun NavHostFragment.showFragmentStackHierarchyView(context: Context) {
     if (mStackDialog != null && mStackDialog!!.isShowing) return
 
-    val tv = TextView(context).apply {
+    val container = DebugHierarchyViewContainer(context).apply {
+        bindFragmentRecords(requireActivity().getFragmentRecords())
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-
-        var res = "NavGraph "
-
-
-        check(childFragmentManager.getBackStack().size == navController.mBackStack.size - 2) {
-            "childFragmentManager.fragments.size != mBackStack.size"
-        }
-        navController.mBackStack.forEachIndexed { index, entry ->
-            entry.destination.let { des ->
-                if (des is FragmentNavigator.Destination) {
-                    val frag = childFragmentManager.fragments[index - 1]
-                    res += "\n +- ${des.className}\n     [tag]${frag.tag}  [hash]${frag.childFragmentManager.fragments.first().hashCode()}"
-                }
-            }
-        }
-        text = res
-        gravity = Gravity.CENTER_VERTICAL
     }
-
     mStackDialog = AlertDialog.Builder(context)
-        .setView(tv)
+        .setView(container)
         .setPositiveButton(android.R.string.cancel, null)
         .setCancelable(true)
         .create()
