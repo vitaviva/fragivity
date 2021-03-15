@@ -3,8 +3,10 @@ package com.github.fragivity
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.collection.SparseArrayCompat
+import androidx.collection.keyIterator
 import androidx.collection.valueIterator
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.MyFragmentNavigator
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
@@ -28,11 +30,23 @@ internal class MyViewModel(
 
         val nodes = SparseArrayCompat<NavDestination>()
         list.forEach {
-            val clazz = Class.forName(it.className) as Class<Fragment>
-            val destination = navController.createNavDestination(clazz.hashCode(), clazz.kotlin)
-            nodes.put(destination.id, destination)
+            if (it.className.isEmpty()) {
+                nodes.put(it.id, navController.createMyNavDestination(it.id))
+            } else {
+                val clazz = Class.forName(it.className) as Class<Fragment>
+                val destination = navController.createNavDestination(clazz.hashCode(), clazz.kotlin)
+                nodes.put(destination.id, destination)
+            }
         }
         nodes
+    }
+
+    internal fun saveDestination(destination: NavDestination) {
+        if (nodes.keyIterator().asSequence().any { it == destination.id }) {
+            return
+        }
+        nodes.put(destination.id, destination)
+        saveState()
     }
 
     internal fun saveState() {
@@ -59,15 +73,19 @@ internal class MyViewModel(
 }
 
 @Parcelize
-internal data class NavDestinationBundle(val className: String) : Parcelable {
+internal data class NavDestinationBundle(
+    val id: Int,
+    val className: String
+) : Parcelable {
     companion object {
         operator fun invoke(destination: NavDestination) = run {
             val clazzName = when (destination) {
+                is MyFragmentNavigator.MyDestination -> ""
                 is FragmentNavigator.Destination -> destination.className
                 is DialogFragmentNavigator.Destination -> destination.className
                 else -> error("Invalid Destination")
             }
-            NavDestinationBundle(clazzName)
+            NavDestinationBundle(destination.id, clazzName)
         }
     }
 }

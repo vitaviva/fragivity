@@ -329,10 +329,14 @@ public class MyFragmentNavigator extends FragmentNavigator {
     public static class MyDestination extends FragmentNavigator.Destination {
 
         // kotlin: (Bundle) -> Fragment
-        private final Function<Bundle, Fragment> content;
+        private Function<Bundle, Fragment> content;
 
         public MyDestination(MyFragmentNavigator navigator, Function<Bundle, Fragment> content) {
             super(navigator);
+            this.content = content;
+        }
+
+        public void setContent(Function<Bundle, Fragment> content) {
             this.content = content;
         }
 

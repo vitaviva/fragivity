@@ -5,17 +5,16 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.MyFragmentNavigator
-import androidx.navigation.NavController
+import androidx.lifecycle.ViewModelLazy
 import androidx.navigation.NavDeepLinkRequest
-import androidx.navigation.get
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navigate
 import androidx.navigation.popBackStack
-import com.github.fragivity.MyNavHost
-import com.github.fragivity.NavOptions
-import com.github.fragivity.`$NavOptionsDefault`
+import com.github.fragivity.*
+import com.github.fragivity.MyNavHost.Companion.assertionFactory
 
 @JvmSynthetic
-fun NavController.composable(
+fun NavHostFragment.composable(
     route: String,
     argument: NamedNavArgument,
     content: (Bundle) -> Fragment
@@ -24,26 +23,38 @@ fun NavController.composable(
 }
 
 @JvmSynthetic
-fun NavController.composable(
+fun NavHostFragment.composable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     content: (Bundle) -> Fragment
 ) {
-    graph.addDestination(
-        MyFragmentNavigator.MyDestination(
-            navigatorProvider[MyFragmentNavigator::class],
-            content
-        ).apply {
-            val internalRoute = createRoute(route)
-            // make id > 0
-            id = internalRoute.hashCode() and Int.MAX_VALUE
+    val internalRoute = createRoute(route)
+    // make id > 0
+    val destinationId = internalRoute.hashCode() and Int.MAX_VALUE
 
-            addDeepLink(internalRoute)
-            arguments.forEach { (argumentName, argument) ->
-                addArgument(argumentName, argument)
-            }
+    var node = navController.graph.findNode(destinationId)
+    if (node is MyFragmentNavigator.MyDestination) {
+        node.setContent(content)
+    } else {
+        node = navController.createMyNavDestination(destinationId, content)
+        navController.graph.addDestination(node)
+    }
+
+    node.apply {
+        addDeepLink(internalRoute)
+        arguments.forEach { (argumentName, argument) ->
+            addArgument(argumentName, argument)
         }
+    }
+
+    // save destination for rebuild
+    val activity = requireActivity()
+    val viewModel by ViewModelLazy(
+        MyViewModel::class,
+        { activity.viewModelStore },
+        { assertionFactory }
     )
+    viewModel.saveDestination(node)
 }
 
 @JvmSynthetic

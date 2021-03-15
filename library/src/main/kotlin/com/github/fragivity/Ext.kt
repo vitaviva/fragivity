@@ -3,6 +3,7 @@
 
 package com.github.fragivity
 
+import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.collection.valueIterator
@@ -140,6 +141,15 @@ internal fun NavController.createNavDestination(
         }
     }).build()
 }
+
+@JvmSynthetic
+internal fun NavController.createMyNavDestination(
+    destinationId: Int,
+    content: ((Bundle) -> Fragment)? = null
+) = MyFragmentNavigator.MyDestination(
+    navigatorProvider[MyFragmentNavigator::class],
+    content
+).apply { id = destinationId }
 
 internal fun Fragment.requireParentFragmentManager() =
     if (parentFragment is ReportFragment) requireParentFragment().parentFragmentManager else parentFragmentManager

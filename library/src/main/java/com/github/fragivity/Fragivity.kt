@@ -37,31 +37,31 @@ object Fragivity {
 
     @JvmStatic
     fun composable(
-        navController: NavController,
+        navHostFragment: NavHostFragment,
         route: String,
         factory: Function<Bundle, Fragment>
     ) {
-        navController.composable(route, emptyList()) { factory.apply(it) }
+        navHostFragment.composable(route, emptyList()) { factory.apply(it) }
     }
 
     @JvmStatic
     fun composable(
-        navController: NavController,
+        navHostFragment: NavHostFragment,
         route: String,
         argument: NamedNavArgument,
         factory: Function<Bundle, Fragment>
     ) {
-        navController.composable(route, listOf(argument)) { factory.apply(it) }
+        navHostFragment.composable(route, listOf(argument)) { factory.apply(it) }
     }
 
     @JvmStatic
     fun composable(
-        navController: NavController,
+        navHostFragment: NavHostFragment,
         route: String,
         arguments: List<NamedNavArgument>,
         factory: Function<Bundle, Fragment>
     ) {
-        navController.composable(route, arguments) { factory.apply(it) }
+        navHostFragment.composable(route, arguments) { factory.apply(it) }
     }
 
     @JvmStatic

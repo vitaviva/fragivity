@@ -33,13 +33,7 @@ class MyNavHost(
 
     @JvmSynthetic
     internal fun saveToViewModel(destination: NavDestination) {
-        with(_vm) {
-            if (nodes.keyIterator().asSequence().any {
-                    it == destination.id
-                }) return
-            nodes.put(destination.id, destination)
-            saveState()
-        }
+        _vm.saveDestination(destination)
     }
 
     @JvmSynthetic
@@ -48,7 +42,7 @@ class MyNavHost(
     }
 
     companion object {
-        private val assertionFactory = object : ViewModelProvider.Factory {
+        internal val assertionFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 throw IllegalStateException("${modelClass.simpleName} should be created in loadRoot.")
             }

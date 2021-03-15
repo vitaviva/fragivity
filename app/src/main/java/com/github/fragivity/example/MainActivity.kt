@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.handleDeepLink(intent)
         navHostFragment.showDebugView(container)
 
-        with(navHostFragment.navController) {
+        with(navHostFragment) {
             composable("feed") { FeedFragment.newInstance() }
             composable("search?keyword={keyword}", stringArgument("keyword")) {
                 SearchFragment.newInstance()
