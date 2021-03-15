@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import com.github.fragivity.applySlideInOut
 import com.github.fragivity.dialog.showDialog
 import com.github.fragivity.example.backpress.BackPressFragment
@@ -17,6 +18,7 @@ import com.github.fragivity.example.swipeback.SwipeBackFragment
 import com.github.fragivity.finish
 import com.github.fragivity.navigator
 import com.github.fragivity.push
+import com.github.fragivity.router.push
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : AbsBaseFragment(false) {
@@ -65,6 +67,12 @@ class HomeFragment : AbsBaseFragment(false) {
 
         btn_nested.setOnClickListener {
             navigator.push(NestedFragment::class)
+        }
+
+        btn_router.setOnClickListener {
+            navigator.push("feed") {
+                arguments = bundleOf("isShowBackSearch" to false)
+            }
         }
     }
 

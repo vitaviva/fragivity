@@ -1,4 +1,5 @@
-include ':processor'
-include ':app'
 rootProject.name='fragivity'
+include ':app'
 include ':library'
+include ':processor'
+include ':component:feed', ':component:search'

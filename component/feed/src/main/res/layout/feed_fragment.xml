@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:text="Feed"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btn_go_to_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to Search" />
+
+    <Button
+        android:id="@+id/btn_go_back_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go Back Search" />
+</LinearLayout>
