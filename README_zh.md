@@ -198,6 +198,31 @@ val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://fragitiy.github.com/"
 startActivity(intent)
 ```
 
+## 路由
+
+### 1.在Activity中绑定Fragment
+
+```kotlin
+with(navHostFragment) {
+    composable("feed") { FeedFragment.newInstance() }
+    composable("search?keyword={keyword}", stringArgument("keyword")) {
+        SearchFragment.newInstance()
+    }
+}
+```
+
+### 2.导航到目标Fragment
+
+```kotlin
+navigator.push("search?keyword=$value")
+// or
+navigator.push("search") {
+    arguments = bundleOf("keyword" to value.toString())
+}
+
+navigator.popTo("search")
+```
+
 ## 使用Java进行开发
 Fragivity支持使用Java进行开发。参考:[APIs For Java](https://github.com/vitaviva/fragivity/blob/master/USE_JAVA.md)
 

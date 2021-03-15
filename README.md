@@ -191,6 +191,31 @@ val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://fragitiy.github.com/"
 startActivity(intent)
 ```
 
+## Router
+
+### 1.composable Fragment in Activity
+
+```kotlin
+with(navHostFragment) {
+    composable("feed") { FeedFragment.newInstance() }
+    composable("search?keyword={keyword}", stringArgument("keyword")) {
+        SearchFragment.newInstance()
+    }
+}
+```
+
+### 2.navigate to destination Fragment
+
+```kotlin
+navigator.push("search?keyword=$value")
+// or
+navigator.push("search") {
+    arguments = bundleOf("keyword" to value.toString())
+}
+
+navigator.popTo("search")
+```
+
 ## Using in Java
 Fragivity provides a set of [APIs for Java developers](https://github.com/vitaviva/fragivity/blob/master/USE_JAVA.md) 
 
