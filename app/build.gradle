@@ -59,6 +59,8 @@ dependencies {
         implementation 'com.github.fragivity:processor:0.1.0'
         kapt 'com.github.fragivity:processor:0.1.0'
     }
+    implementation project(':component:feed')
+    implementation project(':component:search')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

@@ -7,6 +7,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.showDebugView
 import com.github.fragivity.deeplink.handleDeepLink
 import com.github.fragivity.loadRoot
+import com.github.fragivity.router.composable
+import com.github.fragivity.router.stringArgument
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -28,5 +30,11 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.handleDeepLink(intent)
         navHostFragment.showDebugView(container)
 
+        with(navHostFragment) {
+            composable("feed") { FeedFragment.newInstance() }
+            composable("search?keyword={keyword}", stringArgument("keyword")) {
+                SearchFragment.newInstance()
+            }
+        }
     }
 }

@@ -15,7 +15,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <Button
                 android:id="@+id/btn_launchmode"
                 android:layout_width="match_parent"
@@ -52,19 +51,23 @@
                 android:layout_height="wrap_content"
                 android:text="Swipe Back" />
 
-
             <Button
                 android:id="@+id/btn_dialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Dialog" />
 
-
             <Button
                 android:id="@+id/btn_nested"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nested" />
+
+            <Button
+                android:id="@+id/btn_router"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Router" />
         </LinearLayout>
     </ScrollView>
 

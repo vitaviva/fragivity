@@ -3,6 +3,7 @@
 
 package com.github.fragivity
 
+import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.collection.valueIterator
@@ -20,6 +21,7 @@ import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.github.fragivity.deeplink.getRouteUri
+import com.github.fragivity.router.createRoute
 import kotlin.reflect.KClass
 
 private val _fragNavHostMap = mutableMapOf<Fragment, MyNavHost>()
@@ -80,7 +82,6 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
         )
         val startDestId = root.hashCode()
         graph = createGraph(startDestination = startDestId) {
-
             destination(
                 FragmentNavigatorDestinationBuilder(
                     provider[MyFragmentNavigator::class],
@@ -88,6 +89,7 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
                     root
                 ).apply {
                     label = "home"
+                    deepLink(createRoute("root"))
                 })
 
         }.also { graph ->
@@ -139,6 +141,15 @@ internal fun NavController.createNavDestination(
         }
     }).build()
 }
+
+@JvmSynthetic
+internal fun NavController.createMyNavDestination(
+    destinationId: Int,
+    content: ((Bundle) -> Fragment)? = null
+) = MyFragmentNavigator.MyDestination(
+    navigatorProvider[MyFragmentNavigator::class],
+    content
+).apply { id = destinationId }
 
 internal fun Fragment.requireParentFragmentManager() =
     if (parentFragment is ReportFragment) requireParentFragment().parentFragmentManager else parentFragmentManager
