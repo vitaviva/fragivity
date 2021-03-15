@@ -35,6 +35,9 @@ private fun addDebugFragmentRecord(
 }
 
 private fun getChildFragmentRecords(parentFragment: Fragment): List<DebugFragmentRecord> {
+    // java.lang.IllegalStateException: Fragment .. has not been attached yet.
+    if (!parentFragment.isAdded) return emptyList()
+
     val fragmentList = parentFragment.childFragmentManager.fragments
     if (fragmentList.isNullOrEmpty()) return emptyList()
 
