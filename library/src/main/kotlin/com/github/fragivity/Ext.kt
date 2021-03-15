@@ -20,6 +20,7 @@ import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.github.fragivity.deeplink.getRouteUri
+import com.github.fragivity.router.createRoute
 import kotlin.reflect.KClass
 
 private val _fragNavHostMap = mutableMapOf<Fragment, MyNavHost>()
@@ -80,7 +81,6 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
         )
         val startDestId = root.hashCode()
         graph = createGraph(startDestination = startDestId) {
-
             destination(
                 FragmentNavigatorDestinationBuilder(
                     provider[MyFragmentNavigator::class],
@@ -88,6 +88,7 @@ fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
                     root
                 ).apply {
                     label = "home"
+                    deepLink(createRoute("root"))
                 })
 
         }.also { graph ->

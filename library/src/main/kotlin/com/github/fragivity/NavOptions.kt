@@ -90,7 +90,7 @@ internal fun NavOptions.toBundle(): Bundle? =
 
 @JvmSynthetic
 internal fun NavOptions.totOptions(
-    clazz: KClass<out Fragment>
+    clazz: KClass<out Fragment>? = null
 ): androidx.navigation.NavOptions =
     androidx.navigation.NavOptions.Builder().apply {
         setEnterAnim(enterAnim)
@@ -98,7 +98,7 @@ internal fun NavOptions.totOptions(
         setPopEnterAnim(popEnterAnim)
         setPopExitAnim(popExitAnim)
         setLaunchSingleTop(launchMode == LaunchMode.SINGLE_TOP)
-        if (launchMode == LaunchMode.SINGLE_TASK) {
+        if (launchMode == LaunchMode.SINGLE_TASK && clazz != null) {
             setPopUpTo(clazz.hashCode(), true)
         }
     }.build()

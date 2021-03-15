@@ -24,6 +24,7 @@ import android.view.View;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.arch.core.util.Function;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
@@ -83,12 +84,17 @@ public class MyFragmentNavigator extends FragmentNavigator {
                     + " saved its state");
             return null;
         }
-        String className = destination.getClassName();
-        if (className.charAt(0) == '.') {
-            className = mContext.getPackageName() + className;
+
+        final Fragment frag;
+        if (destination instanceof MyDestination) {
+            frag = ((MyDestination) destination).getFragment(args);
+        } else {
+            String className = destination.getClassName();
+            if (className.charAt(0) == '.') {
+                className = mContext.getPackageName() + className;
+            }
+            frag = instantiateFragment(mContext, mFragmentManager, className, args);
         }
-        final Fragment frag = instantiateFragment(mContext, mFragmentManager,
-                className, args);
 //        frag.setArguments(args);
         final FragmentTransaction ft = mFragmentManager.beginTransaction();
 
@@ -317,6 +323,26 @@ public class MyFragmentNavigator extends FragmentNavigator {
                     mBackStack.add(destId);
                 }
             }
+        }
+    }
+
+    public static class MyDestination extends FragmentNavigator.Destination {
+
+        // kotlin: (Bundle) -> Fragment
+        private final Function<Bundle, Fragment> content;
+
+        public MyDestination(MyFragmentNavigator navigator, Function<Bundle, Fragment> content) {
+            super(navigator);
+            this.content = content;
+        }
+
+        Fragment getFragment(Bundle args) {
+            Fragment fragment = content.apply(args);
+            if (fragment.getArguments() != null) {
+                args.putAll(fragment.getArguments());
+            }
+            fragment.setArguments(args);
+            return fragment;
         }
     }
 }

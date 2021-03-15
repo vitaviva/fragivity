@@ -1,12 +1,18 @@
 package com.github.fragivity
 
 import android.os.Bundle
+import androidx.arch.core.util.Function
 import androidx.core.util.Supplier
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentProviderMap
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.dialog.showDialog
+import com.github.fragivity.router.NamedNavArgument
+import com.github.fragivity.router.composable
+import com.github.fragivity.router.popTo
+import com.github.fragivity.router.push
 
 object Fragivity {
 
@@ -27,6 +33,35 @@ object Fragivity {
         val kClass = fragmentClazz.kotlin
         FragmentProviderMap[requireNotNull(kClass.qualifiedName)] = { factory.get() }
         navHost.loadRoot(kClass)
+    }
+
+    @JvmStatic
+    fun composable(
+        navController: NavController,
+        route: String,
+        factory: Function<Bundle, Fragment>
+    ) {
+        navController.composable(route, emptyList()) { factory.apply(it) }
+    }
+
+    @JvmStatic
+    fun composable(
+        navController: NavController,
+        route: String,
+        argument: NamedNavArgument,
+        factory: Function<Bundle, Fragment>
+    ) {
+        navController.composable(route, listOf(argument)) { factory.apply(it) }
+    }
+
+    @JvmStatic
+    fun composable(
+        navController: NavController,
+        route: String,
+        arguments: List<NamedNavArgument>,
+        factory: Function<Bundle, Fragment>
+    ) {
+        navController.composable(route, arguments) { factory.apply(it) }
     }
 
     @JvmStatic
@@ -61,6 +96,16 @@ object Fragivity {
             args: Bundle? = null
         ) {
             _fragment.navigator.showDialog(requireNotNull(fragmentClazz.kotlin), args)
+        }
+
+        @JvmOverloads
+        fun push(route: String, navOptions: NavOptions? = null) {
+            _fragment.navigator.push(route, navOptions)
+        }
+
+        @JvmOverloads
+        fun popTo(route: String, inclusive: Boolean = false) {
+            _fragment.navigator.popTo(route, inclusive)
         }
 
         fun pop() {
