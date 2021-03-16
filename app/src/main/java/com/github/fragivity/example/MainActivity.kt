@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.showDebugView
+import com.github.fragivity.debug.showDebugView
 import com.github.fragivity.deeplink.handleDeepLink
 import com.github.fragivity.loadRoot
 import com.github.fragivity.router.composable
