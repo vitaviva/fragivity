@@ -5,13 +5,11 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.MyFragmentNavigator
-import androidx.lifecycle.ViewModelLazy
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navigate
 import androidx.navigation.popBackStack
 import com.github.fragivity.*
-import com.github.fragivity.MyNavHost.Companion.assertionFactory
 
 @JvmSynthetic
 fun NavHostFragment.composable(
@@ -48,13 +46,8 @@ fun NavHostFragment.composable(
     }
 
     // save destination for rebuild
-    val activity = requireActivity()
-    val viewModel by ViewModelLazy(
-        MyViewModel::class,
-        { activity.viewModelStore },
-        { assertionFactory }
-    )
-    viewModel.saveDestination(node)
+    val viewModel = requireActivity().getFragivityViewModel()
+    viewModel.putDestination(node)
 }
 
 @JvmSynthetic

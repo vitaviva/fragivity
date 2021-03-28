@@ -37,6 +37,7 @@ import java.util.Map;
 
 import static androidx.fragment.app.FragmentTransaction.OP_ADD;
 import static androidx.fragment.app.ReportFragment.REAL_FRAGMENT;
+import static com.github.fragivity.NavOptionsKt.KEY_POP_SELF;
 
 @Navigator.Name("ignore")
 public class MyFragmentNavigator extends FragmentNavigator {
@@ -126,7 +127,9 @@ public class MyFragmentNavigator extends FragmentNavigator {
         boolean isAdded;
         if (initialNavigation) {
             isAdded = true;
-        } else if (isSingleTopReplacement) {
+        } else if (isSingleTopReplacement
+                || args.getBoolean(KEY_POP_SELF) //when popsSelf == true close preFrag as SingleTop: see https://github.com/vitaviva/fragivity/issues/26
+        ) {
             // Single Top means we only want one instance on the back stack
             if (mBackStack.size() > 1) {
 //                // If the Fragment to be replaced is on the FragmentManager's

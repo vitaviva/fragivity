@@ -1,10 +1,9 @@
-package androidx.navigation
+package com.github.fragivity.debug
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
@@ -13,6 +12,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.res.use
 import com.github.fragivity.R
+import com.github.fragivity.util.dp
 
 internal class DebugHierarchyViewContainer @JvmOverloads constructor(
     context: Context,
@@ -30,13 +30,6 @@ internal class DebugHierarchyViewContainer @JvmOverloads constructor(
 
     private val itemHeight = 50.dp
     private val itemPadding = 16.dp
-
-    private val Int.dp: Int
-        get() = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            context.resources.displayMetrics
-        ).toInt()
 
     private val titleLayout by lazy(LazyThreadSafetyMode.NONE) {
         val titleLayout = LinearLayout(context).apply {
@@ -164,4 +157,6 @@ internal class DebugHierarchyViewContainer @JvmOverloads constructor(
             }
         }
     }
+
+    private inline val Int.dp: Int get() = dp(context)
 }

@@ -93,6 +93,7 @@ class MyAdapter(private val myDataset: Array<String>) :
 
         holder.item.setOnClickListener {
             holder.item.navigator.push(UserProfile::class) {
+                popSelf = true
                 applyArguments(USERNAME_KEY to myDataset[position])
                 applySlideInOut()
                 applySharedElements(imageView to "imageView")

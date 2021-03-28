@@ -1,4 +1,4 @@
-package androidx.navigation
+package com.github.fragivity.debug
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -9,32 +9,42 @@ internal data class DebugFragmentRecord(
     val childrenList: List<DebugFragmentRecord>
 )
 
-internal fun FragmentActivity.getFragmentRecords(): List<DebugFragmentRecord> {
+internal fun FragmentActivity.getFragmentRecords(
+    predicate: (Fragment) -> Boolean = { true }
+): List<DebugFragmentRecord> {
     val fragmentList = supportFragmentManager.fragments
     if (fragmentList.isNullOrEmpty()) return emptyList()
 
     val fragmentRecordList = mutableListOf<DebugFragmentRecord>()
-    fragmentList.forEach { addDebugFragmentRecord(fragmentRecordList, it) }
+    fragmentList.forEach { fragment ->
+        if (predicate(fragment)) {
+            addDebugFragmentRecord(fragmentRecordList, fragment, predicate)
+        }
+    }
     return fragmentRecordList
 }
 
 private fun addDebugFragmentRecord(
     fragmentRecords: MutableList<DebugFragmentRecord>,
-    fragment: Fragment?
+    fragment: Fragment?,
+    predicate: (Fragment) -> Boolean
 ) {
     if (fragment == null) return
 
     // Ignore ReportFragment
     if (fragment is ReportFragment) {
-        fragmentRecords.addAll(getChildFragmentRecords(fragment))
+        fragmentRecords.addAll(getChildFragmentRecords(fragment, predicate))
         return
     }
 
     val name = fragment::class.java.simpleName
-    fragmentRecords.add(DebugFragmentRecord(name, getChildFragmentRecords(fragment)))
+    fragmentRecords.add(DebugFragmentRecord(name, getChildFragmentRecords(fragment, predicate)))
 }
 
-private fun getChildFragmentRecords(parentFragment: Fragment): List<DebugFragmentRecord> {
+private fun getChildFragmentRecords(
+    parentFragment: Fragment,
+    predicate: (Fragment) -> Boolean
+): List<DebugFragmentRecord> {
     // java.lang.IllegalStateException: Fragment .. has not been attached yet.
     if (!parentFragment.isAdded) return emptyList()
 
@@ -42,6 +52,10 @@ private fun getChildFragmentRecords(parentFragment: Fragment): List<DebugFragmen
     if (fragmentList.isNullOrEmpty()) return emptyList()
 
     val fragmentRecordList = mutableListOf<DebugFragmentRecord>()
-    fragmentList.forEach { addDebugFragmentRecord(fragmentRecordList, it) }
+    fragmentList.forEach { fragment ->
+        if (predicate(fragment)) {
+            addDebugFragmentRecord(fragmentRecordList, fragment, predicate)
+        }
+    }
     return fragmentRecordList
 }
