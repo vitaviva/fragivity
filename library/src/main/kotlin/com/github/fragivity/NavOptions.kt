@@ -84,9 +84,13 @@ fun NavOptions.applyFadeInOut() {
 }
 
 
+internal const val KEY_POP_SELF = "Fragivity:PopSelf"
+
 @JvmSynthetic
 internal fun NavOptions.toBundle(): Bundle? =
-    arguments.takeIf { it != Bundle.EMPTY }
+    (arguments.takeIf { it != Bundle.EMPTY } ?: Bundle()).apply {
+        putBoolean(KEY_POP_SELF, this@toBundle.popSelf)
+    }
 
 @JvmSynthetic
 internal fun NavOptions.totOptions(

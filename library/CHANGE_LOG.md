@@ -1,3 +1,6 @@
+## 0.2.1
+fix https://github.com/vitaviva/fragivity/issues/26
+
 ## 0.2.0
 support routing with a string key
 

@@ -59,9 +59,6 @@ internal fun MyNavHost.pushInternal(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
 ) = with(navController) {
-    if (navOptions?.popSelf == true) {
-        navController.popBackStack()
-    }
     val node = putFragment(clazz)
     if (navOptions == null)
         navigate(node.id)
