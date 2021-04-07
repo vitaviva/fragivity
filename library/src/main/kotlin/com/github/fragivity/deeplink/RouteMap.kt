@@ -8,10 +8,8 @@ private val _routeMap = mutableMapOf<String, KClass<out Fragment>>()
 internal fun getRouteUri(clazz: KClass<out Fragment>): String? =
     _routeMap.toList().firstOrNull { it.second == clazz }?.first
 
-
 internal fun getFragmentInfo(uri: String): KClass<out Fragment>? =
     _routeMap[uri]
-
 
 /**
  *  Add URI info for Fragment

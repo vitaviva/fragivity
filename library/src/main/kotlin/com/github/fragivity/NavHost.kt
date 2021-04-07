@@ -32,16 +32,6 @@ class MyNavHost(
 }
 
 /**
- * Navigates to fragment of [clazz] by pushing it to back stack
- */
-@JvmSynthetic
-fun MyNavHost.push(
-    clazz: KClass<out Fragment>,
-    optionsBuilder: NavOptions.() -> Unit = {}
-) =
-    pushInternal(clazz, `$NavOptionsDefault`().apply(optionsBuilder))
-
-/**
  * Navigates to a fragment by its factory
  */
 @JvmSynthetic
@@ -52,6 +42,17 @@ inline fun <reified T : Fragment> MyNavHost.push(
     val clazz = T::class
     FragmentProviderMap[clazz.qualifiedName!!] = block
     push(clazz, optionsBuilder = optionsBuilder)
+}
+
+/**
+ * Navigates to fragment of [clazz] by pushing it to back stack
+ */
+@JvmSynthetic
+fun MyNavHost.push(
+    clazz: KClass<out Fragment>,
+    optionsBuilder: NavOptions.() -> Unit = {}
+) {
+    pushInternal(clazz, `$NavOptionsDefault`().apply(optionsBuilder))
 }
 
 @JvmSynthetic
@@ -68,25 +69,6 @@ internal fun MyNavHost.pushInternal(
             navOptions.totOptions(clazz),
             navOptions.totExtras()
         )
-
-}
-
-
-/**
- * pop current fragment from back stack
- */
-@JvmSynthetic
-fun MyNavHost.pop() {
-    navController.popBackStack()
-}
-
-
-/**
- * Pop back stack to [clazz]
- */
-@JvmSynthetic
-fun MyNavHost.popTo(clazz: KClass<out Fragment>) {
-    navController.popBackStack(clazz.hashCode(), false)
 }
 
 @JvmSynthetic
@@ -98,8 +80,24 @@ internal fun MyNavHost.putFragment(
     var destination = graph.findNode(destId) as? FragmentNavigator.Destination
     if (destination == null) {
         destination = navController.createNavDestination(destId, clazz)
-        graph.plusAssign(destination)
+        graph += destination
         saveToViewModel(destination)
     }
     return destination
+}
+
+/**
+ * pop current fragment from back stack
+ */
+@JvmSynthetic
+fun MyNavHost.pop() {
+    navController.popBackStack()
+}
+
+/**
+ * Pop back stack to [clazz]
+ */
+@JvmSynthetic
+fun MyNavHost.popTo(clazz: KClass<out Fragment>) {
+    navController.popBackStack(clazz.hashCode(), false)
 }
