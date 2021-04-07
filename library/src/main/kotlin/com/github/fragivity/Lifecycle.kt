@@ -8,10 +8,7 @@ import androidx.collection.valueIterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.MyFragmentNavigator
 import androidx.lifecycle.*
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavHost
-import androidx.navigation.findNavController
+import androidx.navigation.*
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
@@ -37,22 +34,16 @@ class FragivityViewModel(
         val array: Array<NavDestinationBundle> = savedStateHandle.get(NAV_DEST_NODES_KEY)
             ?: return@lazy SparseArrayCompat<NavDestination>()
 
-        val sparseArray = SparseArrayCompat<NavDestination>(array.size)
-        array.forEach {
-            sparseArray.put(
-                it.id, if (it.className.isEmpty()) {
-                    navController.createMyNavDestination(it.id)
-                } else {
-                    @Suppress("UNCHECKED_CAST")
-                    val clazz = Class.forName(it.className) as Class<Fragment>
-                    navController.createNavDestination(
-                        it.hashCode(),
-                        clazz.kotlin
-                    )
-                }
-            )
+        SparseArrayCompat<NavDestination>(array.size).apply {
+            array.forEach { put(it.id, it.toDestination(navController)) }
         }
-        sparseArray
+    }
+
+    internal fun restoreDestination(graphBuilder: NavGraphBuilder) {
+        nodes.valueIterator().forEach {
+            it.removeFromParent()
+            graphBuilder.addDestination(it)
+        }
     }
 
     internal fun setNavController(navController: NavController) {
@@ -75,7 +66,7 @@ class FragivityViewModel(
         val array = Array<NavDestinationBundle?>(nodes.size()) { null }
         var i = 0
         nodes.valueIterator().forEach {
-            array[i++] = navDestinationBundle(it)
+            array[i++] = it.toBundle()
         }
         savedStateHandle.set(NAV_DEST_NODES_KEY, array)
     }
@@ -94,9 +85,7 @@ class FragivityViewModel(
         })
         navHost.putFragment(fragment::class)
 
-        val lifecycleOwner = if (fragment.view != null) {
-            fragment.viewLifecycleOwner
-        } else fragment
+        val lifecycleOwner = if (fragment.view != null) fragment.viewLifecycleOwner else fragment
         lifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
             if (Lifecycle.Event.ON_DESTROY == event) {
                 fragNavHostMap.remove(id)
@@ -128,8 +117,6 @@ class FragivityViewModel(
         return navHost
     }
 
-    fun nodesIterator() = nodes.valueIterator()
-
     override fun onCleared() {
         super.onCleared()
         fragNavHostMap.clear()
@@ -143,21 +130,30 @@ class FragivityViewModel(
     }
 }
 
+private fun NavDestinationBundle.toDestination(navController: NavController): NavDestination {
+    if (className.isNotEmpty()) {
+        @Suppress("UNCHECKED_CAST")
+        val clazz = Class.forName(className) as Class<Fragment>
+        return navController.createNavDestination(hashCode(), clazz.kotlin)
+    }
+    return navController.createMyNavDestination(id)
+}
+
+private fun NavDestination.toBundle(): NavDestinationBundle {
+    val clazzName = when (this) {
+        is MyFragmentNavigator.MyDestination -> ""
+        is FragmentNavigator.Destination -> className
+        is DialogFragmentNavigator.Destination -> className
+        else -> error("Invalid Destination")
+    }
+    return NavDestinationBundle(id, clazzName)
+}
+
 @Parcelize
 private data class NavDestinationBundle(
     val id: Int,
     val className: String
 ) : Parcelable
-
-private fun navDestinationBundle(node: NavDestination): NavDestinationBundle {
-    val clazzName = when (node) {
-        is MyFragmentNavigator.MyDestination -> ""
-        is FragmentNavigator.Destination -> node.className
-        is DialogFragmentNavigator.Destination -> node.className
-        else -> error("Invalid Destination")
-    }
-    return NavDestinationBundle(node.id, clazzName)
-}
 
 private inline val Any.navHostId: Int
     get() = System.identityHashCode(this)
