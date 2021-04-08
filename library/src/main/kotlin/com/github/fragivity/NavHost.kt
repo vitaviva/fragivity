@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
  * NavHost with viewModel to store NavDestination
  */
 class MyNavHost(
-    private val viewModel: FragivityViewModel,
+    private val viewModel: FragivityNodeViewModel,
     navHost: NavHost
 ) : NavHost by navHost {
 

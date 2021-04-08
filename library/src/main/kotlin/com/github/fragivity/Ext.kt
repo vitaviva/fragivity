@@ -4,10 +4,13 @@
 package com.github.fragivity
 
 import android.view.View
-import androidx.activity.ComponentActivity
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentProviderMap
 import androidx.fragment.app.MyFragmentNavigator
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.NavHostFragment
@@ -17,10 +20,13 @@ import kotlin.collections.set
 import kotlin.reflect.KClass
 
 val Fragment.navigator: MyNavHost
-    get() = requireActivity().getFragivityViewModel().getNavHost(this)
+    get() = fragivityHostViewModel.navHost
 
 val View.navigator: MyNavHost
-    get() = (context as ComponentActivity).getFragivityViewModel().getNavHost(this)
+    get() = fragivityHostViewModel.navHost
+
+val NavController.navigator: MyNavHost
+    get() = fragivityHostViewModel.navHost
 
 /**
  * Load root fragment
@@ -38,8 +44,10 @@ fun NavHostFragment.loadRoot(route: String, root: KClass<out Fragment>) {
         val fragmentNavigator = MyFragmentNavigator(activity, childFragmentManager, id)
         navigatorProvider.addNavigator(fragmentNavigator)
 
-        val viewModel = activity.getFragivityViewModel()
-        viewModel.setNavController(this)
+        val nodeViewModel = ViewModelProvider(
+            this@loadRoot,
+            defaultViewModelProviderFactory
+        ).get(FragivityNodeViewModel::class.java)
 
         val startDestId = root.hashCode()
         graph = createGraph(startDestination = startDestId) {
@@ -51,8 +59,10 @@ fun NavHostFragment.loadRoot(route: String, root: KClass<out Fragment>) {
                 deepLink(createRoute(route))
             })
             // restore destination from vm for NavController#mBackStackToRestore
-            viewModel.restoreDestination(this)
+            nodeViewModel.restoreDestination(this@with, this)
         }
+
+        fragivityHostViewModel.setUpNavHost(nodeViewModel, this)
     }
 }
 

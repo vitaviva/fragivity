@@ -46,8 +46,7 @@ fun NavHostFragment.composable(
     }
 
     // save destination for rebuild
-    val viewModel = requireActivity().getFragivityViewModel()
-    viewModel.putDestination(node)
+    navController.fragivityHostViewModel.navHost.saveToViewModel(node)
 }
 
 @JvmSynthetic
