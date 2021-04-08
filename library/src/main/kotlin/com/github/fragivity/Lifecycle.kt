@@ -134,7 +134,7 @@ private fun NavDestinationBundle.toDestination(navController: NavController): Na
     if (className.isNotEmpty()) {
         @Suppress("UNCHECKED_CAST")
         val clazz = Class.forName(className) as Class<Fragment>
-        return navController.createNavDestination(hashCode(), clazz.kotlin)
+        return navController.createNavDestination(id, clazz.kotlin)
     }
     return navController.createMyNavDestination(id)
 }
