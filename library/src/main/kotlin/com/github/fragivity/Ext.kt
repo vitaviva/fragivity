@@ -68,6 +68,14 @@ inline fun <reified T : Fragment> NavHostFragment.loadRoot(
     loadRoot(T::class)
 }
 
+fun FragmentActivity.findNavHostFragment(@IdRes id: Int): NavHostFragment {
+    return supportFragmentManager.findFragmentById(id) as NavHostFragment
+}
+
+fun Fragment.findNavHostFragment(@IdRes id: Int): NavHostFragment {
+    return childFragmentManager.findFragmentById(id) as NavHostFragment
+}
+
 /**
  * finish Activity
  */
