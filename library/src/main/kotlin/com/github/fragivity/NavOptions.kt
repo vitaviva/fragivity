@@ -83,11 +83,24 @@ fun NavOptions.applyFadeInOut() {
     popExitAnim = R.anim.nav_default_exit_anim
 }
 
+fun NavOptions.applyVerticalInOut() {
+    enterAnim = R.anim.v_fragment_enter
+    exitAnim = R.anim.v_fragment_exit
+    popEnterAnim = R.anim.v_fragment_pop_enter
+    popExitAnim = R.anim.v_fragment_pop_exit
+}
+
+fun NavOptions.applyHorizontalInOut() {
+    enterAnim = R.anim.h_fragment_enter
+    exitAnim = R.anim.h_fragment_exit
+    popEnterAnim = R.anim.h_fragment_pop_enter
+    popExitAnim = R.anim.h_fragment_pop_exit
+}
 
 internal const val KEY_POP_SELF = "Fragivity:PopSelf"
 
 @JvmSynthetic
-internal fun NavOptions.toBundle(): Bundle? =
+internal fun NavOptions.toBundle(): Bundle =
     (arguments.takeIf { it != Bundle.EMPTY } ?: Bundle()).apply {
         putBoolean(KEY_POP_SELF, this@toBundle.popSelf)
     }
