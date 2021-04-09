@@ -68,6 +68,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Router" />
+
+            <Button
+                android:id="@+id/btn_go_to_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Demo1: Similar to GooglePlay" />
+
         </LinearLayout>
     </ScrollView>
 

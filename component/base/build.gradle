@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "kotlin-kapt"
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api 'androidx.appcompat:appcompat:1.2.0'
+    api 'androidx.core:core-ktx:1.3.2'
+    api 'com.google.android.material:material:1.3.0'
+    api 'androidx.constraintlayout:constraintlayout:2.0.4'
+    api "androidx.activity:activity-ktx:1.3.0-alpha05"
+    api 'androidx.navigation:navigation-ui-ktx:2.3.4'
+    api 'androidx.viewpager2:viewpager2:1.0.0'
+
+    // api "androidx.fragment:fragment:$fragment_version"
+    // api "androidx.fragment:fragment-ktx:$fragment_version"
+    api "androidx.fragment:fragment-ktx:1.3.2"
+
+    if (codeDepend) {
+        api project(':library')
+    } else {
+        api "com.github.fragivity:core:$ARTIFACT_VERSION"
+    }
+}
