@@ -30,10 +30,10 @@ internal val NavController.fragivityHostViewModel: FragivityHostViewModel
 
 class FragivityHostViewModel : ViewModel() {
 
-    lateinit var navHost: MyNavHost
+    lateinit var navHost: FragivityNavHost
 
     internal fun setUpNavHost(viewModel: FragivityNodeViewModel, navController: NavController) {
-        navHost = MyNavHost(viewModel, NavHost { navController })
+        navHost = FragivityNavHost(viewModel, NavHost { navController })
     }
 }
 

@@ -12,10 +12,12 @@ import androidx.navigation.plusAssign
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
+typealias MyNavHost = FragivityNavHost
+
 /**
  * NavHost with viewModel to store NavDestination
  */
-class MyNavHost(
+class FragivityNavHost(
     private val viewModel: FragivityNodeViewModel,
     navHost: NavHost
 ) : NavHost by navHost {
@@ -35,7 +37,7 @@ class MyNavHost(
  * Navigates to a fragment by its factory
  */
 @JvmSynthetic
-inline fun <reified T : Fragment> MyNavHost.push(
+inline fun <reified T : Fragment> FragivityNavHost.push(
     noinline optionsBuilder: NavOptions.() -> Unit = {},
     noinline block: () -> T
 ) {
@@ -48,7 +50,7 @@ inline fun <reified T : Fragment> MyNavHost.push(
  * Navigates to fragment of [clazz] by pushing it to back stack
  */
 @JvmSynthetic
-fun MyNavHost.push(
+fun FragivityNavHost.push(
     clazz: KClass<out Fragment>,
     optionsBuilder: NavOptions.() -> Unit = {}
 ) {
@@ -56,7 +58,7 @@ fun MyNavHost.push(
 }
 
 @JvmSynthetic
-internal fun MyNavHost.pushInternal(
+internal fun FragivityNavHost.pushInternal(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
 ) = with(navController) {
@@ -72,7 +74,7 @@ internal fun MyNavHost.pushInternal(
 }
 
 @JvmSynthetic
-internal fun MyNavHost.putFragment(
+internal fun FragivityNavHost.putFragment(
     clazz: KClass<out Fragment>
 ): FragmentNavigator.Destination {
     val destId = clazz.hashCode()
@@ -90,14 +92,14 @@ internal fun MyNavHost.putFragment(
  * pop current fragment from back stack
  */
 @JvmSynthetic
-fun MyNavHost.pop() {
-    navController.popBackStack()
+fun FragivityNavHost.pop(): Boolean {
+    return navController.popBackStack()
 }
 
 /**
  * Pop back stack to [clazz]
  */
 @JvmSynthetic
-fun MyNavHost.popTo(clazz: KClass<out Fragment>) {
-    navController.popBackStack(clazz.hashCode(), false)
+fun FragivityNavHost.popTo(clazz: KClass<out Fragment>, inclusive: Boolean = false): Boolean {
+    return navController.popBackStack(clazz.hashCode(), inclusive)
 }

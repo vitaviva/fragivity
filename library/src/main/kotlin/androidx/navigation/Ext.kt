@@ -26,9 +26,9 @@ internal fun NavController.navigate(request: NavDeepLinkRequest, navOptions: Nav
 }
 
 @JvmSynthetic
-internal fun NavController.popBackStack(request: NavDeepLinkRequest, inclusive: Boolean) {
-    val destination = findDestination(request) ?: return
-    popBackStack(destination.id, inclusive)
+internal fun NavController.popBackStack(request: NavDeepLinkRequest, inclusive: Boolean): Boolean {
+    val destination = findDestination(request) ?: return false
+    return popBackStack(destination.id, inclusive)
 }
 
 private operator fun Bundle?.plus(optionArgs: Bundle?): Bundle? {

@@ -8,13 +8,13 @@ import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
 import androidx.navigation.get
 import androidx.navigation.plusAssign
-import com.github.fragivity.MyNavHost
+import com.github.fragivity.FragivityNavHost
 import kotlin.reflect.KClass
 
 /**
  * Shows dialog of [clazz] by pushing the dialogFragment to back stack
  */
-fun MyNavHost.showDialog(
+fun FragivityNavHost.showDialog(
     clazz: KClass<out DialogFragment>,
     args: Bundle? = null
 ) = with(navController) {
@@ -22,8 +22,7 @@ fun MyNavHost.showDialog(
     navigate(node.id, args)
 }
 
-
-private fun MyNavHost.putDialog(
+private fun FragivityNavHost.putDialog(
     clazz: KClass<out DialogFragment>
 ): DialogFragmentNavigator.Destination {
     val destId = clazz.hashCode()

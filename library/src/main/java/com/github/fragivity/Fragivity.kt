@@ -103,13 +103,13 @@ object Fragivity {
             _fragment.navigator.push(route, navOptions)
         }
 
-        @JvmOverloads
-        fun popTo(route: String, inclusive: Boolean = false) {
-            _fragment.navigator.popTo(route, inclusive)
+        fun pop(): Boolean {
+            return _fragment.navigator.pop()
         }
 
-        fun pop() {
-            _fragment.navigator.pop()
+        @JvmOverloads
+        fun popTo(route: String, inclusive: Boolean = false): Boolean {
+            return _fragment.navigator.popTo(route, inclusive)
         }
 
         companion object {

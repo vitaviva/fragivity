@@ -50,12 +50,12 @@ fun NavHostFragment.composable(
 }
 
 @JvmSynthetic
-fun MyNavHost.push(route: String, optionsBuilder: NavOptions.() -> Unit = {}) {
+fun FragivityNavHost.push(route: String, optionsBuilder: NavOptions.() -> Unit = {}) {
     push(route, navOptions(optionsBuilder))
 }
 
 @JvmSynthetic
-fun MyNavHost.push(route: String, navOptions: NavOptions?) {
+fun FragivityNavHost.push(route: String, navOptions: NavOptions?) {
     navController.navigate(
         createRoute(route).toUri().toNavDeepLinkRequest(),
         navOptions ?: navOptions()
@@ -64,8 +64,8 @@ fun MyNavHost.push(route: String, navOptions: NavOptions?) {
 
 // WARN: currentRoute should not same as route
 @JvmSynthetic
-fun MyNavHost.popTo(route: String, inclusive: Boolean = false) {
-    navController.popBackStack(
+fun FragivityNavHost.popTo(route: String, inclusive: Boolean = false): Boolean {
+    return navController.popBackStack(
         createRoute(route).toUri().toNavDeepLinkRequest(),
         inclusive
     )

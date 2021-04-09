@@ -19,13 +19,13 @@ import com.github.fragivity.router.createRoute
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
-val Fragment.navigator: MyNavHost
+val Fragment.navigator: FragivityNavHost
     get() = fragivityHostViewModel.navHost
 
-val View.navigator: MyNavHost
+val View.navigator: FragivityNavHost
     get() = fragivityHostViewModel.navHost
 
-val NavController.navigator: MyNavHost
+val NavController.navigator: FragivityNavHost
     get() = fragivityHostViewModel.navHost
 
 /**
