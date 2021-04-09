@@ -5,8 +5,10 @@ package com.github.fragivity
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentProviderMap
+import androidx.fragment.app.MyFragmentNavigator
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHost
+import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.plusAssign
 import kotlin.collections.set
@@ -63,14 +65,43 @@ internal fun FragivityNavHost.pushInternal(
     navOptions: NavOptions?
 ) = with(navController) {
     val node = putFragment(clazz)
-    if (navOptions == null)
+    if (navOptions == null) {
         navigate(node.id)
-    else
-        navigate(
-            node.id, navOptions.toBundle(),
-            navOptions.totOptions(clazz),
-            navOptions.totExtras()
-        )
+        return@with
+    }
+
+    when(navOptions.launchMode) {
+        LaunchMode.STANDARD,
+        LaunchMode.SINGLE_TOP -> {
+            navigate(
+                node.id, navOptions.toBundle(),
+                navOptions.totOptions(clazz),
+                navOptions.totExtras()
+            )
+        }
+        LaunchMode.SINGLE_TASK -> {
+            // curr == target
+            if (currentDestination?.id == node.id) {
+                val navigator: Navigator<NavDestination> = navigatorProvider.getNavigator(node.navigatorName)
+                if (navigator is MyFragmentNavigator) {
+                    navigator.restoreTopFragment(node, navOptions.toBundle())
+                }
+                return@with
+            }
+
+            // try pop to target
+            if (popBackStack(node.id, false)) {
+                return@with
+            }
+
+            // create target
+            navigate(
+                node.id, navOptions.toBundle(),
+                navOptions.totOptions(clazz),
+                navOptions.totExtras()
+            )
+        }
+    }
 }
 
 @JvmSynthetic

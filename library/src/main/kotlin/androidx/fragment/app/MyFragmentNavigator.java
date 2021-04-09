@@ -284,6 +284,35 @@ public class MyFragmentNavigator extends FragmentNavigator {
         }
     }
 
+    public void restoreTopFragment(Destination destination, Bundle newBundle) {
+        if (mBackStack.isEmpty()) return;
+
+        int index = 0;
+        for (Integer destId : mBackStack) {
+            if (destId == destination.getId()) {
+                Fragment fragment = mFragmentManager.findFragmentByTag(generateBackStackName(index, destId));
+                if (fragment == null) return;
+
+                // update args
+                Bundle bundle = fragment.getArguments();
+                if (bundle != null) {
+                    bundle.putAll(newBundle);
+                } else {
+                    fragment.setArguments(newBundle);
+                }
+
+                mFragmentManager.beginTransaction()
+                        .setMaxLifecycle(fragment, Lifecycle.State.STARTED)
+                        .commit();
+
+                mFragmentManager.beginTransaction()
+                        .setMaxLifecycle(fragment, Lifecycle.State.RESUMED)
+                        .commit();
+            }
+            index++;
+        }
+    }
+
     @Override
     @Nullable
     public Bundle onSaveState() {
