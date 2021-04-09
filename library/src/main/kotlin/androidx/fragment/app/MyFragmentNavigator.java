@@ -128,7 +128,8 @@ public class MyFragmentNavigator extends FragmentNavigator {
         if (initialNavigation) {
             isAdded = true;
         } else if (isSingleTopReplacement
-                || args.getBoolean(KEY_POP_SELF) //when popsSelf == true close preFrag as SingleTop: see https://github.com/vitaviva/fragivity/issues/26
+            // when popsSelf == true close preFrag as SingleTop: see https://github.com/vitaviva/fragivity/issues/26
+            || (args != null && args.getBoolean(KEY_POP_SELF, false))
         ) {
             // Single Top means we only want one instance on the back stack
             if (mBackStack.size() > 1) {

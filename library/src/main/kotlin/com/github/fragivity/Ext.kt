@@ -29,6 +29,16 @@ val NavController.navigator: FragivityNavHost
     get() = fragivityHostViewModel.navHost
 
 /**
+ * Load root fragment by factory
+ */
+@JvmSynthetic
+inline fun <reified T : Fragment> NavHostFragment.loadRoot(noinline block: () -> T) {
+    val clazz = T::class
+    FragmentProviderMap[clazz.qualifiedName!!] = block
+    loadRoot(clazz)
+}
+
+/**
  * Load root fragment
  */
 @JvmSynthetic
@@ -64,18 +74,6 @@ fun NavHostFragment.loadRoot(route: String, root: KClass<out Fragment>) {
 
         fragivityHostViewModel.setUpNavHost(nodeViewModel, this)
     }
-}
-
-/**
- * Load root fragment by factory
- */
-@JvmSynthetic
-inline fun <reified T : Fragment> NavHostFragment.loadRoot(
-    noinline block: () -> T
-) {
-    val clazz = T::class
-    FragmentProviderMap[clazz.qualifiedName!!] = block
-    loadRoot(T::class)
 }
 
 fun FragmentActivity.findNavHostFragment(@IdRes id: Int): NavHostFragment {

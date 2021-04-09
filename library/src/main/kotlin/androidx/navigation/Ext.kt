@@ -32,7 +32,6 @@ internal fun NavController.popBackStack(request: NavDeepLinkRequest, inclusive: 
 }
 
 private operator fun Bundle?.plus(optionArgs: Bundle?): Bundle? {
-    if (this == null && optionArgs == null) return null
     if (this == null) return optionArgs
     if (optionArgs == null) return this
     return Bundle().apply {
