@@ -5,10 +5,8 @@ package com.github.fragivity
 
 import android.view.View
 import androidx.annotation.IdRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.*
 import androidx.fragment.app.FragmentProviderMap
-import androidx.fragment.app.MyFragmentNavigator
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.createGraph
@@ -82,6 +80,43 @@ fun FragmentActivity.findNavHostFragment(@IdRes id: Int): NavHostFragment {
 
 fun Fragment.findNavHostFragment(@IdRes id: Int): NavHostFragment {
     return childFragmentManager.findFragmentById(id) as NavHostFragment
+}
+
+fun <T : Fragment> FragmentActivity.findFragment(
+    clazz: KClass<T>,
+    includeChild: Boolean = true
+): T? {
+    return findFragment(supportFragmentManager, clazz, includeChild)
+}
+
+fun <T : Fragment> Fragment.findFragment(
+    clazz: KClass<T>,
+    includeChild: Boolean = true
+): T? {
+    return findFragment(childFragmentManager, clazz, includeChild)
+}
+
+private fun <T : Fragment> findFragment(
+    manager: FragmentManager,
+    clazz: KClass<T>,
+    includeChild: Boolean
+): T? {
+    val fragments = manager.fragments
+    if (fragments.isEmpty()) return null
+
+    fragments.forEach { fragment ->
+        if (fragment.javaClass.name == clazz.java.name) {
+            @Suppress("UNCHECKED_CAST")
+            return fragment as T
+        }
+        if (includeChild) {
+            val childFragment = findFragment(fragment.childFragmentManager, clazz, includeChild)
+            if (childFragment != null) {
+                return childFragment
+            }
+        }
+    }
+    return null
 }
 
 /**
