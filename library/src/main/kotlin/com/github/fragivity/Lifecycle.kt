@@ -44,7 +44,7 @@ class FragivityNodeViewModel(
     private lateinit var nodes: SparseArrayCompat<NavDestination>
 
     internal fun restoreDestination(navController: NavController, graphBuilder: NavGraphBuilder) {
-        val array: Array<NavDestinationBundle>? = savedStateHandle.get(NAV_DEST_NODES_KEY)
+        val array = savedStateHandle.get(NAV_DEST_NODES_KEY) as? Array<NavDestinationBundle>?
         nodes = if (array != null) {
             SparseArrayCompat<NavDestination>(array.size).apply {
                 array.forEach {

@@ -16,6 +16,9 @@
 
 package androidx.fragment.app;
 
+import static androidx.fragment.app.FragmentTransaction.OP_ADD;
+import static com.github.fragivity.NavOptionsKt.KEY_POP_SELF;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +28,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
@@ -35,16 +39,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static androidx.fragment.app.FragmentTransaction.OP_ADD;
-import static androidx.fragment.app.ReportFragment.REAL_FRAGMENT;
-import static com.github.fragivity.NavOptionsKt.KEY_POP_SELF;
-
 @Navigator.Name("ignore")
 public class MyFragmentNavigator extends FragmentNavigator {
     private static final String TAG = "FragivityNavigator";
     private static final String KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds";
 
-    private ArrayDeque<Integer> mBackStack = new ArrayDeque<>();
+    private final ArrayDeque<Integer> mBackStack = new ArrayDeque<>();
     private boolean mIsPendingAddToBackStackOperation = false;
     private boolean mIsPendingPopBackStackOperation = false;
 
@@ -52,28 +52,49 @@ public class MyFragmentNavigator extends FragmentNavigator {
     private final FragmentManager mFragmentManager;
     private final int mContainerId;
 
-    public MyFragmentNavigator(@NonNull Context context, @NonNull FragmentManager manager,
+    public MyFragmentNavigator(@NonNull Context context,
+                               @NonNull FragmentManager manager,
                                int containerId) {
         super(context, manager, containerId);
         mContext = context;
         mFragmentManager = manager;
         mContainerId = containerId;
-        mFragmentManager.addOnBackStackChangedListener(mOnBackStackChangedListener);
+        mFragmentManager.addOnBackStackChangedListener(() -> {
+            // If we have pending operations made by us then consume this change, otherwise
+            // detect a pop in the back stack to dispatch callback.
+            if (mIsPendingAddToBackStackOperation) {
+                mIsPendingAddToBackStackOperation = !isBackStackEqual();
+
+                if (mFragmentManager.getFragments().size() > 1) {
+                    // 切到后台时的生命周期
+                    Fragment fragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 2);
+                    if (fragment instanceof ReportFragment) {
+                        fragment.performStop();
+                        ((ReportFragment) fragment).setInForeground(false);
+                    }
+                }
+            } else if (mIsPendingPopBackStackOperation) {
+                mIsPendingPopBackStackOperation = !isBackStackEqual();
+                // 回到前台时的生命周期
+                Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
+                if (fragment instanceof ReportFragment) {
+                    ((ReportFragment) fragment).setInForeground(true);
+                    fragment.performResume();
+                }
+            }
+        });
     }
 
-    @NonNull
-    @Override
-    public Fragment instantiateFragment(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull String className, @Nullable Bundle args) {
-        Fragment fragment = super.instantiateFragment(context, fragmentManager, "androidx.fragment.app.ReportFragment", args);
-        if (fragment instanceof ReportFragment) {
-            Bundle bundle = new Bundle();
-            bundle.putString(REAL_FRAGMENT, className);
-            if (args != null) bundle.putAll(args);
-            fragment.setArguments(bundle);
+    private Fragment createFragment(FragmentNavigator.Destination destination, Bundle args) {
+        if (destination instanceof MyDestination) {
+            return ((MyDestination) destination).getFragment(args);
         } else {
-            fragment.setArguments(args);
+            String className = destination.getClassName();
+            if (className.charAt(0) == '.') {
+                className = mContext.getPackageName() + className;
+            }
+            return ReportFragment.newInstance(className, args);
         }
-        return fragment;
     }
 
     @Nullable
@@ -86,17 +107,8 @@ public class MyFragmentNavigator extends FragmentNavigator {
             return null;
         }
 
-        final Fragment frag;
-        if (destination instanceof MyDestination) {
-            frag = ((MyDestination) destination).getFragment(args);
-        } else {
-            String className = destination.getClassName();
-            if (className.charAt(0) == '.') {
-                className = mContext.getPackageName() + className;
-            }
-            frag = instantiateFragment(mContext, mFragmentManager, className, args);
-        }
-//        frag.setArguments(args);
+        final Fragment frag = createFragment(destination, args);
+
         final FragmentTransaction ft = mFragmentManager.beginTransaction();
 
         int enterAnim = navOptions != null ? navOptions.getEnterAnim() : -1;
@@ -128,8 +140,8 @@ public class MyFragmentNavigator extends FragmentNavigator {
         if (initialNavigation) {
             isAdded = true;
         } else if (isSingleTopReplacement
-            // when popsSelf == true close preFrag as SingleTop: see https://github.com/vitaviva/fragivity/issues/26
-            || (args != null && args.getBoolean(KEY_POP_SELF, false))
+                // when popsSelf == true close preFrag as SingleTop: see https://github.com/vitaviva/fragivity/issues/26
+                || (args != null && args.getBoolean(KEY_POP_SELF, false))
         ) {
             // Single Top means we only want one instance on the back stack
             if (mBackStack.size() > 1) {
@@ -218,37 +230,6 @@ public class MyFragmentNavigator extends FragmentNavigator {
     }
 
 
-    private final FragmentManager.OnBackStackChangedListener mOnBackStackChangedListener =
-            new FragmentManager.OnBackStackChangedListener() {
-
-                @Override
-                public void onBackStackChanged() {
-                    // If we have pending operations made by us then consume this change, otherwise
-                    // detect a pop in the back stack to dispatch callback.
-                    if (mIsPendingAddToBackStackOperation) {
-                        mIsPendingAddToBackStackOperation = !isBackStackEqual();
-
-                        if (mFragmentManager.getFragments().size() > 1) {
-                            // 切到后台时的生命周期
-                            Fragment fragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 2);
-                            if (fragment instanceof ReportFragment) {
-                                fragment.performStop();
-                                ((ReportFragment) fragment).setInForeground(false);
-                            }
-                        }
-                    } else if (mIsPendingPopBackStackOperation) {
-                        mIsPendingPopBackStackOperation = !isBackStackEqual();
-                        // 回到前台时的生命周期
-                        Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
-                        if (fragment instanceof ReportFragment) {
-                            ((ReportFragment) fragment).setInForeground(true);
-                            fragment.performResume();
-                        }
-                    }
-                }
-            };
-
-
     /**
      * Checks if this FragmentNavigator's back stack is equal to the FragmentManager's back stack.
      */
@@ -282,7 +263,6 @@ public class MyFragmentNavigator extends FragmentNavigator {
 
         return true;
     }
-
 
     private int getDestId(@Nullable String backStackName) {
         String[] split = backStackName != null ? backStackName.split("-") : new String[0];

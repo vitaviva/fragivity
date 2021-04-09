@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import com.github.fragivity.R
 import com.github.fragivity.swipeback.SwipeBackLayout
@@ -151,8 +152,16 @@ internal class ReportFragment : Fragment() {
     ) : ViewModel()
 
     internal companion object {
-        const val REAL_FRAGMENT = "real"
+        private const val REAL_FRAGMENT = "real"
         private const val FRAGMENT_RETAIN_INSTANCE = true
+
+        @JvmStatic
+        fun newInstance(realFragmentClassName: String, args: Bundle?) = ReportFragment().apply {
+            val bundle = Bundle()
+            if (args != null) bundle.putAll(args)
+            bundle.putString(REAL_FRAGMENT, realFragmentClassName)
+            arguments = bundle
+        }
     }
 
 }
