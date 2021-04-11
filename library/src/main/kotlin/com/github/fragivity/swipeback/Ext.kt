@@ -9,8 +9,7 @@ import androidx.fragment.app.ReportFragment
  * Detail config for swipe back
  */
 val Fragment.swipeBackLayout
-    get() = (parentFragment as ReportFragment)._swipeBackLayout
-
+    get() = (parentFragment as ReportFragment)._swipeBackLayout!!
 
 /**
  * Global config for enabling swipe back

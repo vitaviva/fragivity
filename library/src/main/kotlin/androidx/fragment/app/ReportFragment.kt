@@ -11,7 +11,9 @@ import android.widget.FrameLayout
 import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModel
-import com.github.fragivity.R
+import com.github.fragivity.navigator
+import com.github.fragivity.pop
+import com.github.fragivity.requirePreviousFragment
 import com.github.fragivity.swipeback.SwipeBackLayout
 import java.lang.reflect.Constructor
 
@@ -43,8 +45,7 @@ internal class ReportFragment : Fragment() {
             }.also { _vm.fragment = it }
         }
 
-
-    internal lateinit var _swipeBackLayout: SwipeBackLayout
+    internal var _swipeBackLayout: SwipeBackLayout? = null
 
     //fix https://github.com/vitaviva/fragivity/issues/7
     @JvmField
@@ -104,13 +105,23 @@ internal class ReportFragment : Fragment() {
         return SwipeBackLayout(requireContext()).apply {
             attachToFragment(this@ReportFragment, layout)
             setEnableGesture(false) // default false
+            addSwipeListener(object : SwipeBackLayout.SimpleOnSwipeListener() {
+                override fun onDragFinished(isActivity: Boolean) {
+                    if (!isActivity) {
+                        disableAnimOnce = true
+                        (requirePreviousFragment() as? ReportFragment)?.disableAnimOnce = true
+                        navigator.pop()
+                    }
+                }
+            })
             _swipeBackLayout = this
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _swipeBackLayout.internalCallOnDestroyView()
+        _swipeBackLayout?.internalCallOnDestroyView()
+        _swipeBackLayout = null
     }
 
     override fun onDestroy() {
