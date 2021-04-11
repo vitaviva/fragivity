@@ -123,7 +123,6 @@ public class MyFragmentNavigator extends FragmentNavigator {
             ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim);
         }
 
-//        ft.replace(mContainerId, frag);
         ft.add(mContainerId, frag, generateBackStackName(mBackStack.size(), destination.getId()));
 
         final Fragment preFrag = mFragmentManager.getPrimaryNavigationFragment();
@@ -287,10 +286,14 @@ public class MyFragmentNavigator extends FragmentNavigator {
     public void restoreTopFragment(Destination destination, Bundle newBundle) {
         if (mBackStack.isEmpty()) return;
 
-        int index = 0;
-        for (Integer destId : mBackStack) {
+        int index = mBackStack.size() - 1;
+
+        Iterator<Integer> backStackIterator = mBackStack.descendingIterator();
+        while (backStackIterator.hasNext()) {
+            int destId = backStackIterator.next();
             if (destId == destination.getId()) {
-                Fragment fragment = mFragmentManager.findFragmentByTag(generateBackStackName(index, destId));
+                Fragment fragment = mFragmentManager.findFragmentByTag(
+                        generateBackStackName(index, destId));
                 if (fragment == null) return;
 
                 // update args
@@ -308,8 +311,9 @@ public class MyFragmentNavigator extends FragmentNavigator {
                 mFragmentManager.beginTransaction()
                         .setMaxLifecycle(fragment, Lifecycle.State.RESUMED)
                         .commit();
+                return;
             }
-            index++;
+            index--;
         }
     }
 

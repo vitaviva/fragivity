@@ -80,17 +80,12 @@ internal fun FragivityNavHost.pushInternal(
             )
         }
         LaunchMode.SINGLE_TASK -> {
-            // curr == target
-            if (currentDestination?.id == node.id) {
+            // curr == target || try pop to target
+            if (currentDestination?.id == node.id || popBackStack(node.id, false)) {
                 val navigator: Navigator<NavDestination> = navigatorProvider.getNavigator(node.navigatorName)
                 if (navigator is MyFragmentNavigator) {
                     navigator.restoreTopFragment(node, navOptions.toBundle())
                 }
-                return@with
-            }
-
-            // try pop to target
-            if (popBackStack(node.id, false)) {
                 return@with
             }
 
