@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import com.github.fragivity.Fragivity;
 import com.github.fragivity.HomeFragmentKt;
 import com.github.fragivity.LaunchMode;
-import com.github.fragivity.R;
 import com.github.fragivity.swipeback.SwipeBackUtil;
 
 import static com.github.fragivity.Fragivity.Navigator.navOptionsBuilder;
@@ -31,10 +30,6 @@ public class HomeFragment extends Fragment {
         Fragivity.of(this).push(DestFragment.class,
                 navOptionsBuilder()
                         .setArguments(bundle)
-                        .setEnterAnim(R.animator.no_anim)
-                        .setExitAnim(R.animator.no_anim)
-                        .setPopEnterAnim(R.animator.no_anim)
-                        .setPopExitAnim(R.animator.no_anim)
                         .setLaunchMode(LaunchMode.STANDARD)
                         .build());
     }

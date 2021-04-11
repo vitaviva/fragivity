@@ -1,7 +1,7 @@
 package androidx.fragment.app
 
 import android.animation.Animator
-import android.animation.AnimatorInflater
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -134,18 +134,12 @@ internal class ReportFragment : Fragment() {
     }
 
     override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
-        if (nextAnim == 0) return super.onCreateAnimator(transit, enter, nextAnim)
-
+        if (nextAnim == 0) return null
         if (disableAnimOnce) {
             disableAnimOnce = false
-            val animator = AnimatorInflater.loadAnimator(context, R.animator.no_anim)
-            if (animator != null) {
-                return animator
-            }
+            return ObjectAnimator.ofInt(0).setDuration(0)
         }
-
         return super.onCreateAnimator(transit, enter, nextAnim)
-
     }
 
     data class FragmentViewModel(
