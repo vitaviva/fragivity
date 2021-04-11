@@ -1,29 +1,23 @@
 package com.github.fragivity.java;
 
+import static com.github.fragivity.HomeFragmentKt.ARGUMENT;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentOnAttachListener;
-import androidx.fragment.app.ReportFragment;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.github.fragivity.Fragivity;
-import com.github.fragivity.FragivityUtil;
-import com.github.fragivity.R;
+import com.github.fragivity.test.R;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,11 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Objects;
-
-import static com.github.fragivity.HomeFragmentKt.ARGUMENT;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class FragivityTest {

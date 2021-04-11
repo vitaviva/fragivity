@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.fragivity.R;
+import com.github.fragivity.test.R;
 
 public class DialogFragment extends androidx.fragment.app.DialogFragment {
 

@@ -3,12 +3,13 @@ package androidx.fragment.app
 import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.content.Context
-import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import android.widget.FrameLayout
+import androidx.core.content.res.use
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModel
 import com.github.fragivity.R
 import com.github.fragivity.swipeback.SwipeBackLayout
@@ -62,6 +63,8 @@ internal class ReportFragment : Fragment() {
         mChildFragmentManager = ReportFragmentManager()
     }
 
+    private val layoutId = ViewCompat.generateViewId()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (!_vm.isRecreating) {
@@ -81,7 +84,7 @@ internal class ReportFragment : Fragment() {
                     putAll(_realFragment.arguments)
                 }
             }
-            add(R.id.container, _realFragment)
+            add(layoutId, _realFragment)
             commitNow()
         }
     }
@@ -90,20 +93,19 @@ internal class ReportFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _swipeBackLayout =
-            SwipeBackLayout(requireContext()).apply {
-                attachToFragment(
-                    this@ReportFragment,
-                    inflater.inflate(R.layout.report_layout, container, false)
-                        .apply { appendBackground() } // add a default background color to make it opaque
+    ): View {
+        val layout = FrameLayout(requireContext())
+        layout.id = layoutId
+        layout.appendBackground()
 
-                )
-                setEnableGesture(false) //default false
-            }
         sharedElementEnterTransition = _realFragment.sharedElementEnterTransition
         sharedElementReturnTransition = _realFragment.sharedElementReturnTransition
-        return _swipeBackLayout
+
+        return SwipeBackLayout(requireContext()).apply {
+            attachToFragment(this@ReportFragment, layout)
+            setEnableGesture(false) // default false
+            _swipeBackLayout = this
+        }
     }
 
     override fun onDestroyView() {
@@ -118,16 +120,6 @@ internal class ReportFragment : Fragment() {
          * this flag used to avoid [_realFragment] to perform onCreate as configuration changed
          */
         _vm.isRecreating = requireActivity().isChangingConfigurations
-
-    }
-
-
-    private fun View.appendBackground() {
-        val a: TypedArray =
-            requireActivity().theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground))
-        val background = a.getResourceId(0, 0)
-        a.recycle()
-        setBackgroundResource(background)
     }
 
     override fun onCreateAnimator(transit: Int, enter: Boolean, nextAnim: Int): Animator? {
@@ -163,7 +155,13 @@ internal class ReportFragment : Fragment() {
             arguments = bundle
         }
     }
+}
 
+private fun View.appendBackground() {
+    context.theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground)).use {
+        val background = it.getResourceId(0, 0)
+        setBackgroundResource(background)
+    }
 }
 
 
