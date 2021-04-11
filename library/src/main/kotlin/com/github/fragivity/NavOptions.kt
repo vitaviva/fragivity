@@ -9,6 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
 import kotlin.reflect.KClass
 
+enum class LaunchMode {
+    STANDARD, SINGLE_TOP, SINGLE_TASK
+}
+
 interface NavOptions {
 
     @set:JvmSynthetic
@@ -127,11 +131,6 @@ internal fun NavOptions.totExtras(): FragmentNavigator.Extras =
             addSharedElement(view, name)
         }
     }.build()
-
-
-enum class LaunchMode {
-    STANDARD, SINGLE_TOP, SINGLE_TASK
-}
 
 fun sharedElementsOf(vararg sharedElements: Pair<View, String>) =
     mutableListOf<Pair<View, String>>().apply {

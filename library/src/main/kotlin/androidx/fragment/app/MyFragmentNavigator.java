@@ -143,7 +143,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
                 || (args != null && args.getBoolean(KEY_POP_SELF, false))
         ) {
             // Single Top means we only want one instance on the back stack
-            if (mBackStack.size() > 1) {
+            if (preFrag != null) {
 //                // If the Fragment to be replaced is on the FragmentManager's
 //                // back stack, a simple replace() isn't enough so we
 //                // remove it from the back stack and put our replacement

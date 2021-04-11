@@ -21,15 +21,17 @@ internal class ReportFragment : Fragment() {
 
     private val _vm: FragmentViewModel by viewModels()
 
-    private val className by lazy {
+    private val className by lazy(LazyThreadSafetyMode.NONE) {
         requireNotNull(arguments?.getString(REAL_FRAGMENT))
     }
 
-    private val _real: Class<out Fragment> by lazy {
+    @Suppress("UNCHECKED_CAST")
+    private val _real: Class<out Fragment> by lazy(LazyThreadSafetyMode.NONE) {
         Class.forName(className) as Class<out Fragment>
     }
 
-    internal val _realFragment: Fragment
+    @Suppress("DEPRECATION")
+    private val _realFragment: Fragment
         get() {
             return _vm.fragment ?: run {
                 val frag = FragmentProviderMap[className]?.invoke()
@@ -56,9 +58,7 @@ internal class ReportFragment : Fragment() {
         set(value) {
             _vm.isShowing = value
         }
-        get() {
-            return _vm.isShowing
-        }
+        get() = _vm.isShowing
 
     init {
         mChildFragmentManager = ReportFragmentManager()
@@ -175,10 +175,8 @@ private fun View.appendBackground() {
     }
 }
 
-
-private fun <T> findMatchingConstructor(
-    modelClass: Class<T>
-): Constructor<T>? {
+@Suppress("UNCHECKED_CAST")
+private fun <T> findMatchingConstructor(modelClass: Class<T>): Constructor<T>? {
     for (constructor in modelClass.constructors) {
         val parameterTypes = constructor.parameterTypes
         if (parameterTypes.isEmpty()) {

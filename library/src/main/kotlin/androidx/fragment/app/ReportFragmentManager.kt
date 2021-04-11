@@ -2,7 +2,7 @@ package androidx.fragment.app
 
 internal class ReportFragmentManager : FragmentManager() {
 
-    private val reportFragment by lazy {
+    private val reportFragment by lazy(LazyThreadSafetyMode.NONE) {
         parent as ReportFragment
     }
 
