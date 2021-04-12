@@ -4,10 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion Build.compile_sdk_version
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion Build.min_sdk_version
+        targetSdkVersion Build.target_sdk_version
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
