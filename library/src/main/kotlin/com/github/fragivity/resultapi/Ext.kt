@@ -3,7 +3,6 @@ package com.github.fragivity.resultapi
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
-import com.github.fragivity.requireParentFragmentManager
 
 /**
  * Sets the given result for the [requestKey]. This result will be delivered to a
@@ -21,7 +20,7 @@ import com.github.fragivity.requireParentFragmentManager
 fun Fragment.setFragmentResult(
     requestKey: String,
     result: Bundle
-) = requireParentFragmentManager().setFragmentResult(requestKey, result)
+) = parentFragmentManager.setFragmentResult(requestKey, result)
 
 /**
  * Clears the stored result for the given requestKey.
@@ -35,7 +34,7 @@ fun Fragment.setFragmentResult(
  */
 fun Fragment.clearFragmentResult(
     requestKey: String
-) = requireParentFragmentManager().clearFragmentResult(requestKey)
+) = parentFragmentManager.clearFragmentResult(requestKey)
 
 /**
  * Sets the [FragmentResultListener] for a given [requestKey]. Once this Fragment is
@@ -54,7 +53,7 @@ fun Fragment.setFragmentResultListener(
     requestKey: String,
     listener: ((requestKey: String, bundle: Bundle) -> Unit)
 ) {
-    requireParentFragmentManager().setFragmentResultListener(
+    parentFragmentManager.setFragmentResultListener(
         requestKey,
         this,
         FragmentResultListener { requestKey, result -> listener(requestKey, result) })
@@ -73,4 +72,4 @@ fun Fragment.setFragmentResultListener(
  */
 fun Fragment.clearFragmentResultListener(
     requestKey: String
-) = requireParentFragmentManager().clearFragmentResultListener(requestKey)
+) = parentFragmentManager.clearFragmentResultListener(requestKey)

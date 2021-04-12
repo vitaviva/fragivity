@@ -2,7 +2,6 @@ package com.github.fragivity.debug
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.ReportFragment
 
 internal data class DebugFragmentRecord(
     val fragmentName: CharSequence,
@@ -30,12 +29,6 @@ private fun addDebugFragmentRecord(
     predicate: (Fragment) -> Boolean
 ) {
     if (fragment == null) return
-
-    // Ignore ReportFragment
-    if (fragment is ReportFragment) {
-        fragmentRecords.addAll(getChildFragmentRecords(fragment, predicate))
-        return
-    }
 
     val name = fragment::class.java.simpleName
     fragmentRecords.add(DebugFragmentRecord(name, getChildFragmentRecords(fragment, predicate)))

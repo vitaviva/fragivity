@@ -3,6 +3,7 @@ package com.github.fragivity.example
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.proxyFragmentFactory
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.debug.showDebugView
 import com.github.fragivity.deeplink.handleDeepLink
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        proxyFragmentFactory()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

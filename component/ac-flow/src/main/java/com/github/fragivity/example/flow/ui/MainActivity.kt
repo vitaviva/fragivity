@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.proxyFragmentFactory
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.*
 import com.github.fragivity.debug.showDebugView
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(R.layout.flow_activity_main),
     private lateinit var navigator: FragivityNavHost
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        proxyFragmentFactory()
         super.onCreate(savedInstanceState)
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host) as NavHostFragment

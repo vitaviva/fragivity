@@ -64,22 +64,22 @@ public class MyFragmentNavigator extends FragmentNavigator {
             // detect a pop in the back stack to dispatch callback.
             if (mIsPendingAddToBackStackOperation) {
                 mIsPendingAddToBackStackOperation = !isBackStackEqual();
-
                 if (mFragmentManager.getFragments().size() > 1) {
                     // 切到后台时的生命周期
                     Fragment fragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 2);
-                    if (fragment instanceof ReportFragment) {
-                        fragment.performStop();
-                        ((ReportFragment) fragment).setInForeground(false);
-                    }
+
+                    mFragmentManager.beginTransaction()
+                            .setMaxLifecycle(fragment, Lifecycle.State.STARTED)
+                            .commit();
                 }
             } else if (mIsPendingPopBackStackOperation) {
                 mIsPendingPopBackStackOperation = !isBackStackEqual();
                 // 回到前台时的生命周期
                 Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
-                if (fragment instanceof ReportFragment) {
-                    ((ReportFragment) fragment).setInForeground(true);
-                    fragment.performResume();
+                if (fragment != null) {
+                    mFragmentManager.beginTransaction()
+                            .setMaxLifecycle(fragment, Lifecycle.State.RESUMED)
+                            .commit();
                 }
             }
         });
@@ -93,7 +93,11 @@ public class MyFragmentNavigator extends FragmentNavigator {
             if (className.charAt(0) == '.') {
                 className = mContext.getPackageName() + className;
             }
-            return ReportFragment.newInstance(className, args);
+            // return ReportFragment.newInstance(className, args);
+            Fragment fragment = mFragmentManager.getFragmentFactory()
+                    .instantiate(mContext.getClassLoader(), className);
+            fragment.setArguments(args);
+            return fragment;
         }
     }
 
