@@ -9,6 +9,7 @@ import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
 import androidx.navigation.get
 import androidx.navigation.plusAssign
 import com.github.fragivity.FragivityNavHost
+import com.github.fragivity.util.positiveHashCode
 import kotlin.reflect.KClass
 
 /**
@@ -25,7 +26,7 @@ fun FragivityNavHost.showDialog(
 private fun FragivityNavHost.putDialog(
     clazz: KClass<out DialogFragment>
 ): DialogFragmentNavigator.Destination {
-    val destId = clazz.hashCode()
+    val destId = clazz.positiveHashCode
     val graph = navController.graph
     var destination = graph.findNode(destId) as? DialogFragmentNavigator.Destination
     if (destination == null) {

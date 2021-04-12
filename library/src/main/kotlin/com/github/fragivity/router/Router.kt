@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navigate
 import androidx.navigation.popBackStack
 import com.github.fragivity.*
+import com.github.fragivity.util.positiveHashCode
 
 @JvmSynthetic
 fun NavHostFragment.composable(
@@ -27,8 +28,8 @@ fun NavHostFragment.composable(
     content: (Bundle) -> Fragment
 ) {
     val internalRoute = createRoute(route)
-    // make id > 0
-    val destinationId = internalRoute.hashCode() and Int.MAX_VALUE
+
+    val destinationId = internalRoute.positiveHashCode
 
     var node = navController.graph.findNode(destinationId)
     if (node is MyFragmentNavigator.MyDestination) {

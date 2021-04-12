@@ -73,10 +73,9 @@ class MyAdapter(private val myDataset: Array<String>) :
         viewType: Int
     ): ViewHolder {
         // create a new view
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_view_item, parent, false)
-
-
+        val itemView = LayoutInflater.from(parent.context).inflate(
+            R.layout.list_view_item, parent, false
+        )
         return ViewHolder(itemView)
     }
 
@@ -93,7 +92,7 @@ class MyAdapter(private val myDataset: Array<String>) :
 
         holder.item.setOnClickListener {
             holder.item.navigator.push(UserProfile::class) {
-                popSelf = true
+                popSelf = false
                 applyArguments(USERNAME_KEY to myDataset[position])
                 applySlideInOut()
                 applySharedElements(imageView to "imageView")

@@ -11,6 +11,7 @@ import androidx.navigation.NavHost
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.plusAssign
+import com.github.fragivity.util.positiveHashCode
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
@@ -103,7 +104,7 @@ internal fun FragivityNavHost.pushInternal(
 internal fun FragivityNavHost.putFragment(
     clazz: KClass<out Fragment>
 ): FragmentNavigator.Destination {
-    val destId = clazz.hashCode()
+    val destId = clazz.positiveHashCode
     val graph = navController.graph
     var destination = graph.findNode(destId) as? FragmentNavigator.Destination
     if (destination == null) {
@@ -127,5 +128,5 @@ fun FragivityNavHost.pop(): Boolean {
  */
 @JvmSynthetic
 fun FragivityNavHost.popTo(clazz: KClass<out Fragment>, inclusive: Boolean = false): Boolean {
-    return navController.popBackStack(clazz.hashCode(), inclusive)
+    return navController.popBackStack(clazz.positiveHashCode, inclusive)
 }

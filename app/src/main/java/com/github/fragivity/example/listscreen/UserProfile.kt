@@ -16,6 +16,7 @@
 
 package com.github.fragivity.example.listscreen
 
+import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
@@ -34,8 +35,10 @@ class UserProfile : AbsBaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedElementEnterTransition = TransitionInflater.from(context)
+                .inflateTransition(android.R.transition.move)
+        }
     }
 
     override val titleName: String?
@@ -43,10 +46,7 @@ class UserProfile : AbsBaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-
         val view = inflater.inflate(R.layout.fragment_user_profile, container, false)
-
         val name = arguments?.getString(USERNAME_KEY) ?: resources.getString(R.string.profile_name_1)
         view.findViewById<TextView>(R.id.profile_user_name).text = name
         return view

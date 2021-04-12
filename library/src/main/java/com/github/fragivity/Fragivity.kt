@@ -6,7 +6,6 @@ import androidx.core.util.Supplier
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentProviderMap
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.dialog.showDialog
 import com.github.fragivity.router.NamedNavArgument
@@ -118,6 +117,5 @@ object Fragivity {
                 return NavOptionsBuilder()
             }
         }
-
     }
 }

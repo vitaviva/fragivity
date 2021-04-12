@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: "kotlin-kapt"
 
 android {
@@ -15,11 +12,15 @@ android {
         targetSdkVersion Build.target_sdk_version
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath = true
             }
+        }
+        vectorDrawables {
+            useSupportLibrary = true
         }
     }
     buildTypes {
@@ -28,12 +29,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -54,6 +53,8 @@ dependencies {
 
     implementation project(':component:base')
     implementation project(':component:ac-flow')
+
+    implementation "androidx.multidex:multidex:2.0.1"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'

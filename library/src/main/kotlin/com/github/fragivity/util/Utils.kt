@@ -1,3 +1,5 @@
+@file:JvmName("FragivityUtils")
+
 package com.github.fragivity.util
 
 import android.content.Context
@@ -12,3 +14,7 @@ fun Float.dp(context: Context): Int {
 }
 
 fun Int.dp(context: Context): Int = toFloat().dp(context)
+
+// make hashCode > 0
+internal inline val Any.positiveHashCode: Int
+    get() = hashCode() and Int.MAX_VALUE

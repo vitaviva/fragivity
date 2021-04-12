@@ -18,6 +18,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.github.fragivity.Fragivity;
 import com.github.fragivity.test.R;
+import com.github.fragivity.util.FragivityUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -52,8 +53,10 @@ public class FragivityTest {
     public void loadRoot() {
         scenario.onFragment(fragment -> {
             Fragivity.loadRoot(fragment, HomeFragment.class);
-            assertEquals(Objects.requireNonNull(fragment.getNavController().getCurrentDestination()).getId(),
-                    HomeFragment.class.hashCode());
+            assertEquals(
+                    Objects.requireNonNull(fragment.getNavController().getCurrentDestination()).getId(),
+                    FragivityUtils.getPositiveHashCode(HomeFragment.class)
+            );
         });
 
     }
@@ -88,8 +91,10 @@ public class FragivityTest {
                 fragment.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                     if (event == Lifecycle.Event.ON_START) {
                         fragment.testPush();
-                        assertEquals(host.getNavController().getCurrentDestination().getId(),
-                                DestFragment.class.hashCode());
+                        assertEquals(
+                                host.getNavController().getCurrentDestination().getId(),
+                                FragivityUtils.getPositiveHashCode(DestFragment.class)
+                        );
                     }
                 });
                 return fragment;
@@ -106,8 +111,10 @@ public class FragivityTest {
                 home.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                     if (event == Lifecycle.Event.ON_START) {
                         home.testPushWithFactory();
-                        assertEquals(host.getNavController().getCurrentDestination().getId(),
-                                DestFragment.class.hashCode());
+                        assertEquals(
+                                host.getNavController().getCurrentDestination().getId(),
+                                FragivityUtils.getPositiveHashCode(DestFragment.class)
+                        );
                     }
                 });
                 return home;
@@ -156,7 +163,10 @@ public class FragivityTest {
                     fragment.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                         if (event == Lifecycle.Event.ON_START) {
                             Fragivity.of(fragment.getChildFragmentManager().getFragments().get(0)).pop();
-                            assertEquals(host.getNavController().getCurrentDestination().getId(), HomeFragment.class.hashCode());
+                            assertEquals(
+                                    host.getNavController().getCurrentDestination().getId(),
+                                    FragivityUtils.getPositiveHashCode(HomeFragment.class)
+                            );
                         }
                     });
                 }

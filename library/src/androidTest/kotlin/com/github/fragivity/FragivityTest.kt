@@ -4,6 +4,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.github.fragivity.util.positiveHashCode
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +26,10 @@ class FragivityTest {
 
         scenario.onFragment {
             it.loadRoot(HomeFragment::class)
-            assertEquals(it.navController.currentDestination?.id, DestFragment::class.hashCode())
+            assertEquals(
+                it.navController.currentDestination?.id,
+                HomeFragment::class.positiveHashCode
+            )
         }
     }
 }

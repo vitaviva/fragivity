@@ -14,6 +14,7 @@ import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.get
 import com.github.fragivity.router.createRoute
+import com.github.fragivity.util.positiveHashCode
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
@@ -57,7 +58,7 @@ fun NavHostFragment.loadRoot(route: String, root: KClass<out Fragment>) {
             defaultViewModelProviderFactory
         ).get(FragivityNodeViewModel::class.java)
 
-        val startDestId = root.hashCode()
+        val startDestId = root.positiveHashCode
         graph = createGraph(startDestination = startDestId) {
             destination(FragmentNavigatorDestinationBuilder(
                 provider[MyFragmentNavigator::class],

@@ -7,6 +7,7 @@ import androidx.annotation.AnimatorRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
+import com.github.fragivity.util.positiveHashCode
 import kotlin.reflect.KClass
 
 enum class LaunchMode {
@@ -119,7 +120,7 @@ internal fun NavOptions.totOptions(
         setPopExitAnim(popExitAnim)
         setLaunchSingleTop(launchMode == LaunchMode.SINGLE_TOP)
         if (launchMode == LaunchMode.SINGLE_TASK && clazz != null) {
-            setPopUpTo(clazz.hashCode(), true)
+            setPopUpTo(clazz.positiveHashCode, true)
         }
     }.build()
 

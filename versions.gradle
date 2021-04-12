@@ -2,7 +2,7 @@ ext {
     Build = [
             compile_sdk_version: 29,
             build_tool_version: '29.0.3',
-            min_sdk_version: 21,
+            min_sdk_version: 19,
             target_sdk_version: 29
     ]
 
