@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.res.use
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModel
+import com.github.fragivity.R
 import com.github.fragivity.navigator
 import com.github.fragivity.pop
 import com.github.fragivity.requirePreviousFragment
@@ -64,7 +64,7 @@ internal class ReportFragment : Fragment() {
         mChildFragmentManager = ReportFragmentManager()
     }
 
-    private val layoutId = ViewCompat.generateViewId()
+    private val layoutId = R.id.container
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
