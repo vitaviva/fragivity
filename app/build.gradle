@@ -8,7 +8,7 @@ apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion Build.compile_sdk_version
-    buildToolsVersion Build.compile_tool_version
+    buildToolsVersion Build.build_tool_version
     defaultConfig {
         applicationId "com.github.fragivity.example"
         minSdkVersion Build.min_sdk_version
