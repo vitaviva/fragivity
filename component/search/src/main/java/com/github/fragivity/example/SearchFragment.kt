@@ -6,8 +6,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.github.fragivity.example.search.R
 import com.github.fragivity.navigator
-import com.github.fragivity.router.popTo
-import com.github.fragivity.router.push
+import com.github.fragivity.popTo
+import com.github.fragivity.push
 import kotlinx.android.synthetic.main.search_fragment.*
 
 class SearchFragment : Fragment(R.layout.search_fragment) {

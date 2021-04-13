@@ -27,7 +27,6 @@ import android.view.View;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
@@ -40,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 @Navigator.Name("ignore")
-public class MyFragmentNavigator extends FragmentNavigator {
+public class FragivityFragmentNavigator extends FragmentNavigator {
     private static final String TAG = "FragivityNavigator";
     private static final String KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds";
 
@@ -52,9 +51,9 @@ public class MyFragmentNavigator extends FragmentNavigator {
     private final FragmentManager mFragmentManager;
     private final int mContainerId;
 
-    public MyFragmentNavigator(@NonNull Context context,
-                               @NonNull FragmentManager manager,
-                               int containerId) {
+    public FragivityFragmentNavigator(@NonNull Context context,
+                                      @NonNull FragmentManager manager,
+                                      int containerId) {
         super(context, manager, containerId);
         mContext = context;
         mFragmentManager = manager;
@@ -67,38 +66,36 @@ public class MyFragmentNavigator extends FragmentNavigator {
                 if (mFragmentManager.getFragments().size() > 1) {
                     // 切到后台时的生命周期
                     Fragment fragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 2);
-
-                    mFragmentManager.beginTransaction()
-                            .setMaxLifecycle(fragment, Lifecycle.State.STARTED)
-                            .commit();
+                    setMaxLifecycle(fragment, Lifecycle.State.STARTED);
                 }
             } else if (mIsPendingPopBackStackOperation) {
                 mIsPendingPopBackStackOperation = !isBackStackEqual();
                 // 回到前台时的生命周期
                 Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
                 if (fragment != null) {
-                    mFragmentManager.beginTransaction()
-                            .setMaxLifecycle(fragment, Lifecycle.State.RESUMED)
-                            .commit();
+                    setMaxLifecycle(fragment, Lifecycle.State.RESUMED);
                 }
             }
         });
     }
 
-    private Fragment createFragment(FragmentNavigator.Destination destination, Bundle args) {
-        if (destination instanceof MyDestination) {
-            return ((MyDestination) destination).getFragment(args);
-        } else {
-            String className = destination.getClassName();
-            if (className.charAt(0) == '.') {
-                className = mContext.getPackageName() + className;
-            }
-            // return ReportFragment.newInstance(className, args);
-            Fragment fragment = mFragmentManager.getFragmentFactory()
-                    .instantiate(mContext.getClassLoader(), className);
-            fragment.setArguments(args);
-            return fragment;
+    private Fragment createFragment(
+            FragmentNavigator.Destination destination,
+            @Nullable Bundle args
+    ) {
+        if (destination instanceof FragivityFragmentDestination) {
+            return ((FragivityFragmentDestination) destination).createFragment(args);
         }
+
+        String className = destination.getClassName();
+        if (className.charAt(0) == '.') {
+            className = mContext.getPackageName() + className;
+        }
+
+        Fragment fragment = mFragmentManager.getFragmentFactory()
+                .instantiate(mContext.getClassLoader(), className);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Nullable
@@ -198,9 +195,8 @@ public class MyFragmentNavigator extends FragmentNavigator {
         if (isAdded) {
             mBackStack.add(destId);
             return destination;
-        } else {
-            return null;
         }
+        return null;
     }
 
 
@@ -229,9 +225,7 @@ public class MyFragmentNavigator extends FragmentNavigator {
         mBackStack.removeLast();
 
         return true;
-
     }
-
 
     /**
      * Checks if this FragmentNavigator's back stack is equal to the FragmentManager's back stack.
@@ -301,20 +295,11 @@ public class MyFragmentNavigator extends FragmentNavigator {
                 if (fragment == null) return;
 
                 // update args
-                Bundle bundle = fragment.getArguments();
-                if (bundle != null) {
-                    bundle.putAll(newBundle);
-                } else {
-                    fragment.setArguments(newBundle);
-                }
+                appendArguments(fragment, newBundle);
 
-                mFragmentManager.beginTransaction()
-                        .setMaxLifecycle(fragment, Lifecycle.State.STARTED)
-                        .commit();
-
-                mFragmentManager.beginTransaction()
-                        .setMaxLifecycle(fragment, Lifecycle.State.RESUMED)
-                        .commit();
+                // run onResume
+                setMaxLifecycle(fragment, Lifecycle.State.STARTED);
+                setMaxLifecycle(fragment, Lifecycle.State.RESUMED);
                 return;
             }
             index--;
@@ -347,27 +332,18 @@ public class MyFragmentNavigator extends FragmentNavigator {
         }
     }
 
-    public static class MyDestination extends FragmentNavigator.Destination {
-
-        // kotlin: (Bundle) -> Fragment
-        private Function<Bundle, Fragment> content;
-
-        public MyDestination(MyFragmentNavigator navigator, Function<Bundle, Fragment> content) {
-            super(navigator);
-            this.content = content;
+    private void appendArguments(Fragment fragment, Bundle newArgs) {
+        Bundle oldArgs = fragment.mArguments;
+        if (oldArgs != null) {
+            oldArgs.putAll(newArgs);
+        } else {
+            fragment.setArguments(newArgs);
         }
+    }
 
-        public void setContent(Function<Bundle, Fragment> content) {
-            this.content = content;
-        }
-
-        Fragment getFragment(Bundle args) {
-            Fragment fragment = content.apply(args);
-            if (fragment.getArguments() != null) {
-                args.putAll(fragment.getArguments());
-            }
-            fragment.setArguments(args);
-            return fragment;
-        }
+    private void setMaxLifecycle(Fragment fragment, Lifecycle.State state) {
+        mFragmentManager.beginTransaction()
+                .setMaxLifecycle(fragment, state)
+                .commit();
     }
 }

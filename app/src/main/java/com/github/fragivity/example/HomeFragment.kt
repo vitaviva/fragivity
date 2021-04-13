@@ -20,7 +20,6 @@ import com.github.fragivity.example.swipeback.SwipeBackFragment
 import com.github.fragivity.finish
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import com.github.fragivity.router.push
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : AbsBaseFragment(false) {

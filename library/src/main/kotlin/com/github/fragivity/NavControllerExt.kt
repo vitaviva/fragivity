@@ -1,8 +1,9 @@
 package com.github.fragivity
 
 import android.os.Bundle
+import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.MyFragmentNavigator
+import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
@@ -16,7 +17,7 @@ internal fun NavController.createNavDestination(
     clazz: KClass<out Fragment>
 ): FragmentNavigator.Destination {
     return (FragmentNavigatorDestinationBuilder(
-        navigatorProvider[MyFragmentNavigator::class],
+        navigatorProvider[FragivityFragmentNavigator::class],
         destinationId,
         clazz
     ).apply {
@@ -30,14 +31,13 @@ internal fun NavController.createNavDestination(
 }
 
 @JvmSynthetic
-internal fun NavController.createMyNavDestination(
+internal fun NavController.createNavDestination(
     destinationId: Int,
-    content: ((Bundle) -> Fragment)? = null
-): MyFragmentNavigator.MyDestination {
-    return MyFragmentNavigator.MyDestination(
-        navigatorProvider[MyFragmentNavigator::class],
-        content
-    ).apply {
-        id = destinationId
-    }
+    factory: ((Bundle) -> Fragment)? = null
+): FragivityFragmentDestination {
+    return FragivityFragmentDestination(
+        navigatorProvider[FragivityFragmentNavigator::class],
+        destinationId,
+        factory
+    )
 }

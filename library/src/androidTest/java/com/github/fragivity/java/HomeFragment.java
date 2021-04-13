@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void testPushWithFactory() {
-        Fragivity.of(this).push(DestFragment.class, () -> new DestFragment()
+        Fragivity.of(this).push(DestFragment.class, (Bundle) -> new DestFragment()
                 , navOptionsBuilder().build());
     }
 

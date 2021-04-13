@@ -5,10 +5,7 @@ import android.view.View
 import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
-import com.github.fragivity.util.positiveHashCode
-import kotlin.reflect.KClass
 
 enum class LaunchMode {
     STANDARD, SINGLE_TOP, SINGLE_TASK
@@ -111,7 +108,7 @@ internal fun NavOptions.toBundle(): Bundle =
 
 @JvmSynthetic
 internal fun NavOptions.totOptions(
-    clazz: KClass<out Fragment>? = null
+    destinationId: Int? = null
 ): androidx.navigation.NavOptions =
     androidx.navigation.NavOptions.Builder().apply {
         setEnterAnim(enterAnim)
@@ -119,8 +116,8 @@ internal fun NavOptions.totOptions(
         setPopEnterAnim(popEnterAnim)
         setPopExitAnim(popExitAnim)
         setLaunchSingleTop(launchMode == LaunchMode.SINGLE_TOP)
-        if (launchMode == LaunchMode.SINGLE_TASK && clazz != null) {
-            setPopUpTo(clazz.positiveHashCode, true)
+        if (launchMode == LaunchMode.SINGLE_TASK && destinationId != null) {
+            setPopUpTo(destinationId, true)
         }
     }.build()
 
@@ -139,3 +136,7 @@ fun sharedElementsOf(vararg sharedElements: Pair<View, String>) =
             add(view to name)
         }
     }
+
+fun navOptions(optionsBuilder: NavOptions.() -> Unit = {}): NavOptions {
+    return `$NavOptionsDefault`().apply(optionsBuilder)
+}

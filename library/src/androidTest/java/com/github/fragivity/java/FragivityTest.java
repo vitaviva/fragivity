@@ -63,30 +63,27 @@ public class FragivityTest {
 
     @Test
     public void loadRootWithFactory() {
-
         scenario.onFragment(host ->
-                Fragivity.loadRoot(host, HomeFragment.class, () -> {
+                Fragivity.loadRoot(host, HomeFragment.class, (Bundle) -> {
                     HomeFragment fragment = new HomeFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(null, ARGUMENT);
                     fragment.setArguments(bundle);
                     fragment.getViewLifecycleOwnerLiveData().observeForever(lifecycleOwner -> {
                         assertEquals(
-                                host.getChildFragmentManager().getFragments().get(0).//ReportFragment
-                                        getChildFragmentManager().getFragments().get(0),//real
+                                host.getChildFragmentManager().getFragments().get(0),
                                 fragment);
                         assertTrue(fragment.testArgument());
                     });
                     return fragment;
                 }));
-
     }
 
 
     @Test
     public void push() {
         scenario.onFragment(host -> {
-            Fragivity.loadRoot(host, HomeFragment.class, () -> {
+            Fragivity.loadRoot(host, HomeFragment.class, (Bundle) -> {
                 HomeFragment fragment = new HomeFragment();
                 fragment.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                     if (event == Lifecycle.Event.ON_START) {
@@ -106,7 +103,7 @@ public class FragivityTest {
     @Test
     public void pushWithFactory() {
         scenario.onFragment(host -> {
-            Fragivity.loadRoot(host, HomeFragment.class, () -> {
+            Fragivity.loadRoot(host, HomeFragment.class, (Bundle) -> {
                 HomeFragment home = new HomeFragment();
                 home.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                     if (event == Lifecycle.Event.ON_START) {
@@ -125,15 +122,14 @@ public class FragivityTest {
     @Test
     public void pushWithOptions() {
         scenario.onFragment(host -> {
-            Fragivity.loadRoot(host, HomeFragment.class, () -> {
+            Fragivity.loadRoot(host, HomeFragment.class, (Bundle) -> {
                 HomeFragment home = new HomeFragment();
                 home.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                     if (event == Lifecycle.Event.ON_START) {
                         home.testPushWithOptions();
                         new Handler().post(() -> {
                             DestFragment fragment =
-                                    ((DestFragment) host.getChildFragmentManager().getFragments().get(1)
-                                            .getChildFragmentManager().getFragments().get(0));
+                                    ((DestFragment) host.getChildFragmentManager().getFragments().get(1));
                             assertTrue(fragment.testArguments());
                         });
                     }
@@ -147,7 +143,7 @@ public class FragivityTest {
     @Test
     public void pop() {
         scenario.onFragment(host -> {
-            Fragivity.loadRoot(host, HomeFragment.class, () -> {
+            Fragivity.loadRoot(host, HomeFragment.class, (Bundle) -> {
                 HomeFragment home = new HomeFragment();
                 home.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                     if (event == Lifecycle.Event.ON_START) {
@@ -155,14 +151,13 @@ public class FragivityTest {
                     }
                 });
                 return home;
-
             });
 
             host.getChildFragmentManager().addFragmentOnAttachListener((fragmentManager, fragment) -> {
                 if (host.getChildFragmentManager().getFragments().size() == 2) {
                     fragment.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                         if (event == Lifecycle.Event.ON_START) {
-                            Fragivity.of(fragment.getChildFragmentManager().getFragments().get(0)).pop();
+                            Fragivity.of(fragment).pop();
                             assertEquals(
                                     host.getNavController().getCurrentDestination().getId(),
                                     FragivityUtils.getPositiveHashCode(HomeFragment.class)
@@ -178,7 +173,7 @@ public class FragivityTest {
     @Test
     public void showDialog() {
         scenario.onFragment(host -> {
-            Fragivity.loadRoot(host, HomeFragment.class, () -> {
+            Fragivity.loadRoot(host, HomeFragment.class, (Bundle) -> {
                 HomeFragment home = new HomeFragment();
                 home.getLifecycle().addObserver((LifecycleEventObserver) (source, event) -> {
                     if (event == Lifecycle.Event.ON_RESUME) {

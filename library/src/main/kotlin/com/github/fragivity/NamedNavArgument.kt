@@ -1,4 +1,4 @@
-package com.github.fragivity.router
+package com.github.fragivity
 
 import androidx.navigation.NavArgument
 import androidx.navigation.NavArgumentBuilder

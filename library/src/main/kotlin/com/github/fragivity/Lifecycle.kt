@@ -4,8 +4,8 @@ import android.os.Parcelable
 import android.view.View
 import androidx.collection.SparseArrayCompat
 import androidx.collection.valueIterator
+import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.MyFragmentNavigator
 import androidx.lifecycle.*
 import androidx.navigation.*
 import androidx.navigation.fragment.DialogFragmentNavigator
@@ -96,12 +96,12 @@ private fun NavDestinationBundle.toDestination(navController: NavController): Na
         val clazz = Class.forName(className) as Class<Fragment>
         return navController.createNavDestination(id, clazz.kotlin)
     }
-    return navController.createMyNavDestination(id)
+    return navController.createNavDestination(id)
 }
 
 private fun NavDestination.toBundle(): NavDestinationBundle {
     val clazzName = when (this) {
-        is MyFragmentNavigator.MyDestination -> ""
+        is FragivityFragmentDestination -> ""
         is FragmentNavigator.Destination -> className
         is DialogFragmentNavigator.Destination -> className
         else -> error("Invalid Destination")
