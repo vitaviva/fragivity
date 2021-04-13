@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.res.use
 import com.github.fragivity.R
-import com.github.fragivity.util.dp
 import java.util.*
 
 internal class DebugHierarchyViewContainer @JvmOverloads constructor(
@@ -173,5 +173,13 @@ internal class DebugHierarchyViewContainer @JvmOverloads constructor(
         }
     }
 
-    private inline val Int.dp: Int get() = dp(context)
+    private inline val Int.dp: Int get() = toFloat().dp(context)
+}
+
+internal fun Float.dp(context: Context): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this,
+        context.resources.displayMetrics
+    ).toInt()
 }

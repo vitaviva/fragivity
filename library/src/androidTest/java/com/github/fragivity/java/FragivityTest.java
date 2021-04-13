@@ -18,7 +18,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.github.fragivity.Fragivity;
 import com.github.fragivity.test.R;
-import com.github.fragivity.util.FragivityUtils;
+import com.github.fragivity.FragivityUtils;
 
 import org.junit.After;
 import org.junit.Before;

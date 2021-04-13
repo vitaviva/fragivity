@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDestination
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
-import com.github.fragivity.util.positiveHashCode
 import kotlin.reflect.KClass
 
 /**

@@ -11,7 +11,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.R
-import com.github.fragivity.util.dp
 import kotlin.math.abs
 
 private const val DEFAULT_DEBUG_DIALOG_TAG = "DebugViewDialogFragment"

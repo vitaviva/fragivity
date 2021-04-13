@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import com.github.fragivity.util.positiveHashCode
 import kotlin.reflect.KClass
 
 inline fun <reified T : Fragment> NavHostFragment.composable(

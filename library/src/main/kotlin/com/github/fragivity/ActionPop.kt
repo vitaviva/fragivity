@@ -7,7 +7,6 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.popBackStack
-import com.github.fragivity.util.positiveHashCode
 import kotlin.reflect.KClass
 
 /**

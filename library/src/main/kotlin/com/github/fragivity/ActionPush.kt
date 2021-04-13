@@ -9,7 +9,6 @@ import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.fragment.app.Fragment
 import androidx.navigation.*
 import androidx.navigation.fragment.FragmentNavigator
-import com.github.fragivity.util.positiveHashCode
 import kotlin.reflect.KClass
 
 @JvmSynthetic

@@ -9,7 +9,7 @@ import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
 import androidx.navigation.get
 import androidx.navigation.plusAssign
 import com.github.fragivity.FragivityNavHost
-import com.github.fragivity.util.positiveHashCode
+import com.github.fragivity.positiveHashCode
 import kotlin.reflect.KClass
 
 /**

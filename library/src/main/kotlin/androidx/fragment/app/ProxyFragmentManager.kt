@@ -5,7 +5,7 @@ package androidx.fragment.app
 import android.os.Parcelable
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
-import com.github.fragivity.util.appendBackground
+import com.github.fragivity.appendBackground
 
 private class ReportFragmentManager : FragmentManager() {
     override fun saveAllState(): Parcelable {
