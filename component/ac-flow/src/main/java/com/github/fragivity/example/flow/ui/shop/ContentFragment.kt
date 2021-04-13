@@ -3,6 +3,7 @@ package com.github.fragivity.example.flow.ui.shop
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.github.fragivity.applyVerticalInOut
 import com.github.fragivity.example.flow.R
@@ -33,5 +34,8 @@ class ContentFragment : Fragment(R.layout.flow_fragment_content) {
 
     companion object {
         const val ARGS_MENU = "content_args_menu"
+        fun newInstance(menu: String) = ContentFragment().apply {
+            arguments = bundleOf(ARGS_MENU to menu)
+        }
     }
 }

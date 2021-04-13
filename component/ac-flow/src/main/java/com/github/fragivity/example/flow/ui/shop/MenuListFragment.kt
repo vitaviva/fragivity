@@ -31,7 +31,7 @@ class MenuListFragment : Fragment(R.layout.flow_fragment_list_menu) {
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        mAdapter = MenuAdapter(resources.getStringArray(R.array.array_menu))
+        mAdapter = MenuAdapter(requireArguments().getStringArray(ARGS_MENUS) ?: emptyArray())
         mAdapter.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(view: View, item: Any, position: Int) {
                 if (item !is String) return
@@ -102,7 +102,11 @@ class MenuListFragment : Fragment(R.layout.flow_fragment_list_menu) {
             holder.tvName.text = items[position]
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        override fun onBindViewHolder(
+            holder: ViewHolder,
+            position: Int,
+            payloads: MutableList<Any>
+        ) {
             if (payloads.isEmpty()) {
                 onBindViewHolder(holder, position)
             } else {
@@ -135,5 +139,9 @@ class MenuListFragment : Fragment(R.layout.flow_fragment_list_menu) {
 
     companion object {
         const val SAVE_STATE_POSITION = "menu_list_save_state_position"
+        private const val ARGS_MENUS = "menu_list_args_menus"
+        fun newInstance(menus: Array<String>) = MenuListFragment().apply {
+            arguments = bundleOf(ARGS_MENUS to menus)
+        }
     }
 }

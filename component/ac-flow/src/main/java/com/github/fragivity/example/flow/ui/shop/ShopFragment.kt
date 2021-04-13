@@ -39,11 +39,13 @@ class ShopFragment : Fragment(R.layout.flow_fragment_shop) {
             openDrawerListener?.onOpenDrawer()
         }
 
+        val menus = resources.getStringArray(R.array.array_menu)
+
         val mMenuListNavHostFragment = findNavHostFragment(R.id.fl_list_container)
-        mMenuListNavHostFragment.loadRoot(MenuListFragment::class)
+        mMenuListNavHostFragment.loadRoot { MenuListFragment.newInstance(menus) }
 
         val mContentNavHostFragment = findNavHostFragment(R.id.fl_content_container)
-        mContentNavHostFragment.loadRoot(ContentFragment::class)
+        mContentNavHostFragment.loadRoot { ContentFragment.newInstance(menus[0]) }
         contentNavigator = mContentNavHostFragment.navigator
     }
 
