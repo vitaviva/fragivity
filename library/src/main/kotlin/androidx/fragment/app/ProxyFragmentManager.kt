@@ -36,13 +36,14 @@ private class BackgroundFragmentManager(
 }
 
 private class FragmentFactoryProxy(
-    private val factory: FragmentFactory
+    private val factory: FragmentFactory,
+    var autoSetBackground: Boolean
 ) : FragmentFactory() {
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         val fragment = factory.instantiate(classLoader, className)
         if (fragment is NavHostFragment) {
             fragment.setupFragmentManager(ReportFragmentManager())
-        } else {
+        } else if (autoSetBackground) {
             fragment.setupFragmentManager(BackgroundFragmentManager(fragment))
         }
         return fragment
@@ -53,13 +54,15 @@ private fun Fragment.setupFragmentManager(manager: FragmentManager) {
     mChildFragmentManager = manager
 }
 
-fun FragmentManager.proxyFragmentFactory() {
+fun FragmentManager.proxyFragmentFactory(autoSetBackground: Boolean = true) {
     val oldFactory = fragmentFactory
     if (oldFactory !is FragmentFactoryProxy) {
-        fragmentFactory = FragmentFactoryProxy(oldFactory)
+        fragmentFactory = FragmentFactoryProxy(oldFactory, autoSetBackground)
+    } else {
+        oldFactory.autoSetBackground = autoSetBackground
     }
 }
 
-fun FragmentActivity.proxyFragmentFactory() {
-    supportFragmentManager.proxyFragmentFactory()
+fun FragmentActivity.proxyFragmentFactory(autoSetBackground: Boolean = true) {
+    supportFragmentManager.proxyFragmentFactory(autoSetBackground)
 }
