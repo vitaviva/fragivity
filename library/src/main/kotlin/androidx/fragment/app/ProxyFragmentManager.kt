@@ -8,18 +8,46 @@ import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.appendBackground
 
 private class ReportFragmentManager : FragmentManager() {
+
+    override fun dispatchStart() {
+        forEachBackFragment { fragment ->
+            if (fragment.mState == Fragment.ACTIVITY_CREATED) {
+                fragment.mState = Fragment.STARTED
+            }
+        }
+        super.dispatchStart()
+    }
+
+    override fun dispatchStop() {
+        forEachBackFragment { fragment ->
+            if (fragment.mState == Fragment.STARTED) {
+                fragment.mState = Fragment.ACTIVITY_CREATED
+            }
+        }
+        super.dispatchStop()
+    }
+
     override fun saveAllState(): Parcelable {
-        val fragments = fragments
-        if (fragments.size > 1) {
-            var fragment: Fragment
-            for (i in 0..fragments.size - 2) {
-                fragment = fragments[i]
+        if (parent?.requireActivity()?.isChangingConfigurations == true) {
+            forEachBackFragment { fragment ->
                 if (fragment.mMaxState != Lifecycle.State.CREATED) {
                     fragment.mMaxState = Lifecycle.State.CREATED
                 }
             }
         }
         return super.saveAllState()
+    }
+
+    private fun forEachBackFragment(block: (Fragment) -> Unit) {
+        val fragments = fragments
+        if (fragments.size > 1) {
+            var fragment: Fragment
+            for (i in 0..fragments.size - 2) {
+                fragment = fragments[i]
+                if (fragment is NavHostFragment) continue
+                block(fragments[i])
+            }
+        }
     }
 }
 

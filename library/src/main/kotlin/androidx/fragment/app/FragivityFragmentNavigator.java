@@ -66,13 +66,20 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
                 if (mFragmentManager.getFragments().size() > 1) {
                     // 切到后台时的生命周期
                     Fragment fragment = mFragmentManager.getFragments().get(mFragmentManager.getFragments().size() - 2);
-                    setMaxLifecycle(fragment, Lifecycle.State.STARTED);
+                    // fragment onResume -> onStop
+                    mFragmentManager.moveToState(fragment, Fragment.ACTIVITY_CREATED);
+                    fragment.mState = Fragment.STARTED;
+                    fragment.mMaxState = Lifecycle.State.STARTED;
                 }
             } else if (mIsPendingPopBackStackOperation) {
                 mIsPendingPopBackStackOperation = !isBackStackEqual();
                 // 回到前台时的生命周期
                 Fragment fragment = mFragmentManager.getPrimaryNavigationFragment();
                 if (fragment != null) {
+                    // fragment (true) ?: onStart : onCreateView -> onResume
+                    if (fragment.mState == Fragment.STARTED) {
+                        fragment.mState = Fragment.ACTIVITY_CREATED;
+                    }
                     setMaxLifecycle(fragment, Lifecycle.State.RESUMED);
                 }
             }
