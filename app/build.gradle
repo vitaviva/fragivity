@@ -55,9 +55,9 @@ dependencies {
         implementation project(':processor')
         kapt project(':processor')
     } else {
-        implementation "com.github.fragivity:core:$ARTIFACT_VERSION"
-        implementation 'com.github.fragivity:processor:0.1.0'
-        kapt 'com.github.fragivity:processor:0.1.0'
+        implementation "com.github.vitaviva.fragivity:core:$ARTIFACT_VERSION"
+        implementation "com.github.vitaviva.fragivity:processor:$ARTIFACT_VERSION"
+        kapt "com.github.vitaviva.fragivity:processor:$ARTIFACT_VERSION"
     }
     implementation project(':component:feed')
     implementation project(':component:search')

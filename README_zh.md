@@ -2,7 +2,7 @@
 
 [English](https://github.com/vitaviva/fragivity/blob/master/README.md) | 中文文档
 
-![Bintray](https://img.shields.io/bintray/v/vitaviva/maven/core)  ![Language](https://img.shields.io/badge/language-kotlin-green.svg)  ![License](https://img.shields.io/badge/License-MIT-blue.svg)
+[![](https://jitpack.io/v/vitaviva/fragivity.svg)](https://jitpack.io/#vitaviva/fragivity)  ![Language](https://img.shields.io/badge/language-kotlin-green.svg)  ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 <img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
@@ -25,9 +25,32 @@ Fragivity可以帮助开发者基于Fragment打造单Activty架构的APP
 
 ## Installation
 
+由于JCenter停服，0.2.1之后的依赖方式改为JitPack.
+
+> !注意: Group Name 有变化：`com.github.fragivity` -> `com.github.vitaviva.fragivity`
+
+### before 0.2.0
+
 ```groovy
 implementation 'com.github.fragivity:core:$latest_version'
 ```
+
+### after 0.2.1
+
+```groovy
+// add in your root build.gradle at the end of repositories
+allprojects {
+    repositories { 
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+```groovy
+implementation 'com.github.vitaviva.fragivity:core:$latest_version'
+```
+
 
 ## Quick start
 

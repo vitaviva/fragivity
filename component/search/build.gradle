@@ -24,6 +24,6 @@ dependencies {
     if (codeDepend) {
         implementation project(':library')
     } else {
-        implementation "com.github.fragivity:core:$ARTIFACT_VERSION"
+        implementation "com.github.vitaviva.fragivity:core:$ARTIFACT_VERSION"
     }
 }

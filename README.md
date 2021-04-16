@@ -2,7 +2,7 @@
 
 English | [中文文档](https://github.com/vitaviva/fragivity/blob/master/README_zh.md)
 
-![Bintray](https://img.shields.io/bintray/v/vitaviva/maven/core)  ![Language](https://img.shields.io/badge/language-kotlin-green.svg)  ![License](https://img.shields.io/badge/License-MIT-blue.svg)
+[![](https://jitpack.io/v/vitaviva/fragivity.svg)](https://jitpack.io/#vitaviva/fragivity) ![Language](https://img.shields.io/badge/language-kotlin-green.svg)  ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 <img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
@@ -17,9 +17,30 @@ Fragivity is a library used to build APP with "Single Activity + Multi-Fragments
 - **Dialog：** Supports DialogFragment
 
 ## Installation
+JCenter is shutting down and the lib after(including) 0.2.1 can be get from JitPack.
+
+> !Note: group name changed from `com.github.fragivity` to `com.github.vitaviva.fragivity`
+
+### before 0.2.0
 
 ```groovy
 implementation 'com.github.fragivity:core:$latest_version'
+```
+
+### after 0.2.1
+
+```groovy
+// add in your root build.gradle at the end of repositories
+allprojects {
+    repositories { 
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+```groovy
+implementation 'com.github.vitaviva.fragivity:core:$latest_version'
 ```
 
 ## Quick start
