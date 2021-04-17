@@ -15,15 +15,12 @@ private val _isRouteInit by lazy(LazyThreadSafetyMode.NONE) {
 }
 
 @MainThread
-fun NavHostFragment.handleDeepLink(intent: Intent) {
-
-    with(intent) {
-        if (ACTION_VIEW == action && _isRouteInit) {
-            getFragmentInfo(data.toString())?.let {
-                navigator.putFragment(it)
-                //post用来确保HomeFragment已进入fragmentManager，才能获取并对其进行hide
-                Handler().post { navController.navigate(data!!) }
-            }
+fun NavHostFragment.handleDeepLink(intent: Intent) = with(intent) {
+    if (ACTION_VIEW == action && _isRouteInit) {
+        getFragmentInfo(data.toString())?.let {
+            navigator.putFragment(it)
+            //post用来确保HomeFragment已进入fragmentManager，才能获取并对其进行hide
+            Handler().post { navController.navigate(data!!) }
         }
     }
 }

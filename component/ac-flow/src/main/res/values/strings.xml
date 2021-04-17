@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="home">Home</string>
+    <string name="discover">Discover</string>
+    <string name="shop">Shop</string>
+    <string name="login">Sign in</string>
+    <string name="system">Account</string>
+    <string name="swipe">SwipeBack</string>
+    <string name="go_swipe_back" tools:ignore="MissingTranslation">SwipeBack</string>
+
+    <string name="anim_v">Set animation: Vertical</string>
+    <string name="anim_h">Set animation: Horizontal</string>
+    <string name="anim_none">Set animation: None</string>
+    <string name="anim">anim</string>
+
+    <string name="hot_news">hot</string>
+
+    <string name="start_result_test">StartForResult Sample</string>
+    <string name="modify_success">Modify successfully!</string>
+
+    <string name="recommend">Recommend</string>
+    <string name="hot">Hot</string>
+    <string name="favorite">Favorite</string>
+
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="account">Username</string>
+
+    <string name="sign_in_success">Sign in successful, NavigationView\'s name has changed</string>
+
+    <string name="error_username">This username is invalid</string>
+    <string name="error_pwd">This password is invalid</string>
+
+    <string name="swipe_back">Swipe back</string>
+</resources>

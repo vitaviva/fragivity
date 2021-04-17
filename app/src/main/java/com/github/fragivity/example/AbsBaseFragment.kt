@@ -22,7 +22,7 @@ abstract class AbsBaseFragment(private val _supportBack: Boolean = true) : Fragm
         super.onViewCreated(view, savedInstanceState)
         Log.e(TAG, "onViewCreated:" + this.javaClass.simpleName)
         title_name?.text = titleName
-        if (_supportBack == true) {
+        if (_supportBack) {
             title_back?.let {
                 it.visibility = View.VISIBLE
                 it.setOnClickListener {
@@ -30,7 +30,6 @@ abstract class AbsBaseFragment(private val _supportBack: Boolean = true) : Fragm
                 }
             }
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

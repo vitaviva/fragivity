@@ -1,5 +1,6 @@
 package com.github.fragivity.example
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.github.fragivity.example.backpress.BackPressFragment
 import com.github.fragivity.example.communicate.CommFragment
 import com.github.fragivity.example.deeplink.sendNotification
 import com.github.fragivity.example.dialog.DialogFragment
+import com.github.fragivity.example.flow.ui.MainActivity
 import com.github.fragivity.example.launchmode.LaunchModeFragment
 import com.github.fragivity.example.listscreen.Leaderboard
 import com.github.fragivity.example.nested.NestedFragment
@@ -18,7 +20,6 @@ import com.github.fragivity.example.swipeback.SwipeBackFragment
 import com.github.fragivity.finish
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import com.github.fragivity.router.push
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : AbsBaseFragment(false) {
@@ -73,6 +74,10 @@ class HomeFragment : AbsBaseFragment(false) {
             navigator.push("feed") {
                 arguments = bundleOf("isShowBackSearch" to false)
             }
+        }
+
+        btn_go_to_flow.setOnClickListener {
+            startActivity(Intent(requireContext(), MainActivity::class.java))
         }
     }
 

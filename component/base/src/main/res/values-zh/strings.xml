@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="modify">修改上个页面的标题</string>
+
+    <string name="start_cycle">启动CyclerFragment</string>
+    <string name="start_with_pop">启动启动CyclerFragment，并关闭自己</string>
+
+    <string-array name="array_menu">
+        <item>销量排行</item>
+        <item>炒菜</item>
+        <item>汤面类</item>
+        <item>煲类</item>
+        <item>汤</item>
+        <item>小菜</item>
+        <item>酒水饮料</item>
+        <item>盖浇饭类</item>
+        <item>炒面类</item>
+        <item>拉面类</item>
+        <item>盖浇面类</item>
+        <item>特色菜</item>
+        <item>加料</item>
+        <item>馄饨类</item>
+        <item>其他</item>
+    </string-array>
+</resources>

@@ -17,22 +17,31 @@ internal fun NavController.findDestination(request: NavDeepLinkRequest): NavDest
 }
 
 @JvmSynthetic
-internal fun NavController.navigate(request: NavDeepLinkRequest, navOptions: NavOptions) {
+internal fun NavController.navigate(request: NavDeepLinkRequest, navOptions: NavOptions?) {
     val deepLinkMatch = graph.matchDeepLink(request) ?: return
     val destination = deepLinkMatch.destination
     val uriArgs = destination.addInDefaultArgs(deepLinkMatch.matchingArgs)
-    val optionArgs = navOptions.toBundle()
-    navigate(destination.id, uriArgs + optionArgs, navOptions.totOptions(), navOptions.totExtras())
+
+    if (navOptions == null) {
+        navigate(destination.id, uriArgs)
+        return
+    }
+
+    navigate(
+        destination.id,
+        uriArgs + navOptions.toBundle(),
+        navOptions.totOptions(),
+        navOptions.totExtras()
+    )
 }
 
 @JvmSynthetic
-internal fun NavController.popBackStack(request: NavDeepLinkRequest, inclusive: Boolean) {
-    val destination = findDestination(request) ?: return
-    popBackStack(destination.id, inclusive)
+internal fun NavController.popBackStack(request: NavDeepLinkRequest, inclusive: Boolean): Boolean {
+    val destination = findDestination(request) ?: return false
+    return popBackStack(destination.id, inclusive)
 }
 
 private operator fun Bundle?.plus(optionArgs: Bundle?): Bundle? {
-    if (this == null && optionArgs == null) return null
     if (this == null) return optionArgs
     if (optionArgs == null) return this
     return Bundle().apply {

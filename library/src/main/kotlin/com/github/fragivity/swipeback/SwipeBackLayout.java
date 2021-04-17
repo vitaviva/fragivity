@@ -1,5 +1,6 @@
 package com.github.fragivity.swipeback;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -15,15 +16,14 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.ReportFragment;
 
-import com.github.fragivity.Fragivity;
-import com.github.fragivity.FragivityUtil;
 import com.github.fragivity.R;
 
 import java.lang.annotation.Retention;
@@ -31,7 +31,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -71,11 +70,6 @@ public class SwipeBackLayout extends FrameLayout {
      */
     public static final int STATE_SETTLING = ViewDragHelper.STATE_SETTLING;
 
-    /**
-     * A view is currently drag finished.
-     */
-    public static final int STATE_FINISHED = 3;
-
     private static final int DEFAULT_SCRIM_COLOR = 0x99000000;
     private static final float DEFAULT_PARALLAX = 0.33f;
     private static final int FULL_ALPHA = 255;
@@ -96,10 +90,10 @@ public class SwipeBackLayout extends FrameLayout {
 
     private Drawable mShadowLeft;
     private Drawable mShadowRight;
-    private Rect mTmpRect = new Rect();
+    private final Rect mTmpRect = new Rect();
 
     private int mEdgeFlag;
-    private Boolean mEnable = null;
+    private Boolean mEnable = true;
     private int mCurrentSwipeOrientation;
     private float mParallaxOffset = DEFAULT_PARALLAX;
 
@@ -116,7 +110,7 @@ public class SwipeBackLayout extends FrameLayout {
      */
     private List<OnSwipeListener> mListeners;
 
-    private Context mContext;
+    private final Context mContext;
 
     public enum EdgeLevel {
         MAX, MIN, MED
@@ -161,8 +155,6 @@ public class SwipeBackLayout extends FrameLayout {
     /**
      * Set scroll threshold, we will close the activity, when scrollPercent over
      * this value
-     *
-     * @param threshold
      */
     public void setScrollThresHold(@FloatRange(from = 0.0f, to = 1.0f) float threshold) {
         if (threshold >= 1.0f || threshold <= 0) {
@@ -215,7 +207,7 @@ public class SwipeBackLayout extends FrameLayout {
      * Set a drawable used for edge shadow.
      */
     public void setShadow(int resId, int edgeFlag) {
-        setShadow(getResources().getDrawable(resId), edgeFlag);
+        setShadow(ContextCompat.getDrawable(mContext, resId), edgeFlag);
     }
 
     /**
@@ -250,7 +242,6 @@ public class SwipeBackLayout extends FrameLayout {
          * @see #STATE_IDLE
          * @see #STATE_DRAGGING
          * @see #STATE_SETTLING
-         * @see #STATE_FINISHED
          */
         void onDragStateChange(int state);
 
@@ -269,6 +260,31 @@ public class SwipeBackLayout extends FrameLayout {
          * @param scrollPercent scroll percent of this view
          */
         void onDragScrolled(float scrollPercent);
+
+        /**
+         * Invoke when drag finish
+         *
+         * @param isActivity true:Activity false:Fragment
+         */
+        void onDragFinished(boolean isActivity);
+    }
+
+    public static abstract class SimpleOnSwipeListener implements OnSwipeListener {
+        @Override
+        public void onDragStateChange(int state) {
+        }
+
+        @Override
+        public void onEdgeTouch(int oritentationEdgeFlag) {
+        }
+
+        @Override
+        public void onDragScrolled(float scrollPercent) {
+        }
+
+        @Override
+        public void onDragFinished(boolean isActivity) {
+        }
     }
 
     @Override
@@ -344,7 +360,7 @@ public class SwipeBackLayout extends FrameLayout {
 
                 if (mHelper.getCapturedView() != null) {
                     int leftOffset = (int) ((mHelper.getCapturedView().getLeft() - getWidth()) * mParallaxOffset * mScrimOpacity);
-                    mPreFragment.getView().setX(leftOffset > 0 ? 0 : leftOffset);
+                    mPreFragment.getView().setX(Math.min(leftOffset, 0));
                 }
             }
         }
@@ -425,9 +441,7 @@ public class SwipeBackLayout extends FrameLayout {
                     mEdgeSize.setInt(mHelper, ((int) (20 * metrics.density + 0.5f)));
                 }
             }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -435,7 +449,7 @@ public class SwipeBackLayout extends FrameLayout {
     private class ViewDragCallback extends ViewDragHelper.Callback {
 
         @Override
-        public boolean tryCaptureView(View child, int pointerId) {
+        public boolean tryCaptureView(@NonNull View child, int pointerId) {
             boolean dragEnable = mHelper.isEdgeTouched(mEdgeFlag, pointerId);
             if (dragEnable) {
                 if (mHelper.isEdgeTouched(EDGE_LEFT, pointerId)) {
@@ -452,13 +466,16 @@ public class SwipeBackLayout extends FrameLayout {
 
                 if (mPreFragment == null) {
                     if (mFragment != null) {
-                        List<Fragment> fragmentList = mFragment.getFragmentManager().getFragments();
-                        if (fragmentList != null && fragmentList.size() > 1) {
+                        List<Fragment> fragmentList = mFragment.getParentFragmentManager().getFragments();
+                        if (fragmentList.size() > 1) {
                             int index = fragmentList.indexOf(mFragment);
                             for (int i = index - 1; i >= 0; i--) {
                                 Fragment fragment = fragmentList.get(i);
                                 if (fragment != null && fragment.getView() != null) {
-                                    fragment.getView().setVisibility(VISIBLE);
+                                    fragment.getParentFragmentManager()
+                                            .beginTransaction()
+                                            .show(fragment)
+                                            .commit();
                                     mPreFragment = fragment;
                                     break;
                                 }
@@ -466,9 +483,11 @@ public class SwipeBackLayout extends FrameLayout {
                         }
                     }
                 } else {
-                    View preView = mPreFragment.getView();
-                    if (preView != null && preView.getVisibility() != VISIBLE) {
-                        preView.setVisibility(VISIBLE);
+                    if (mPreFragment.isHidden()) {
+                        mPreFragment.getParentFragmentManager()
+                                .beginTransaction()
+                                .show(mPreFragment)
+                                .commit();
                     }
                 }
             }
@@ -476,7 +495,7 @@ public class SwipeBackLayout extends FrameLayout {
         }
 
         @Override
-        public int clampViewPositionHorizontal(View child, int left, int dx) {
+        public int clampViewPositionHorizontal(@NonNull View child, int left, int dx) {
             int ret = 0;
             if ((mCurrentSwipeOrientation & EDGE_LEFT) != 0) {
                 ret = Math.min(child.getWidth(), Math.max(left, 0));
@@ -487,7 +506,7 @@ public class SwipeBackLayout extends FrameLayout {
         }
 
         @Override
-        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+        public void onViewPositionChanged(@NonNull View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
 
             if ((mCurrentSwipeOrientation & EDGE_LEFT) != 0) {
@@ -508,19 +527,13 @@ public class SwipeBackLayout extends FrameLayout {
             if (mScrollPercent > 1) {
                 if (mFragment != null) {
                     if (mCallOnDestroyView) return;
-
                     if (!mFragment.isDetached()) {
-                        onDragFinished();
-
-                        //https://github.com/vitaviva/fragivity/issues/7
-                        ((ReportFragment)mFragment).disableAnimOnce = true;
-                        ((ReportFragment) Objects.requireNonNull(FragivityUtil.requirePreviousFragment(mFragment))).disableAnimOnce = true;
-
-                        Fragivity.of(mFragment).pop();
+                        onDragFinished(false);
                     }
                 } else {
                     if (!mActivity.isFinishing()) {
-                        onDragFinished();
+                        onDragFinished(true);
+
                         mActivity.finish();
                         mActivity.overridePendingTransition(0, 0);
                     }
@@ -529,7 +542,7 @@ public class SwipeBackLayout extends FrameLayout {
         }
 
         @Override
-        public int getViewHorizontalDragRange(View child) {
+        public int getViewHorizontalDragRange(@NonNull View child) {
             if (mFragment != null) {
                 return 1;
             }
@@ -572,37 +585,38 @@ public class SwipeBackLayout extends FrameLayout {
         }
     }
 
-    private void onDragFinished() {
+    private void onDragFinished(boolean isActivity) {
         if (mListeners != null) {
             for (OnSwipeListener listener : mListeners) {
-                listener.onDragStateChange(STATE_FINISHED);
+                listener.onDragFinished(isActivity);
             }
         }
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        boolean enable = mEnable != null ?
-                mEnable : SwipeBackUtil.enableSwipeBack;
-        if (!enable)
+        if (!mEnable && !SwipeBackUtil.enableSwipeBack) {
             return super.onInterceptTouchEvent(ev);
+        }
         try {
             return mHelper.shouldInterceptTouchEvent(ev);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!mEnable && !SwipeBackUtil.enableSwipeBack)
+        if (!mEnable && !SwipeBackUtil.enableSwipeBack) {
             return super.onTouchEvent(event);
+        }
         try {
             mHelper.processTouchEvent(event);
             return true;
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }

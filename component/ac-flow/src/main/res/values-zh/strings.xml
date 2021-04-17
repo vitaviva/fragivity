@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_drawer_open">打开drawer</string>
+    <string name="navigation_drawer_close">关闭drawer</string>
+
+    <string name="home">首页</string>
+    <string name="discover">发现</string>
+    <string name="shop">商店</string>
+    <string name="login">登录</string>
+    <string name="system">账户</string>
+    <string name="swipe">侧滑返回</string>
+
+    <string name="anim_v">设置全局动画成功! 竖向</string>
+    <string name="anim_h">设置全局动画成功! 横向</string>
+    <string name="anim_none">设置全局动画成功! 无</string>
+    <string name="anim">动画</string>
+
+    <string name="hot_news">热门新闻</string>
+
+    <string name="start_result_test">测试startForResult</string>
+    <string name="modify_success">修改成功!</string>
+
+    <string name="recommend">推荐</string>
+    <string name="hot">热门</string>
+    <string name="favorite">收藏</string>
+
+    <string name="password">密码</string>
+    <string name="register">注册</string>
+    <string name="account">用户名</string>
+
+    <string name="sign_in_success">登录成功,NavigationView的用户名已经更改!</string>
+
+    <string name="error_username">用户名无效</string>
+    <string name="error_pwd">密码无效</string>
+
+    <string name="swipe_back">侧滑返回</string>
+</resources>

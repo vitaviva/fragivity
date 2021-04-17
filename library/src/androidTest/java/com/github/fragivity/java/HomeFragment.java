@@ -1,5 +1,7 @@
 package com.github.fragivity.java;
 
+import static com.github.fragivity.Fragivity.Navigator.navOptionsBuilder;
+
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,10 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.github.fragivity.Fragivity;
 import com.github.fragivity.HomeFragmentKt;
 import com.github.fragivity.LaunchMode;
-import com.github.fragivity.R;
 import com.github.fragivity.swipeback.SwipeBackUtil;
-
-import static com.github.fragivity.Fragivity.Navigator.navOptionsBuilder;
 
 public class HomeFragment extends Fragment {
 
@@ -31,16 +30,12 @@ public class HomeFragment extends Fragment {
         Fragivity.of(this).push(DestFragment.class,
                 navOptionsBuilder()
                         .setArguments(bundle)
-                        .setEnterAnim(R.animator.no_anim)
-                        .setExitAnim(R.animator.no_anim)
-                        .setPopEnterAnim(R.animator.no_anim)
-                        .setPopExitAnim(R.animator.no_anim)
                         .setLaunchMode(LaunchMode.STANDARD)
                         .build());
     }
 
     public void testPushWithFactory() {
-        Fragivity.of(this).push(DestFragment.class, () -> new DestFragment()
+        Fragivity.of(this).push(DestFragment.class, (Bundle) -> new DestFragment()
                 , navOptionsBuilder().build());
     }
 
@@ -54,6 +49,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SwipeBackUtil.getSwipeBackLayout(this).setEnableGesture(true);
+        SwipeBackUtil.setEnableGesture(this, true);
     }
 }

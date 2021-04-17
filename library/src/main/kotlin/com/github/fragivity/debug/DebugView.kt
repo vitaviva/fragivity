@@ -1,6 +1,7 @@
 package com.github.fragivity.debug
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -10,11 +11,16 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.R
-import com.github.fragivity.util.dp
 import kotlin.math.abs
 
+private const val DEFAULT_DEBUG_DIALOG_TAG = "DebugViewDialogFragment"
+
+fun NavHostFragment.showDebugView(activity: Activity, tag: String = DEFAULT_DEBUG_DIALOG_TAG) {
+    showDebugView(activity.findViewById<FrameLayout>(android.R.id.content), tag)
+}
+
 @SuppressLint("ClickableViewAccessibility")
-fun NavHostFragment.showDebugView(root: ViewGroup, tag: String = "DebugViewDialogFragment") {
+fun NavHostFragment.showDebugView(root: ViewGroup, tag: String = DEFAULT_DEBUG_DIALOG_TAG) {
     val context = root.context
 
     val dp18 = 18f.dp(context)
@@ -26,7 +32,7 @@ fun NavHostFragment.showDebugView(root: ViewGroup, tag: String = "DebugViewDialo
         ).apply {
             gravity = Gravity.END or Gravity.BOTTOM
             rightMargin = dp18
-            bottomMargin = dp18
+            bottomMargin = dp18 * 3
         }
     }
     root.addView(stackView)

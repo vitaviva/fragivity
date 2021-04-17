@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
@@ -12,7 +14,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.res.use
 import com.github.fragivity.R
-import com.github.fragivity.util.dp
+import java.util.*
 
 internal class DebugHierarchyViewContainer @JvmOverloads constructor(
     context: Context,
@@ -87,7 +89,9 @@ internal class DebugHierarchyViewContainer @JvmOverloads constructor(
                             childTvItem.setCompoundDrawablesWithIntrinsicBounds(
                                 R.drawable.ic_baseline_arrow_right_24, 0, 0, 0
                             )
-                            removeView(finalChildHierarchy)
+
+                            val startIndex = linearLayout.indexOfChild(childTvItem)
+                            removeView(startIndex, finalChildHierarchy)
                         } else {
                             handleExpandView(
                                 childFragmentRecordList,
@@ -147,16 +151,35 @@ internal class DebugHierarchyViewContainer @JvmOverloads constructor(
         )
     }
 
-    private fun removeView(hierarchy: Int) {
+    private fun removeView(startIndex: Int, hierarchy: Int) {
         val size = linearLayout.childCount
-        for (i in size - 1 downTo 0) {
+
+        val deque = ArrayDeque<View>(size - 1 - startIndex)
+
+        var find = false
+        for (i in startIndex until size) {
             val child = linearLayout.getChildAt(i)
             val childHierarchy = child.getTag(R.id.hierarchy) as? Int ?: continue
             if (childHierarchy >= hierarchy) {
-                linearLayout.removeView(child)
+                deque.offerLast(child)
+                find = true
+            } else if (find && childHierarchy < hierarchy) {
+                break
             }
+        }
+
+        while (deque.isNotEmpty()) {
+            linearLayout.removeView(deque.pollLast())
         }
     }
 
-    private inline val Int.dp: Int get() = dp(context)
+    private inline val Int.dp: Int get() = toFloat().dp(context)
+}
+
+internal fun Float.dp(context: Context): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this,
+        context.resources.displayMetrics
+    ).toInt()
 }

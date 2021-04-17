@@ -2,17 +2,10 @@ package com.github.fragivity
 
 import android.os.Bundle
 import androidx.arch.core.util.Function
-import androidx.core.util.Supplier
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentProviderMap
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.dialog.showDialog
-import com.github.fragivity.router.NamedNavArgument
-import com.github.fragivity.router.composable
-import com.github.fragivity.router.popTo
-import com.github.fragivity.router.push
 
 object Fragivity {
 
@@ -27,12 +20,29 @@ object Fragivity {
     @JvmStatic
     fun <T : Fragment> loadRoot(
         navHost: NavHostFragment,
-        fragmentClazz: Class<T>,
-        factory: Supplier<T>
+        route: String,
+        fragmentClazz: Class<T>
     ) {
-        val kClass = fragmentClazz.kotlin
-        FragmentProviderMap[requireNotNull(kClass.qualifiedName)] = { factory.get() }
-        navHost.loadRoot(kClass)
+        navHost.loadRoot(route, fragmentClazz.kotlin)
+    }
+
+    @JvmStatic
+    fun <T : Fragment> loadRoot(
+        navHost: NavHostFragment,
+        fragmentClazz: Class<T>,
+        factory: Function<Bundle, T>
+    ) {
+        navHost.loadRoot(fragmentClazz.kotlin) { factory.apply(it) }
+    }
+
+    @JvmStatic
+    fun <T : Fragment> loadRoot(
+        navHost: NavHostFragment,
+        route: String,
+        fragmentClazz: Class<T>,
+        factory: Function<Bundle, T>
+    ) {
+        navHost.loadRoot(route, fragmentClazz.kotlin) { factory.apply(it) }
     }
 
     @JvmStatic
@@ -41,7 +51,7 @@ object Fragivity {
         route: String,
         factory: Function<Bundle, Fragment>
     ) {
-        navHostFragment.composable(route, emptyList()) { factory.apply(it) }
+        navHostFragment.composable(route) { factory.apply(it) }
     }
 
     @JvmStatic
@@ -51,7 +61,7 @@ object Fragivity {
         argument: NamedNavArgument,
         factory: Function<Bundle, Fragment>
     ) {
-        navHostFragment.composable(route, listOf(argument)) { factory.apply(it) }
+        navHostFragment.composable(route, argument) { factory.apply(it) }
     }
 
     @JvmStatic
@@ -76,18 +86,16 @@ object Fragivity {
             fragmentClazz: Class<T>,
             navOptions: NavOptions? = null
         ) {
-            _fragment.navigator.pushInternal(fragmentClazz.kotlin, navOptions)
+            _fragment.navigator.push(fragmentClazz.kotlin, navOptions)
         }
 
         @JvmOverloads
         fun <T : Fragment> push(
             fragmentClazz: Class<T>,
-            factory: Supplier<T>,
+            factory: Function<Bundle, T>,
             navOptions: NavOptions? = null
         ) {
-            FragmentProviderMap[requireNotNull(fragmentClazz.kotlin.qualifiedName)] =
-                { factory.get() }
-            push(fragmentClazz, navOptions)
+            _fragment.navigator.push(fragmentClazz.kotlin, navOptions) { factory.apply(it) }
         }
 
         @JvmOverloads
@@ -103,13 +111,13 @@ object Fragivity {
             _fragment.navigator.push(route, navOptions)
         }
 
-        @JvmOverloads
-        fun popTo(route: String, inclusive: Boolean = false) {
-            _fragment.navigator.popTo(route, inclusive)
+        fun pop(): Boolean {
+            return _fragment.navigator.pop()
         }
 
-        fun pop() {
-            _fragment.navigator.pop()
+        @JvmOverloads
+        fun popTo(route: String, inclusive: Boolean = false): Boolean {
+            return _fragment.navigator.popTo(route, inclusive)
         }
 
         companion object {
@@ -118,6 +126,5 @@ object Fragivity {
                 return NavOptionsBuilder()
             }
         }
-
     }
 }

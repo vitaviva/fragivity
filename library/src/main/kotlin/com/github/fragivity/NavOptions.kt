@@ -5,9 +5,11 @@ import android.view.View
 import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
-import kotlin.reflect.KClass
+
+enum class LaunchMode {
+    STANDARD, SINGLE_TOP, SINGLE_TASK
+}
 
 interface NavOptions {
 
@@ -75,7 +77,6 @@ fun NavOptions.applySlideInOut() {
     popExitAnim = R.anim.slide_out_pop
 }
 
-
 fun NavOptions.applyFadeInOut() {
     enterAnim = R.anim.nav_default_enter_anim
     exitAnim = R.anim.nav_default_exit_anim
@@ -83,18 +84,31 @@ fun NavOptions.applyFadeInOut() {
     popExitAnim = R.anim.nav_default_exit_anim
 }
 
+fun NavOptions.applyVerticalInOut() {
+    enterAnim = R.anim.v_fragment_enter
+    exitAnim = R.anim.v_fragment_exit
+    popEnterAnim = R.anim.v_fragment_pop_enter
+    popExitAnim = R.anim.v_fragment_pop_exit
+}
+
+fun NavOptions.applyHorizontalInOut() {
+    enterAnim = R.anim.h_fragment_enter
+    exitAnim = R.anim.h_fragment_exit
+    popEnterAnim = R.anim.h_fragment_pop_enter
+    popExitAnim = R.anim.h_fragment_pop_exit
+}
 
 internal const val KEY_POP_SELF = "Fragivity:PopSelf"
 
 @JvmSynthetic
-internal fun NavOptions.toBundle(): Bundle? =
+internal fun NavOptions.toBundle(): Bundle =
     (arguments.takeIf { it != Bundle.EMPTY } ?: Bundle()).apply {
         putBoolean(KEY_POP_SELF, this@toBundle.popSelf)
     }
 
 @JvmSynthetic
 internal fun NavOptions.totOptions(
-    clazz: KClass<out Fragment>? = null
+    destinationId: Int? = null
 ): androidx.navigation.NavOptions =
     androidx.navigation.NavOptions.Builder().apply {
         setEnterAnim(enterAnim)
@@ -102,8 +116,8 @@ internal fun NavOptions.totOptions(
         setPopEnterAnim(popEnterAnim)
         setPopExitAnim(popExitAnim)
         setLaunchSingleTop(launchMode == LaunchMode.SINGLE_TOP)
-        if (launchMode == LaunchMode.SINGLE_TASK && clazz != null) {
-            setPopUpTo(clazz.hashCode(), true)
+        if (launchMode == LaunchMode.SINGLE_TASK && destinationId != null) {
+            setPopUpTo(destinationId, true)
         }
     }.build()
 
@@ -116,14 +130,13 @@ internal fun NavOptions.totExtras(): FragmentNavigator.Extras =
         }
     }.build()
 
-
-enum class LaunchMode {
-    STANDARD, SINGLE_TOP, SINGLE_TASK
-}
-
 fun sharedElementsOf(vararg sharedElements: Pair<View, String>) =
     mutableListOf<Pair<View, String>>().apply {
         sharedElements.forEach { (view, name) ->
             add(view to name)
         }
     }
+
+fun navOptions(optionsBuilder: NavOptions.() -> Unit = {}): NavOptions {
+    return `$NavOptionsDefault`().apply(optionsBuilder)
+}

@@ -25,7 +25,10 @@ class FragivityTest {
 
         scenario.onFragment {
             it.loadRoot(HomeFragment::class)
-            assertEquals(it.navController.currentDestination?.id, DestFragment::class.hashCode())
+            assertEquals(
+                it.navController.currentDestination?.id,
+                HomeFragment::class.positiveHashCode
+            )
         }
     }
 }
