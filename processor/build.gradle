@@ -1,7 +1,7 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.novoda.bintray-release'
 
 
 dependencies {
@@ -17,3 +17,10 @@ dependencies {
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+publish {
+    userOrg = USER_ORG
+    groupId = ARTIFACT_GROUP
+    artifactId = ARTIFACT_NAME
+    publishVersion = ARTIFACT_VERSION
+    desc = 'Use Fragment like Activity'
+}
