@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.novoda.bintray-release'
+
 
 android {
     compileSdkVersion Build.compile_sdk_version
@@ -59,5 +61,15 @@ configurations.all {
         force "androidx.fragment:fragment:1.3.0-beta02" //for compiling with result api
         force "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0"
     }
+}
+
+
+
+publish {
+    userOrg = USER_ORG
+    groupId = ARTIFACT_GROUP
+    artifactId = ARTIFACT_NAME
+    publishVersion = ARTIFACT_VERSION
+    desc = 'Use Fragment like Activity'
 }
 
