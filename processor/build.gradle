@@ -1,7 +1,8 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 
 dependencies {
@@ -17,3 +18,12 @@ dependencies {
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = ARTIFACT_GROUP
+            artifactId = ARTIFACT_NAME
+            version = ARTIFACT_VERSION
+        }
+    }
+}

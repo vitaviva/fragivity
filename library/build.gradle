@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion Build.compile_sdk_version
@@ -61,3 +63,12 @@ configurations.all {
     }
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = ARTIFACT_GROUP
+            artifactId = ARTIFACT_NAME
+            version = ARTIFACT_VERSION
+        }
+    }
+}
