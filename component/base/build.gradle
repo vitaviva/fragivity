@@ -35,6 +35,6 @@ dependencies {
     if (codeDepend) {
         api project(':library')
     } else {
-        api "com.github.vitaviva.fragivity:core:$ARTIFACT_VERSION"
+        api "com.github.fragivity:core:$ARTIFACT_VERSION"
     }
 }

@@ -12,7 +12,7 @@ import com.github.fragivity.example.backpress.BackPressFragment
 import com.github.fragivity.example.communicate.CommFragment
 import com.github.fragivity.example.deeplink.sendNotification
 import com.github.fragivity.example.dialog.DialogFragment
-//import com.github.fragivity.example.flow.ui.MainActivity
+import com.github.fragivity.example.flow.ui.MainActivity
 import com.github.fragivity.example.launchmode.LaunchModeFragment
 import com.github.fragivity.example.listscreen.Leaderboard
 import com.github.fragivity.example.nested.NestedFragment
