@@ -2,7 +2,7 @@
 
 English | [中文文档](https://github.com/vitaviva/fragivity/blob/master/README_zh.md)
 
-[![](https://jitpack.io/v/vitaviva/fragivity.svg)](https://jitpack.io/#vitaviva/fragivity) ![Language](https://img.shields.io/badge/language-kotlin-green.svg)  ![License](https://img.shields.io/badge/License-MIT-blue.svg)
+[![](https://jitpack.io/v/vitaviva/fragivity.svg)](https://jitpack.io/#vitaviva/fragivity) ![Language](https://img.shields.io/badge/Language-Kotlin-green.svg)  ![License](https://img.shields.io/badge/MinSdkVersion-19-blue.svg)
 
 <img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
