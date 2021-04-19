@@ -143,13 +143,12 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
                 && navOptions.shouldLaunchSingleTop()
                 && mBackStack.peekLast() == destId;
 
+        // when popsSelf == true close preFrag as SingleTop: see https://github.com/vitaviva/fragivity/issues/26
+        boolean isPopSelf = args != null && args.getBoolean(KEY_POP_SELF, false);
         boolean isAdded;
         if (initialNavigation) {
             isAdded = true;
-        } else if (isSingleTopReplacement
-                // when popsSelf == true close preFrag as SingleTop: see https://github.com/vitaviva/fragivity/issues/26
-                || (args != null && args.getBoolean(KEY_POP_SELF, false))
-        ) {
+        } else if (isSingleTopReplacement || isPopSelf) {
             // Single Top means we only want one instance on the back stack
             if (preFrag != null) {
 //                // If the Fragment to be replaced is on the FragmentManager's
@@ -199,6 +198,9 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
         ft.commit();
 
         // The commit succeeded, update our view of the world
+        if (isPopSelf) {
+            return destination;
+        }
         if (isAdded) {
             mBackStack.add(destId);
             return destination;
