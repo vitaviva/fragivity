@@ -91,6 +91,13 @@ private fun FragivityNavHost.pushInternal(
         return@with
     }
 
+    // fix https://github.com/vitaviva/fragivity/issues/31
+    // popSelf为true时， mFragmentManager.mBackStack需要与NavController.mBackStack同步更新，
+    //  mFragmentManager在Navigator中会处理，NavController需要在此处处理，先删除当前Destination
+    if (navOptions.popSelf) {
+        navController.removeLastBackStackEntry()
+    }
+
     when (navOptions.launchMode) {
         LaunchMode.STANDARD,
         LaunchMode.SINGLE_TOP -> {
@@ -119,4 +126,5 @@ private fun FragivityNavHost.pushInternal(
             )
         }
     }
+
 }

@@ -32,6 +32,7 @@ class LaunchModeFragment : AbsBaseFragment() {
 
         btn_singletop.setOnClickListener {
             navigator.push(LaunchModeFragment::class) {
+                applySlideInOut()
                 applyLaunchMode(LaunchMode.SINGLE_TOP)
                 applyArguments(ARGUMENTS_FROM to "Launch with SingleTop")
             }

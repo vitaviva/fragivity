@@ -46,6 +46,16 @@ class BackPressFragment : AbsBaseFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        cb.isEnabled = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cb.isEnabled = true
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         cb.remove() //not necessary
