@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.github.fragivity.appendBackground
 import com.github.fragivity.navigator
 import com.github.fragivity.pop
-import com.github.fragivity.appendBackground
 
 fun Fragment.attachToSwipeBack(view: View): View {
     val swipeBackLayout = SwipeBackLayout(requireContext()).apply {
