@@ -11,7 +11,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.fragivity.applyArguments
 import com.github.fragivity.applyVerticalInOut
 import com.github.fragivity.example.base.OnItemClickListener
 import com.github.fragivity.example.flow.R
@@ -51,12 +50,11 @@ class HomeFragment : Fragment(R.layout.flow_fragment_home), Toolbar.OnMenuItemCl
         adapter.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(view: View, item: Any, position: Int) {
                 if (item !is Article) return
-                navigator.push(DetailFragment::class) {
+                navigator.push({
                     applyVerticalInOut()
-                    applyArguments(
-                        DetailFragment.ARGS_TITLE to item.title
-                    )
-                }
+                }, {
+                    DetailFragment.newInstance(item.title)
+                })
             }
         })
 
