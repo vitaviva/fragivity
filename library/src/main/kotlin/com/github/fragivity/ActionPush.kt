@@ -78,10 +78,23 @@ internal fun FragivityNavHost.putFragment(
         }
         graph += destination
         saveToViewModel(destination)
-    } else if (destination is FragivityFragmentDestination) {
-        destination.factory = factory
+        return destination
     }
-    return destination
+    // check destination is valid
+    if (factory != null) {
+        if (destination is FragivityFragmentDestination) {
+            destination.factory = factory
+            return destination
+        }
+    } else {
+        if (destination !is FragivityFragmentDestination) {
+            return destination
+        }
+    }
+    // rebuild destination
+    graph -= destination
+    removeFromViewModel(destId)
+    return putFragment(clazz, factory)
 }
 
 @JvmSynthetic
