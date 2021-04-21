@@ -3,6 +3,8 @@
 
 package com.github.fragivity
 
+import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
@@ -64,6 +66,25 @@ private fun <T : Fragment> findFragment(
         }
     }
     return null
+}
+
+fun FragmentActivity.setupDefaultFragmentBackground(
+    defaultBackground: Drawable? = defaultBackground()
+) {
+    supportFragmentManager.registerFragmentLifecycleCallbacks(
+        object : FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentViewCreated(
+                fm: FragmentManager,
+                f: Fragment,
+                v: View,
+                savedInstanceState: Bundle?
+            ) {
+                if (v.background == null) {
+                    v.background = defaultBackground
+                }
+            }
+        }, true
+    )
 }
 
 /**

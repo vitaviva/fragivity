@@ -51,11 +51,19 @@ class HomeFragment : Fragment(R.layout.flow_fragment_home), Toolbar.OnMenuItemCl
         adapter.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(view: View, item: Any, position: Int) {
                 if (item !is Article) return
-                navigator.push(DetailFragment::class) {
-                    applyVerticalInOut()
-                    applyArguments(
-                        DetailFragment.ARGS_TITLE to item.title
-                    )
+                if (Random.nextBoolean()) {
+                    navigator.push(DetailFragment::class) {
+                        applyVerticalInOut()
+                        applyArguments(DetailFragment.ARGS_TITLE to item.title + "_v1")
+                    }
+                } else {
+                    navigator.push({
+                        applyVerticalInOut()
+                        applyArguments(DetailFragment.ARGS_TITLE to item.title + "_v2")
+                    }, { args ->
+                        val title = args.getString(DetailFragment.ARGS_TITLE)
+                        DetailFragment.newInstance("$title*")
+                    })
                 }
             }
         })

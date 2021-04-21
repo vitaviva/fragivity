@@ -2,6 +2,7 @@ package com.github.fragivity.example.flow.ui.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import com.github.fragivity.applyArguments
@@ -49,5 +50,8 @@ class DetailFragment : Fragment(R.layout.flow_fragment_detail) {
     companion object {
         const val ARGS_TITLE = "detail_args_title"
         const val KEY_RESULT_TITLE = "detail_key_result_title"
+        fun newInstance(title: String) = DetailFragment().apply {
+            arguments = bundleOf(ARGS_TITLE to title)
+        }
     }
 }

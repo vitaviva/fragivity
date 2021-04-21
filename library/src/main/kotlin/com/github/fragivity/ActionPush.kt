@@ -5,6 +5,7 @@ package com.github.fragivity
 
 import android.os.Bundle
 import androidx.core.net.toUri
+import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.fragment.app.Fragment
 import androidx.navigation.*
@@ -77,8 +78,23 @@ internal fun FragivityNavHost.putFragment(
         }
         graph += destination
         saveToViewModel(destination)
+        return destination
     }
-    return destination
+    // check destination is valid
+    if (factory != null) {
+        if (destination is FragivityFragmentDestination) {
+            destination.factory = factory
+            return destination
+        }
+    } else {
+        if (destination !is FragivityFragmentDestination) {
+            return destination
+        }
+    }
+    // rebuild destination
+    graph -= destination
+    removeFromViewModel(destId)
+    return putFragment(clazz, factory)
 }
 
 @JvmSynthetic
