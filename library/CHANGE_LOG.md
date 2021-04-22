@@ -1,3 +1,10 @@
+## 0.2.5 
+1. support alternate push(KClass) and push { }
+2. fix https://github.com/vitaviva/fragivity/issues/34
+
+## 0.2.4
+fix https://github.com/vitaviva/fragivity/issues/31
+
 ## 0.2.1
 fix https://github.com/vitaviva/fragivity/issues/26
 
