@@ -36,6 +36,7 @@ class CheckListFragment : AbsBaseFragment() {
 
     private val binding by viewBinding(FragmentCommListBinding::bind)
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        requireActivity().supportFragmentManager.setFragmentResultListener(REQUEST_KEY, this, FragmentResultListener { requestKey, bundle ->
@@ -45,7 +46,7 @@ class CheckListFragment : AbsBaseFragment() {
 //                else item
 //            })
 //        })
-        setFragmentResultListener(REQUEST_KEY) { requestKey, bundle ->
+        setFragmentResultListener(REQUEST_KEY) { _, bundle ->
             val result = checkNotNull(bundle.getParcelable<Item>(RESULT_KEY))
             _adapter.submitList(_list.mapIndexed { index: Int, item: Item ->
                 if (index == result.id) result

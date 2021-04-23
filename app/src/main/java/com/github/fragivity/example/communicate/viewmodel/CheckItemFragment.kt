@@ -28,7 +28,7 @@ class CheckItemFragment : AbsBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val _id = requireArguments().getInt(ARGUMENTS_ID).also { binding.name.text = "Item $it" }
-        val _check = requireArguments().getBoolean(ARGUMENTS_CHECKED).also { binding.checkbox.isChecked = it }
+        // val _check = requireArguments().getBoolean(ARGUMENTS_CHECKED).also { binding.checkbox.isChecked = it }
         binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
             viewModel.updateCheckState(_id, isChecked)
         }

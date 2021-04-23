@@ -84,8 +84,7 @@ class HomeFragment : AbsBaseFragment(false) {
         }
     }
 
-    override var titleName: String
+    override val titleName: String
         get() = "Fragivity"
-        set(value) {}
 
 }

@@ -42,7 +42,6 @@ class LaunchModeFragment : AbsBaseFragment() {
         }
 
         binding.btnSingletask.setOnClickListener {
-            val bundle = bundleOf(ARGUMENTS_FROM to "Launch with SingleTask")
             navigator.push {
                 ToNextFragment {
                     navigator.push(LaunchModeFragment::class) {

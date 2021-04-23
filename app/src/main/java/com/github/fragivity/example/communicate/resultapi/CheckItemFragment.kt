@@ -38,6 +38,7 @@ class CheckItemFragment : AbsBaseFragment() {
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onDestroy() {
         super.onDestroy()
 //        requireActivity().supportFragmentManager.setFragmentResult(REQUEST_KEY, bundleOf(RESULT_KEY to Item(_id, _check)))
