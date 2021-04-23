@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.novoda.bintray-release'
 
 
 android {
@@ -60,13 +59,4 @@ configurations.all {
     }
 }
 
-
-
-publish {
-    userOrg = USER_ORG
-    groupId = ARTIFACT_GROUP
-    artifactId = ARTIFACT_NAME
-    publishVersion = ARTIFACT_VERSION
-    desc = 'Use Fragment like Activity'
-}
-
+apply from: rootProject.file("gradle/bintray.gradle")
