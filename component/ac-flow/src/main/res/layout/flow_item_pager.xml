@@ -5,7 +5,8 @@
     android:layout_height="56dp"
     android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/tv_title"

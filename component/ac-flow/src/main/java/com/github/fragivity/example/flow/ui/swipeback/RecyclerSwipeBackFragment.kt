@@ -10,25 +10,27 @@ import com.github.fragivity.applyHorizontalInOut
 import com.github.fragivity.example.base.OnItemClickListener
 import com.github.fragivity.example.base.initToolbarNav
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentSwipeBackRecyBinding
 import com.github.fragivity.example.flow.ui.discover.PagerChildFragment
 import com.github.fragivity.navigator
 import com.github.fragivity.push
 import com.github.fragivity.swipeback.attachToSwipeBack
-import kotlinx.android.synthetic.main.flow_content_toolbar.*
-import kotlinx.android.synthetic.main.flow_fragment_swipe_back_recy.*
 
 class RecyclerSwipeBackFragment : Fragment() {
 
-    private val mToolbar get() = toolbar
-    private val mRecyclerView get() = recy
+    private var _binding: FlowFragmentSwipeBackRecyBinding? = null
+    private val binding get() = _binding!!
+
+    private val mToolbar get() = binding.content.toolbar
+    private val mRecyclerView get() = binding.recy
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.flow_fragment_swipe_back_recy, container, false)
-        return attachToSwipeBack(view)
+    ): View {
+        _binding = FlowFragmentSwipeBackRecyBinding.inflate(inflater, container, false)
+        return attachToSwipeBack(binding.root)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,5 +63,10 @@ class RecyclerSwipeBackFragment : Fragment() {
                 else -> ""
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

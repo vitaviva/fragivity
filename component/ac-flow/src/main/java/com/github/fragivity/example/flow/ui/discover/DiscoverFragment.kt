@@ -6,15 +6,18 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentDiscoverBinding
 import com.github.fragivity.example.flow.listener.OnFragmentOpenDrawerListener
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.flow_fragment_discover.*
 
 class DiscoverFragment : Fragment(R.layout.flow_fragment_discover) {
 
-    private val mToolbar get() = toolbar
-    private val mTabLayout get() = tab_layout
-    private val mViewPager get() = viewPager
+    private val binding by viewBinding(FlowFragmentDiscoverBinding::bind)
+
+    private val mToolbar get() = binding.toolbar
+    private val mTabLayout get() = binding.tabLayout
+    private val mViewPager get() = binding.viewPager
 
     private var openDrawerListener: OnFragmentOpenDrawerListener? = null
 

@@ -16,6 +16,7 @@ import com.github.fragivity.*
 import com.github.fragivity.debug.showDebugView
 import com.github.fragivity.example.base.showToast
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowActivityMainBinding
 import com.github.fragivity.example.flow.listener.OnFragmentOpenDrawerListener
 import com.github.fragivity.example.flow.listener.OnLoginSuccessListener
 import com.github.fragivity.example.flow.ui.account.LoginFragment
@@ -24,16 +25,16 @@ import com.github.fragivity.example.flow.ui.home.HomeFragment
 import com.github.fragivity.example.flow.ui.shop.ShopFragment
 import com.github.fragivity.example.flow.ui.swipeback.FirstSwipeBackFragment
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.flow_activity_main.*
-import kotlinx.android.synthetic.main.flow_nav_header_main.view.*
 
-class MainActivity : AppCompatActivity(R.layout.flow_activity_main),
+class MainActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     OnFragmentOpenDrawerListener,
     OnLoginSuccessListener {
 
-    private val mDrawer get() = drawer_layout
-    private val mNavigationView get() = nav_view
+    private lateinit var binding: FlowActivityMainBinding
+
+    private val mDrawer get() = binding.drawerLayout
+    private val mNavigationView get() = binding.navView
 
     private var _mTvName: TextView? = null
     private val mTvName: TextView get() = _mTvName!!
@@ -45,6 +46,8 @@ class MainActivity : AppCompatActivity(R.layout.flow_activity_main),
     override fun onCreate(savedInstanceState: Bundle?) {
         proxyFragmentFactory()
         super.onCreate(savedInstanceState)
+        binding = FlowActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host) as NavHostFragment
         navHostFragment.loadRoot(HomeFragment::class)
@@ -69,8 +72,8 @@ class MainActivity : AppCompatActivity(R.layout.flow_activity_main),
             mDrawer.closeDrawer(GravityCompat.START)
             mDrawer.postDelayed({ goLogin() }, 250)
         }
-        _mTvName = llNavHeader.tv_name
-        _mImageNav = llNavHeader.img_nav
+        _mTvName = llNavHeader.findViewById(R.id.tv_name)
+        _mImageNav = llNavHeader.findViewById(R.id.img_nav)
 
         supportFragmentManager.setFragmentResultListener(KEY_RESULT_OPEN_DRAW, this,
             FragmentResultListener { _, _ ->

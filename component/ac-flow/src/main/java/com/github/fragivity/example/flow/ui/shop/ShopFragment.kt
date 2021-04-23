@@ -7,12 +7,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import com.github.fragivity.*
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentShopBinding
 import com.github.fragivity.example.flow.listener.OnFragmentOpenDrawerListener
-import kotlinx.android.synthetic.main.flow_content_toolbar.*
+import com.github.fragivity.example.viewbinding.viewBinding
 
 class ShopFragment : Fragment(R.layout.flow_fragment_shop) {
 
-    private val mToolbar get() = toolbar
+    private val binding by viewBinding(FlowFragmentShopBinding::bind)
+
+    private val mToolbar get() = binding.content.toolbar
 
     private lateinit var contentNavigator: FragivityNavHost
 

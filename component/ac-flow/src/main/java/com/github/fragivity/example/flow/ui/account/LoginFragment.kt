@@ -9,20 +9,22 @@ import com.github.fragivity.example.base.hideSoftInput
 import com.github.fragivity.example.base.initToolbarNav
 import com.github.fragivity.example.base.showToast
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentLoginBinding
 import com.github.fragivity.example.flow.listener.OnLoginSuccessListener
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.pop
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.flow_content_toolbar.*
-import kotlinx.android.synthetic.main.flow_fragment_login.*
 
 class LoginFragment : Fragment(R.layout.flow_fragment_login) {
 
-    private val mToolbar get() = toolbar
-    private val mEtAccount get() = et_account
-    private val mEtPassword get() = et_password
-    private val mBtnLogin get() = btn_login
-    private val mBtnRegister get() = btn_register
+    private val binding by viewBinding(FlowFragmentLoginBinding::bind)
+
+    private val mToolbar get() = binding.content.toolbar
+    private val mEtAccount get() = binding.etAccount
+    private val mEtPassword get() = binding.etPassword
+    private val mBtnLogin get() = binding.btnLogin
+    private val mBtnRegister get() = binding.btnRegister
 
     private var mOnLoginSuccessListener: OnLoginSuccessListener? = null
 

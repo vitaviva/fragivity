@@ -10,17 +10,18 @@ import com.github.fragivity.applyVerticalInOut
 import com.github.fragivity.example.base.doOnIdle
 import com.github.fragivity.example.base.initToolbarNav
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentDetailBinding
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.flow_content_detail.*
-import kotlinx.android.synthetic.main.flow_content_toolbar.*
-import kotlinx.android.synthetic.main.flow_fragment_detail.*
 
 class DetailFragment : Fragment(R.layout.flow_fragment_detail) {
 
-    private val mToolbar get() = toolbar
-    private val mFab get() = fab
-    private val mTvContent get() = tv_content
+    private val binding by viewBinding(FlowFragmentDetailBinding::bind)
+
+    private val mToolbar get() = binding.content.toolbar
+    private val mFab get() = binding.fab
+    private val mTvContent get() = binding.contentDetail.tvContent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
