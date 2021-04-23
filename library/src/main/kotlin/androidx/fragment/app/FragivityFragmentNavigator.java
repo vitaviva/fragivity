@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 @Navigator.Name("ignore")
-public class FragivityFragmentNavigator extends FragmentNavigator {
+public class FragivityFragmentNavigator extends Navigator<FragmentNavigator.Destination> {
     private static final String TAG = "FragivityNavigator";
     private static final String KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds";
 
@@ -54,7 +54,6 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
     public FragivityFragmentNavigator(@NonNull Context context,
                                       @NonNull FragmentManager manager,
                                       int containerId) {
-        super(context, manager, containerId);
         mContext = context;
         mFragmentManager = manager;
         mContainerId = containerId;
@@ -107,7 +106,7 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
 
     @Nullable
     @Override
-    public NavDestination navigate(@NonNull Destination destination, @Nullable Bundle args,
+    public NavDestination navigate(@NonNull FragmentNavigator.Destination destination, @Nullable Bundle args,
                                    @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
         if (mFragmentManager.isStateSaved()) {
             Log.i(TAG, "Ignoring navigate() call: FragmentManager has already"
@@ -188,8 +187,8 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
             }
         }
 
-        if (navigatorExtras instanceof Extras) {
-            Extras extras = (Extras) navigatorExtras;
+        if (navigatorExtras instanceof FragmentNavigator.Extras) {
+            FragmentNavigator.Extras extras = (FragmentNavigator.Extras) navigatorExtras;
             for (Map.Entry<View, String> sharedElement : extras.getSharedElements().entrySet()) {
                 ft.addSharedElement(sharedElement.getKey(), sharedElement.getValue());
             }
@@ -290,7 +289,7 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
         }
     }
 
-    public void restoreTopFragment(Destination destination, Bundle newBundle) {
+    public void restoreTopFragment(FragmentNavigator.Destination destination, Bundle newBundle) {
         if (mBackStack.isEmpty()) return;
 
         int index = mBackStack.size() - 1;
@@ -313,6 +312,12 @@ public class FragivityFragmentNavigator extends FragmentNavigator {
             }
             index--;
         }
+    }
+
+    @NonNull
+    @Override
+    public FragmentNavigator.Destination createDestination() {
+        return new FragmentNavigator.Destination(this);
     }
 
     @Override

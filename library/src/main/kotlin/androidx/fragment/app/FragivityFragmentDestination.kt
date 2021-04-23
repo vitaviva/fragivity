@@ -4,14 +4,10 @@ import android.os.Bundle
 import androidx.navigation.fragment.FragmentNavigator
 
 internal class FragivityFragmentDestination(
-    navigator: FragivityFragmentNavigator,
-    destinationId: Int,
-    var factory: ((Bundle) -> Fragment)? = null
+    navigator: FragivityFragmentNavigator
 ) : FragmentNavigator.Destination(navigator) {
 
-    init {
-        id = destinationId
-    }
+    var factory: ((Bundle) -> Fragment)? = null
 
     fun createFragment(args: Bundle?): Fragment {
         val realArgs = args ?: Bundle()
