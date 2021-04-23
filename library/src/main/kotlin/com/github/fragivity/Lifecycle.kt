@@ -12,7 +12,7 @@ import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 internal val Fragment.fragivityHostViewModel: FragivityHostViewModel
     get() = if (this is NavHostFragment) {
