@@ -71,6 +71,7 @@ private fun <T : Fragment> findFragment(
 fun FragmentActivity.setupDefaultFragmentBackground(
     defaultBackground: Drawable? = defaultBackground()
 ) {
+    if (defaultBackground == null) return
     supportFragmentManager.registerFragmentLifecycleCallbacks(
         object : FragmentManager.FragmentLifecycleCallbacks() {
             override fun onFragmentViewCreated(
