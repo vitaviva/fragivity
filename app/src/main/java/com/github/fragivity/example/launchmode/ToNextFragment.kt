@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.github.fragivity.example.R
-import kotlinx.android.synthetic.main.fragment_tonext.*
-import kotlinx.android.synthetic.main.title_bar.*
+import com.github.fragivity.example.databinding.FragmentTonextBinding
+import com.github.fragivity.example.viewbinding.viewBinding
 
 class ToNextFragment(
     private val _title: String = "ToNextFragment",
     private val _next: ToNextFragment.() -> Unit = {}
 ) : Fragment() {
+
+    private val binding by viewBinding(FragmentTonextBinding::bind)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,10 +25,9 @@ class ToNextFragment(
         return inflater.inflate(R.layout.fragment_tonext, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        title_name.text = _title
-        next.setOnClickListener { _next.invoke(this) }
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<TextView>(R.id.title_name).text = _title
+        binding.next.setOnClickListener { _next.invoke(this) }
     }
 }

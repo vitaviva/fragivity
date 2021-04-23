@@ -10,6 +10,7 @@ import com.github.fragivity.applySlideInOut
 import com.github.fragivity.dialog.showDialog
 import com.github.fragivity.example.backpress.BackPressFragment
 import com.github.fragivity.example.communicate.CommFragment
+import com.github.fragivity.example.databinding.FragmentHomeBinding
 import com.github.fragivity.example.deeplink.sendNotification
 import com.github.fragivity.example.dialog.DialogFragment
 import com.github.fragivity.example.flow.ui.MainActivity
@@ -17,12 +18,14 @@ import com.github.fragivity.example.launchmode.LaunchModeFragment
 import com.github.fragivity.example.listscreen.Leaderboard
 import com.github.fragivity.example.nested.NestedFragment
 import com.github.fragivity.example.swipeback.SwipeBackFragment
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.finish
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : AbsBaseFragment(false) {
+
+    private val binding by viewBinding(FragmentHomeBinding::bind)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,56 +35,56 @@ class HomeFragment : AbsBaseFragment(false) {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        btn_launchmode.setOnClickListener {
+        binding.btnLaunchmode.setOnClickListener {
             navigator.push(LaunchModeFragment::class)
         }
 
-        btn_transition.setOnClickListener {
+        binding.btnTransition.setOnClickListener {
             navigator.push(Leaderboard::class)
         }
 
-        btn_deeplink.setOnClickListener {
+        binding.btnDeeplink.setOnClickListener {
             context?.sendNotification()
             finish()
         }
 
-        btn_backpress.setOnClickListener {
+        binding.btnBackpress.setOnClickListener {
             navigator.push(BackPressFragment::class)
         }
 
-        btn_communication.setOnClickListener {
+        binding.btnCommunication.setOnClickListener {
             navigator.push(CommFragment::class)
         }
 
-        btn_swipeback.setOnClickListener {
+        binding.btnSwipeback.setOnClickListener {
             navigator.push(SwipeBackFragment::class) {
                 applySlideInOut()
             }
         }
 
-        btn_dialog.setOnClickListener {
+        binding.btnDialog.setOnClickListener {
             navigator.showDialog(DialogFragment::class)
         }
 
-        btn_nested.setOnClickListener {
+        binding.btnNested.setOnClickListener {
             navigator.push(NestedFragment::class)
         }
 
-        btn_router.setOnClickListener {
+        binding.btnRouter.setOnClickListener {
             navigator.push("feed") {
                 arguments = bundleOf("isShowBackSearch" to false)
             }
         }
 
-        btn_go_to_flow.setOnClickListener {
+        binding.btnGoToFlow.setOnClickListener {
             startActivity(Intent(requireContext(), MainActivity::class.java))
         }
     }
 
-    override var titleName: String?
+    override var titleName: String
         get() = "Fragivity"
         set(value) {}
 
