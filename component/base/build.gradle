@@ -16,6 +16,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -28,6 +31,8 @@ dependencies {
     api "androidx.fragment:fragment-ktx:$fragment_version"
     api "androidx.navigation:navigation-ui-ktx:$navigation_version"
     api "androidx.viewpager2:viewpager2:$viewpager2_version"
+    api "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    api "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     if (codeDepend) {
         api project(':library')
