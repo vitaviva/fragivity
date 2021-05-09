@@ -7,40 +7,21 @@ import android.os.Bundle
 import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import kotlin.reflect.KClass
 
-inline fun <reified T : Fragment> NavHostFragment.composable(
+fun NavHostFragment.composable(
     route: String,
     argument: NamedNavArgument,
-    noinline factory: (Bundle) -> T
+    factory: (Bundle) -> Fragment
 ) {
-    composable(route, T::class, argument, factory)
+    composable(route, listOf(argument), factory)
 }
 
-inline fun <reified T : Fragment> NavHostFragment.composable(
+fun NavHostFragment.composable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
-    noinline factory: (Bundle) -> T
-) {
-    composable(route, T::class, arguments, factory)
-}
-
-fun NavHostFragment.composable(
-    route: String,
-    clazz: KClass<out Fragment>,
-    argument: NamedNavArgument,
     factory: (Bundle) -> Fragment
 ) {
-    composable(route, clazz, listOf(argument), factory)
-}
-
-fun NavHostFragment.composable(
-    route: String,
-    clazz: KClass<out Fragment>,
-    arguments: List<NamedNavArgument>,
-    factory: (Bundle) -> Fragment
-) {
-    composableInternal(route, clazz.positiveHashCode, arguments, factory)
+    composableInternal(route, route.positiveHashCode, arguments, factory)
 }
 
 private fun NavHostFragment.composableInternal(

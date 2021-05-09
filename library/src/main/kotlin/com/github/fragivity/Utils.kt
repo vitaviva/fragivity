@@ -4,6 +4,7 @@ package com.github.fragivity
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
@@ -22,5 +23,14 @@ internal fun Context.defaultBackground(): Drawable? {
     return theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground)).use {
         val background = it.getResourceId(0, 0)
         ContextCompat.getDrawable(this, background)
+    }
+}
+
+internal operator fun Bundle?.plus(optionArgs: Bundle?): Bundle? {
+    if (optionArgs == null) return this
+    if (this == null) return optionArgs
+    return Bundle().apply {
+        putAll(optionArgs)
+        putAll(this@plus)
     }
 }

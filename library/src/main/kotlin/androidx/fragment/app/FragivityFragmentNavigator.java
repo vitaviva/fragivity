@@ -289,7 +289,7 @@ public class FragivityFragmentNavigator extends Navigator<FragmentNavigator.Dest
         }
     }
 
-    public void restoreTopFragment(FragmentNavigator.Destination destination, Bundle newBundle) {
+    public void restoreTopFragment(int destinationId, Bundle newBundle) {
         if (mBackStack.isEmpty()) return;
 
         int index = mBackStack.size() - 1;
@@ -297,7 +297,7 @@ public class FragivityFragmentNavigator extends Navigator<FragmentNavigator.Dest
         Iterator<Integer> backStackIterator = mBackStack.descendingIterator();
         while (backStackIterator.hasNext()) {
             int destId = backStackIterator.next();
-            if (destId == destination.getId()) {
+            if (destId == destinationId) {
                 Fragment fragment = mFragmentManager.findFragmentByTag(
                         generateBackStackName(index, destId));
                 if (fragment == null) return;
