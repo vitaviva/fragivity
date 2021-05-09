@@ -8,9 +8,11 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 
-// make hashCode > 0
+/**
+ * string hash容易冲突，使用System.identityHashCode离散hash，同时确保结果 > 0
+ */
 internal inline val Any.positiveHashCode: Int
-    get() = hashCode() and Int.MAX_VALUE
+    get() = System.identityHashCode(this) and Int.MAX_VALUE
 
 internal fun View.appendBackground() {
     background = context.defaultBackground()
