@@ -2,7 +2,9 @@
 
 English | [中文文档](https://github.com/vitaviva/fragivity/blob/master/README_zh.md)
 
-[![](https://jitpack.io/v/vitaviva/fragivity.svg)](https://jitpack.io/#vitaviva/fragivity) ![Language](https://img.shields.io/badge/Language-Kotlin-green.svg)  ![License](https://img.shields.io/badge/MinSdkVersion-19-blue.svg)
+[![JitPack](https://jitpack.io/v/vitaviva/fragivity.svg)](https://jitpack.io/#vitaviva/fragivity)
+![Language](https://img.shields.io/badge/Language-Kotlin-green.svg)  
+![License](https://img.shields.io/badge/MinSdkVersion-19-blue.svg)
 
 <img src="app/src/main/res/drawable-v24/ic_launcher.png" width=150 align=right>
 
@@ -17,15 +19,10 @@ Fragivity is a library used to build APP with "Single Activity + Multi-Fragments
 - **Dialog：** Supports DialogFragment
 
 ## Installation
+
 JCenter is shutting down and the lib after(including) 0.2.1 can be get from JitPack.
 
 > !Note: group name changed from `com.github.fragivity` to `com.github.vitaviva.fragivity`
-
-### before 0.2.0
-
-```groovy
-implementation 'com.github.fragivity:core:$latest_version'
-```
 
 ### after 0.2.1
 
@@ -43,9 +40,16 @@ allprojects {
 implementation 'com.github.vitaviva.fragivity:core:$latest_version'
 ```
 
+### before 0.2.0
+
+```groovy
+implementation 'com.github.fragivity:core:$latest_version'
+```
+
 ## Quick start
 
 ### 1. declare NavHostFragment in layout
+
 Like `Navigation`, Fragivity needs a `NavHostFragment` as the host of ChildFragments
 
 ```xml
@@ -66,10 +70,12 @@ Like `Navigation`, Fragivity needs a `NavHostFragment` as the host of ChildFragm
 ```
 
 ### 2. load HomeFragment in Activity
+
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        proxyFragmentFactory()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -84,18 +90,22 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
-### 3. navigate to destination Fragment 
+
+### 3. navigate to destination Fragment
+
 ```kotlin
 //in HomeFragment
 navigator.push(DestinationFragment::class) {
     arguments = bundleOf(KEY_ARGUMENT1 to "arg1", KEY_ARGUMENT2 to "arg2")
-    //or applyArguments(KEY_ARGUMENT1 to "arg1", KEY_ARGUMENT2 to "arg2")
-
+    //or 
+    applyArguments(KEY_ARGUMENT1 to "arg1", KEY_ARGUMENT2 to "arg2")
 }
 ```
 
 ## Launch Mode
+
 Support multiple launch modes
+
 ```kotlin
 navigator.push(DestinationFragment::class) {
     launchMode = LaunchMode.STANDARD //default
@@ -104,6 +114,7 @@ navigator.push(DestinationFragment::class) {
 ```
 
 ## Transition Animation
+
 ```kotlin
 navigator.push(DestinationFragment::class) {
     //animator
@@ -119,12 +130,14 @@ navigator.push(DestinationFragment::class) {
 
 <img src="screenshot/transition.gif" width=250 >
 
-
 ## Communication
+
 You can simply setup communication between two fragments
+
 ### 1. start destination Fragment with a callback
+
 ```kotlin
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment() {
     private val cb: (Int) -> Unit = { checked ->
         //...
     }
@@ -140,7 +153,9 @@ class HomeFragment : Fragment(){
     //...
 }
 ```
+
 ### 2. callback to source Fragment
+
 ```kotlin
 class DestinationFragment(val cb: (Int) -> Unit) : Fragment() {
     //...
@@ -150,9 +165,10 @@ class DestinationFragment(val cb: (Int) -> Unit) : Fragment() {
 
 ```
 
-
 ## Show Dialog
+
 ### 1. declare a DialogFragment
+
 ```kotlin
 class DialogFragment : DialogFragment() {
 
@@ -166,22 +182,23 @@ class DialogFragment : DialogFragment() {
     }
 }
 ```
+
 ### 2. show it
+
 ```kotlin
 navigator.showDialog(DialogFragment::class)
 ```
 
-
-
-
 ## Deep links
 
 ### 1. add kapt dependencies
+
  ```groovy
 kapt 'com.github.fragivity:processor:$latest_version'
 ```
 
 ### 2. declare URI with `@Deeplink` annotation
+
 ```kotlin
 @DeepLink(uri = "myapp://fragitiy.github.com/")
 class DeepLinkFragment : Fragment() {
@@ -190,6 +207,7 @@ class DeepLinkFragment : Fragment() {
 ```
 
 ### 3. handle intent in MainActivity
+
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -238,11 +256,13 @@ navigator.popTo("search")
 ```
 
 ## Using in Java
-Fragivity provides a set of [APIs for Java developers](https://github.com/vitaviva/fragivity/blob/master/USE_JAVA.md) 
+
+Fragivity provides a set of [APIs for Java developers](https://github.com/vitaviva/fragivity/blob/master/USE_JAVA.md)
 
 ## FAQ
+
 [Frequently Asked Question](https://github.com/vitaviva/fragivity/blob/master/FAQ.md)
 
 ## License
-Fragivity is licensed under the [MIT License](LICENSE).
 
+Fragivity is licensed under the [MIT License](LICENSE).
