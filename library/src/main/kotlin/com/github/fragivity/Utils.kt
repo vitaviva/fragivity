@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
+import androidx.fragment.app.Fragment
 
 /**
  * string hash容易冲突，使用System.identityHashCode离散hash，同时确保结果 > 0
@@ -32,5 +33,27 @@ internal operator fun Bundle?.plus(optionArgs: Bundle?): Bundle? {
     return Bundle().apply {
         putAll(optionArgs)
         putAll(this@plus)
+    }
+}
+
+internal operator fun Fragment.plusAssign(newBundle: Bundle?) {
+    if (newBundle == null) {
+        return
+    }
+
+    val oldArgs: Bundle? = this.arguments
+    if (oldArgs == null) {
+        this.arguments = newBundle
+        return
+    }
+
+    oldArgs.putAll(newBundle)
+}
+
+internal fun ArrayDeque<Int>.replaceAll(array: IntArray?) {
+    if (array == null) return
+    clear()
+    for (value in array) {
+        add(value)
     }
 }

@@ -9,7 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.defaultBackground
 import com.github.fragivity.setupDefaultFragmentBackground
 
-private class ReportFragmentManager : FragmentManager() {
+internal class ReportFragmentManager : FragmentManager() {
 
     override fun dispatchStart() {
         forEachBackFragment { fragment ->
@@ -30,7 +30,7 @@ private class ReportFragmentManager : FragmentManager() {
     }
 
     override fun saveAllState(): Parcelable {
-        if (parent?.requireActivity()?.isChangingConfigurations == true) {
+        if (parent?.activity?.isChangingConfigurations == true) {
             forEachBackFragment { fragment ->
                 if (fragment.mMaxState != Lifecycle.State.CREATED) {
                     fragment.mMaxState = Lifecycle.State.CREATED
