@@ -11,7 +11,6 @@ import com.github.fragivity.example.flow.databinding.FlowFragmentSwipeBackFirstB
 import com.github.fragivity.example.flow.ui.MainActivity
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import com.github.fragivity.swipeback.attachToSwipeBack
 
 class FirstSwipeBackFragment : Fragment() {
 
@@ -34,7 +33,7 @@ class FirstSwipeBackFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FlowFragmentSwipeBackFirstBinding.inflate(inflater, container, false)
-        return attachToSwipeBack(binding.root)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
