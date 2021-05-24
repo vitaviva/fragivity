@@ -57,5 +57,3 @@ configurations.all {
         force "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0"
     }
 }
-
-apply from: rootProject.file("gradle/bintray.gradle")
