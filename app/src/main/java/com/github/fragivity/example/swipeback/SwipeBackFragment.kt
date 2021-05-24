@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setEnableGesture
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
 import com.github.fragivity.example.databinding.FragmentSwipeBackBinding
-import com.github.fragivity.swipeback.attachToSwipeBack
-import com.github.fragivity.swipeback.setEnableGesture
 
 
 class SwipeBackFragment : AbsBaseFragment() {
@@ -22,7 +21,7 @@ class SwipeBackFragment : AbsBaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSwipeBackBinding.inflate(inflater, container, false)
-        return attachToSwipeBack(binding.root)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

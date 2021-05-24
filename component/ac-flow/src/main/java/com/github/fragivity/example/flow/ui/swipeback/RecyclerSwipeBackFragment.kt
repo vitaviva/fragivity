@@ -14,7 +14,6 @@ import com.github.fragivity.example.flow.databinding.FlowFragmentSwipeBackRecyBi
 import com.github.fragivity.example.flow.ui.discover.PagerChildFragment
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import com.github.fragivity.swipeback.attachToSwipeBack
 
 class RecyclerSwipeBackFragment : Fragment() {
 
@@ -30,7 +29,7 @@ class RecyclerSwipeBackFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FlowFragmentSwipeBackRecyBinding.inflate(inflater, container, false)
-        return attachToSwipeBack(binding.root)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
