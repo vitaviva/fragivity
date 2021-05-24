@@ -2,8 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/bg_app"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
 
     <View
         android:id="@+id/view_line"

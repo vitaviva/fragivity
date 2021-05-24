@@ -6,18 +6,20 @@ import androidx.fragment.app.Fragment
 import com.github.fragivity.applyArguments
 import com.github.fragivity.applyVerticalInOut
 import com.github.fragivity.example.base.R
+import com.github.fragivity.example.base.databinding.FragmentCycleBinding
 import com.github.fragivity.example.base.initToolbarNav
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.content_toolbar.*
-import kotlinx.android.synthetic.main.fragment_cycle.*
 
 class CycleFragment : Fragment(R.layout.fragment_cycle) {
 
-    private val mToolbar get() = toolbar
-    private val mTvName get() = tv_name
-    private val mBtnNext get() = btn_next
-    private val mBtnNextWithFinish get() = btn_next_with_finish
+    private val binding by viewBinding(FragmentCycleBinding::bind)
+
+    private val mToolbar get() = binding.content.toolbar
+    private val mTvName get() = binding.tvName
+    private val mBtnNext get() = binding.btnNext
+    private val mBtnNextWithFinish get() = binding.btnNextWithFinish
 
     private var num = 0
 

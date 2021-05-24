@@ -19,10 +19,9 @@ fun FragivityNavHost.push(route: String, optionsBuilder: NavOptions.() -> Unit =
 
 @JvmSynthetic
 fun FragivityNavHost.push(route: String, navOptions: NavOptions?) {
-    navController.navigate(
-        NavDeepLinkRequest.Builder.fromUri(createRoute(route).toUri()).build(),
-        navOptions
-    )
+    val request = NavDeepLinkRequest.Builder.fromUri(createRoute(route).toUri()).build()
+    val (node, matchingArgs) = navController.findDestinationAndArgs(request) ?: return
+    pushInternal(node, navOptions, matchingArgs)
 }
 
 /**
@@ -99,8 +98,9 @@ internal fun FragivityNavHost.putFragment(
 
 @JvmSynthetic
 private fun FragivityNavHost.pushInternal(
-    node: FragmentNavigator.Destination,
-    navOptions: NavOptions?
+    node: NavDestination,
+    navOptions: NavOptions?,
+    matchingArgs: Bundle? = null
 ) = with(navController) {
     if (navOptions == null) {
         navigate(node.id)
@@ -118,7 +118,8 @@ private fun FragivityNavHost.pushInternal(
         LaunchMode.STANDARD,
         LaunchMode.SINGLE_TOP -> {
             navigate(
-                node.id, navOptions.toBundle(),
+                node.id,
+                navOptions.toBundle() + matchingArgs,
                 navOptions.totOptions(node.id),
                 navOptions.totExtras()
             )
@@ -126,17 +127,21 @@ private fun FragivityNavHost.pushInternal(
         LaunchMode.SINGLE_TASK -> {
             // curr == target || try pop to target
             if (currentDestination?.id == node.id || popBackStack(node.id, false)) {
-                val navigator: Navigator<NavDestination> =
+                val navigator: Navigator<out NavDestination> =
                     navigatorProvider.getNavigator(node.navigatorName)
                 if (navigator is FragivityFragmentNavigator) {
-                    navigator.restoreTopFragment(node, navOptions.toBundle())
+                    navigator.restoreTopFragment(
+                        node.id,
+                        navOptions.toBundle() + matchingArgs
+                    )
                 }
                 return@with
             }
 
             // create target
             navigate(
-                node.id, navOptions.toBundle(),
+                node.id,
+                navOptions.toBundle() + matchingArgs,
                 navOptions.totOptions(node.id),
                 navOptions.totExtras()
             )

@@ -5,23 +5,26 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.github.fragivity.example.search.R
+import com.github.fragivity.example.search.databinding.SearchFragmentBinding
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.popTo
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.search_fragment.*
 
 class SearchFragment : Fragment(R.layout.search_fragment) {
 
+    private val binding by viewBinding(SearchFragmentBinding::bind)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        input.setText(requireArguments().getString("keyword", ""))
-        btn_go_to_feed.setOnClickListener {
+        binding.input.setText(requireArguments().getString("keyword", ""))
+        binding.btnGoToFeed.setOnClickListener {
             navigator.push("feed")
         }
-        btn_go_back_feed.setOnClickListener {
+        binding.btnGoBackFeed.setOnClickListener {
             navigator.popTo("feed")
         }
-        btn_go_back_root.setOnClickListener {
+        binding.btnGoBackRoot.setOnClickListener {
             navigator.popTo("root")
         }
     }

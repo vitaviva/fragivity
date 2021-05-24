@@ -15,18 +15,19 @@ import com.github.fragivity.applyArguments
 import com.github.fragivity.applyVerticalInOut
 import com.github.fragivity.example.base.OnItemClickListener
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentHomeBinding
 import com.github.fragivity.example.flow.listener.OnFragmentOpenDrawerListener
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.flow_content_toolbar.*
-import kotlinx.android.synthetic.main.flow_fragment_home.*
-import kotlinx.android.synthetic.main.flow_item_home.view.*
 import kotlin.random.Random
 
 class HomeFragment : Fragment(R.layout.flow_fragment_home), Toolbar.OnMenuItemClickListener {
 
-    private val mToolbar get() = toolbar
-    private val mList get() = recy
+    private val binding by viewBinding(FlowFragmentHomeBinding::bind)
+
+    private val mToolbar get() = binding.content.toolbar
+    private val mList get() = binding.recy
 
     private var openDrawerListener: OnFragmentOpenDrawerListener? = null
 
@@ -120,8 +121,8 @@ class HomeFragment : Fragment(R.layout.flow_fragment_home), Toolbar.OnMenuItemCl
         }
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val tvTitle: TextView = view.tv_title
-            val tvContent: TextView = view.tv_content
+            val tvTitle: TextView = view.findViewById(R.id.tv_title)
+            val tvContent: TextView = view.findViewById(R.id.tv_content)
         }
 
         fun setOnItemClickListener(l: OnItemClickListener?) {

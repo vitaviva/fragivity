@@ -1,6 +1,7 @@
 package com.github.fragivity.example
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.proxyFragmentFactory
@@ -10,7 +11,6 @@ import com.github.fragivity.debug.showDebugView
 import com.github.fragivity.deeplink.handleDeepLink
 import com.github.fragivity.loadRoot
 import com.github.fragivity.stringArgument
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        @Suppress("DEPRECATION")
         FragmentManager.enableDebugLogging(true)
 
         val navHostFragment = supportFragmentManager
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 //        navHostFragment.loadRoot { HomeFragment() }
 
         navHostFragment.handleDeepLink(intent)
-        navHostFragment.showDebugView(container)
+        navHostFragment.showDebugView(findViewById<ViewGroup>(R.id.container))
 
         with(navHostFragment) {
             composable("feed") { FeedFragment.newInstance() }

@@ -11,9 +11,10 @@ import com.github.fragivity.example.R
 import com.github.fragivity.example.communicate.CheckListAdapter
 import com.github.fragivity.example.communicate.Item
 import com.github.fragivity.example.communicate.originList
+import com.github.fragivity.example.databinding.FragmentCommListBinding
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.fragment_comm_list.*
 
 class CheckListFragment : AbsBaseFragment() {
 
@@ -34,6 +35,8 @@ class CheckListFragment : AbsBaseFragment() {
         }
     }
 
+    private val binding by viewBinding(FragmentCommListBinding::bind)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,8 +47,7 @@ class CheckListFragment : AbsBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        with(recycler) {
+        with(binding.recycler) {
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
                 DividerItemDecoration(
@@ -60,6 +62,6 @@ class CheckListFragment : AbsBaseFragment() {
 
     }
 
-    override val titleName: String?
+    override val titleName: String
         get() = "Communication"
 }

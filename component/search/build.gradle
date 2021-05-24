@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
 
 android {
@@ -16,14 +15,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-    implementation "androidx.activity:activity-ktx:1.2.0-rc01"
-    implementation "androidx.fragment:fragment-ktx:$fragment_version"
-    if (codeDepend) {
-        implementation project(':library')
-    } else {
-        implementation "com.github.vitaviva.fragivity:core:$ARTIFACT_VERSION"
-    }
+    implementation project(':component:base')
 }

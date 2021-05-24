@@ -16,12 +16,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.fragivity.example.base.OnItemClickListener
 import com.github.fragivity.example.base.setTextColorRes
 import com.github.fragivity.example.flow.R
-import kotlinx.android.synthetic.main.flow_fragment_list_menu.*
-import kotlinx.android.synthetic.main.flow_item_menu.view.*
+import com.github.fragivity.example.flow.databinding.FlowFragmentListMenuBinding
+import com.github.fragivity.example.viewbinding.viewBinding
 
 class MenuListFragment : Fragment(R.layout.flow_fragment_list_menu) {
 
-    private val mRecyclerView get() = recy
+    private val binding by viewBinding(FlowFragmentListMenuBinding::bind)
+
+    private val mRecyclerView get() = binding.recy
 
     private lateinit var mAdapter: MenuAdapter
     private var mCurrentPosition = 0
@@ -120,8 +122,8 @@ class MenuListFragment : Fragment(R.layout.flow_fragment_list_menu) {
         }
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            private val viewLine: View = view.view_line
-            val tvName: TextView = view.tv_name
+            private val viewLine: View = view.findViewById(R.id.view_line)
+            val tvName: TextView = view.findViewById(R.id.tv_name)
 
             fun setChecked(isChecked: Boolean) {
                 if (isChecked) {

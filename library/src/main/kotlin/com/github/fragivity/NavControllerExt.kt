@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.get
 import com.github.fragivity.deeplink.getRouteUri
 import kotlin.reflect.KClass
@@ -16,18 +15,16 @@ internal fun NavController.createNavDestination(
     destinationId: Int,
     clazz: KClass<out Fragment>
 ): FragmentNavigator.Destination {
-    return (FragmentNavigatorDestinationBuilder(
-        navigatorProvider[FragivityFragmentNavigator::class],
-        destinationId,
-        clazz
+    return FragmentNavigator.Destination(
+        navigatorProvider[FragivityFragmentNavigator::class]
     ).apply {
+        id = destinationId
+        className = clazz.java.name
         label = clazz.qualifiedName
         getRouteUri(clazz)?.let {
-            deepLink {
-                uriPattern = it
-            }
+            addDeepLink(it)
         }
-    }).build()
+    }
 }
 
 @JvmSynthetic
@@ -36,8 +33,9 @@ internal fun NavController.createNavDestination(
     factory: ((Bundle) -> Fragment)? = null
 ): FragivityFragmentDestination {
     return FragivityFragmentDestination(
-        navigatorProvider[FragivityFragmentNavigator::class],
-        destinationId,
-        factory
-    )
+        navigatorProvider[FragivityFragmentNavigator::class]
+    ).apply {
+        id = destinationId
+        this.factory = factory
+    }
 }

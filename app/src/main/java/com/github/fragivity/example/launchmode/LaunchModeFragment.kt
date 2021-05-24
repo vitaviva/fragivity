@@ -9,9 +9,12 @@ import com.github.fragivity.*
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.HomeFragment
 import com.github.fragivity.example.R
-import kotlinx.android.synthetic.main.fragment_launch_mode.*
+import com.github.fragivity.example.databinding.FragmentLaunchModeBinding
+import com.github.fragivity.example.viewbinding.viewBinding
 
 class LaunchModeFragment : AbsBaseFragment() {
+
+    private val binding by viewBinding(FragmentLaunchModeBinding::bind)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,16 +24,16 @@ class LaunchModeFragment : AbsBaseFragment() {
         return inflater.inflate(R.layout.fragment_launch_mode, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        btn_standard.setOnClickListener {
+        binding.btnStandard.setOnClickListener {
             navigator.push(LaunchModeFragment::class) {
                 applyArguments(ARGUMENTS_FROM to "Launch with Standard")
             }
         }
 
-        btn_singletop.setOnClickListener {
+        binding.btnSingletop.setOnClickListener {
             navigator.push(LaunchModeFragment::class) {
                 applySlideInOut()
                 applyLaunchMode(LaunchMode.SINGLE_TOP)
@@ -38,8 +41,7 @@ class LaunchModeFragment : AbsBaseFragment() {
             }
         }
 
-        btn_singletask.setOnClickListener {
-            val bundle = bundleOf(ARGUMENTS_FROM to "Launch with SingleTask")
+        binding.btnSingletask.setOnClickListener {
             navigator.push {
                 ToNextFragment {
                     navigator.push(LaunchModeFragment::class) {
@@ -50,12 +52,12 @@ class LaunchModeFragment : AbsBaseFragment() {
             }
         }
 
-        btn_poptohome.setOnClickListener {
+        binding.btnPoptohome.setOnClickListener {
             navigator.popTo(HomeFragment::class)
         }
     }
 
-    override val titleName: String?
+    override val titleName: String
         get() = arguments?.getString(ARGUMENTS_FROM) ?: "Launch Mode"
 
 }

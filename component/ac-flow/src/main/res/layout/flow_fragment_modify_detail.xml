@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/flow_content_toolbar" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/flow_content_toolbar" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_modify_title"

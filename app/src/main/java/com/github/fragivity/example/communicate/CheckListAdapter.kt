@@ -8,7 +8,7 @@ import android.widget.CheckedTextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 class CheckListAdapter(
     private val onItemClick: (id: Int, check: Boolean) -> Unit

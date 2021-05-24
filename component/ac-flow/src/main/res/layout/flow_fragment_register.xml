@@ -4,7 +4,9 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <include layout="@layout/content_toolbar" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"

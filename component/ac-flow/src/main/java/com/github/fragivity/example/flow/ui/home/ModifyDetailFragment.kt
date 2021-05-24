@@ -9,18 +9,20 @@ import com.github.fragivity.example.base.hideSoftInput
 import com.github.fragivity.example.base.initToolbarNav
 import com.github.fragivity.example.base.showToast
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentModifyDetailBinding
 import com.github.fragivity.example.ui.CycleFragment
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.flow_content_toolbar.*
-import kotlinx.android.synthetic.main.flow_fragment_modify_detail.*
 
 class ModifyDetailFragment : Fragment(R.layout.flow_fragment_modify_detail) {
 
-    private val mToolbar get() = toolbar
-    private val mEtModifyTitle get() = et_modify_title
-    private val mBtnModify get() = btn_modify
-    private val mBtnNext get() = btn_next
+    private val binding by viewBinding(FlowFragmentModifyDetailBinding::bind)
+
+    private val mToolbar get() = binding.content.toolbar
+    private val mEtModifyTitle get() = binding.etModifyTitle
+    private val mBtnModify get() = binding.btnModify
+    private val mBtnNext get() = binding.btnNext
 
     private var mTitle = ""
 

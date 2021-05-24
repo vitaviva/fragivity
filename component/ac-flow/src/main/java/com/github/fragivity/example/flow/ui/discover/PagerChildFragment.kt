@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
@@ -14,15 +15,17 @@ import com.github.fragivity.applyVerticalInOut
 import com.github.fragivity.example.base.OnItemClickListener
 import com.github.fragivity.example.base.doOnIdle
 import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentPagerBinding
 import com.github.fragivity.example.ui.CycleFragment
+import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.push
-import kotlinx.android.synthetic.main.flow_fragment_pager.*
-import kotlinx.android.synthetic.main.flow_item_pager.view.*
 
 class PagerChildFragment : Fragment(R.layout.flow_fragment_pager) {
 
-    private val mRecyclerView get() = recy
+    private val binding by viewBinding(FlowFragmentPagerBinding::bind)
+
+    private val mRecyclerView get() = binding.recy
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,7 +84,7 @@ class PagerChildFragment : Fragment(R.layout.flow_fragment_pager) {
         }
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val tvTitle = view.tv_title
+            val tvTitle: TextView = view.findViewById(R.id.tv_title)
         }
 
         companion object {

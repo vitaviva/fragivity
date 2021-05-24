@@ -3,16 +3,18 @@ package com.github.fragivity.example
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.github.fragivity.navigator
 import com.github.fragivity.pop
-import kotlinx.android.synthetic.main.title_bar.*
 
 abstract class AbsBaseFragment(private val _supportBack: Boolean = true) : Fragment() {
 
     companion object {
         const val TAG = "Fragivity"
     }
+
+    @Suppress("DEPRECATION")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.e(TAG, "onActivityCreated:" + this.javaClass.simpleName)
@@ -21,9 +23,9 @@ abstract class AbsBaseFragment(private val _supportBack: Boolean = true) : Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e(TAG, "onViewCreated:" + this.javaClass.simpleName)
-        title_name?.text = titleName
+        view.findViewById<TextView>(R.id.title_name)?.text = titleName
         if (_supportBack) {
-            title_back?.let {
+            view.findViewById<TextView>(R.id.title_back)?.let {
                 it.visibility = View.VISIBLE
                 it.setOnClickListener {
                     navigator.pop()

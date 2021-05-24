@@ -4,13 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/flow_content_toolbar" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/flow_content_toolbar" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/flow_content_detail" />
+        <include
+            android:id="@+id/content_detail"
+            layout="@layout/flow_content_detail" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

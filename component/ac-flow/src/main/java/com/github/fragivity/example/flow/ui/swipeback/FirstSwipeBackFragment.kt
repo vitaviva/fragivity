@@ -7,18 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.github.fragivity.applyHorizontalInOut
 import com.github.fragivity.example.base.initToolbarNav
-import com.github.fragivity.example.flow.R
+import com.github.fragivity.example.flow.databinding.FlowFragmentSwipeBackFirstBinding
 import com.github.fragivity.example.flow.ui.MainActivity
 import com.github.fragivity.navigator
 import com.github.fragivity.push
 import com.github.fragivity.swipeback.attachToSwipeBack
-import kotlinx.android.synthetic.main.flow_content_toolbar.*
-import kotlinx.android.synthetic.main.flow_fragment_swipe_back_first.*
 
 class FirstSwipeBackFragment : Fragment() {
 
-    private val mToolbar get() = toolbar
-    private val mNext get() = btn
+    private var _binding: FlowFragmentSwipeBackFirstBinding? = null
+    private val binding get() = _binding!!
+
+    private val mToolbar get() = binding.content.toolbar
+    private val mNext get() = binding.btn
 
     private var isFirst = false
 
@@ -32,8 +33,8 @@ class FirstSwipeBackFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.flow_fragment_swipe_back_first, container, false)
-        return attachToSwipeBack(view)
+        _binding = FlowFragmentSwipeBackFirstBinding.inflate(inflater, container, false)
+        return attachToSwipeBack(binding.root)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,6 +48,11 @@ class FirstSwipeBackFragment : Fragment() {
                 applyHorizontalInOut()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onDestroy() {
