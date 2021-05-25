@@ -1,4 +1,4 @@
-## 0.2.6
+## 0.2.7
 fix https://github.com/vitaviva/fragivity/issues/37
 
 ## 0.2.5 

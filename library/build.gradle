@@ -58,4 +58,5 @@ configurations.all {
     }
 }
 
-apply from: rootProject.file("gradle/bintray.gradle")
+
+apply from: rootProject.file("gradle/publish.gradle")
