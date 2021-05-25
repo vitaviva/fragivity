@@ -7,6 +7,8 @@ buildscript {
         google()
         mavenCentral()
         jcenter()
+        mavenLocal()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.2'
@@ -24,6 +26,7 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        mavenLocal()
     }
 
     tasks.withType(Javadoc).all {
