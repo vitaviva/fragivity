@@ -58,4 +58,18 @@ configurations.all {
     }
 }
 
-apply from: rootProject.file("gradle/bintray.gradle")
+
+apply from: rootProject.file("gradle/publish.gradle")
+
+
+
+//publish {
+//    userOrg = USER_ORG
+//    groupId = ARTIFACT_GROUP
+//    artifactId = ARTIFACT_NAME
+//    publishVersion = ARTIFACT_VERSION
+//    desc = 'Use Fragment like Activity'
+//    website = 'https://github.com/vitaviva/fragivity'
+//}
+
+//apply from: rootProject.file("gradle/bintray.gradle")
