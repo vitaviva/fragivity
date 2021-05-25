@@ -1,6 +1,6 @@
 rootProject.name='fragivity'
 include ':app'
-include ':fragivity-core'
-include ':fragivity-processor'
+include ':library'
+include ':processor'
 include ':component:feed', ':component:search'
 include ':component:base', ':component:ac-flow'

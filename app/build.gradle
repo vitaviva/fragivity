@@ -44,8 +44,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     if (codeDepend) {
-        implementation project(':fragivity-processor')
-        kapt project(':fragivity-processor')
+        implementation project(':processor')
+        kapt project(':processor')
     } else {
         implementation "com.github.vitaviva.fragivity:core:$ARTIFACT_VERSION"
         implementation "com.github.vitaviva.fragivity:processor:$ARTIFACT_VERSION"

@@ -34,7 +34,7 @@ dependencies {
     api "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     if (codeDepend) {
-        api project(':fragivity-core')
+        api project(':library')
     } else {
         api "com.github.vitaviva.fragivity:core:$ARTIFACT_VERSION"
     }
