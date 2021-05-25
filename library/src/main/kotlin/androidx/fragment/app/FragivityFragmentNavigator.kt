@@ -22,6 +22,8 @@ class FragivityFragmentNavigator(
 ) : Navigator<FragmentNavigator.Destination>() {
 
     private val backStack = ArrayDeque<Int>()
+    private val descendingBackStack = backStack.asReversed()
+
     private var mIsPendingAddToBackStackOperation = false
     private var mIsPendingPopBackStackOperation = false
 
@@ -195,7 +197,7 @@ class FragivityFragmentNavigator(
         }
 
         var backStackIndex = fragmentBackStackCount - 1
-        val backStackIterator = backStack.asReversed().iterator()
+        val backStackIterator = descendingBackStack.iterator()
         while (backStackIterator.hasNext() && backStackIndex >= 0) {
             val destId = backStackIterator.next()
             val fragmentDestId = getDestinationId(
@@ -250,7 +252,7 @@ class FragivityFragmentNavigator(
         if (backStack.isEmpty()) return null
 
         var index = backStack.size - 1
-        backStack.asReversed().forEach { destId ->
+        descendingBackStack.forEach { destId ->
             if (destinationId == destId) {
                 return fragmentManager.findFragment(index, destId)
             }
