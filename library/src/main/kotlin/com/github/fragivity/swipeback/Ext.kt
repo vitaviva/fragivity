@@ -1,25 +1,19 @@
 @file:JvmName("SwipeBackUtil")
 
-package androidx.fragment.app
+package com.github.fragivity.swipeback
 
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.R
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
-import androidx.savedstate.SavedStateRegistryOwner
-import androidx.savedstate.ViewTreeSavedStateRegistryOwner
 import com.github.fragivity.appendBackground
 import com.github.fragivity.navigator
 import com.github.fragivity.pop
-import com.github.fragivity.swipeback.SwipeBackLayout
 
-private fun Fragment.attachToSwipeBack(view: View): View {
-
+private fun Fragment.attachToSwipeBack(view: View): SwipeBackLayout {
     val swipeBackLayout = SwipeBackLayout(requireContext()).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -52,19 +46,11 @@ fun Fragment.setEnableGesture(enable: Boolean) {
         val parent = rootView.parent as ViewGroup
         parent.removeView(rootView)
 
-        rootView = attachToSwipeBack(rootView).also {
-            it.setTag(R.id.fragment_container_view_tag, this)
-            ViewTreeLifecycleOwner.set(it, viewLifecycleOwner)
-            ViewTreeViewModelStoreOwner.set(it, this)
-            ViewTreeSavedStateRegistryOwner.set(it, viewLifecycleOwner as SavedStateRegistryOwner)
-        }
-
+        rootView = attachToSwipeBack(rootView)
+        setView(rootView)
         parent.addView(rootView)
-        this.mView = rootView
     }
-
-    (rootView as SwipeBackLayout).setEnableGesture(enable)
-
+    rootView.setEnableGesture(enable)
 }
 
 /**

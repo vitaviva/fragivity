@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.setEnableGesture
 import com.github.fragivity.example.AbsBaseFragment
 import com.github.fragivity.example.R
 import com.github.fragivity.example.databinding.FragmentSwipeBackBinding
+import com.github.fragivity.swipeback.setEnableGesture
 
 
 class SwipeBackFragment : AbsBaseFragment() {
