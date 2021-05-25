@@ -7,13 +7,13 @@ import androidx.annotation.AnimatorRes
 
 
 class NavOptionsBuilder internal constructor() {
-    private val navOptions = `$NavOptionsDefault`()
+    private val navOptions = navOptions()
 
     fun setLaunchMode(mode: LaunchMode) =
         also { navOptions.launchMode = mode }
 
     fun popSelf(enable: Boolean) =
-        also { navOptions.popSelf = enable}
+        also { navOptions.popSelf = enable }
 
     fun setArguments(bundle: Bundle) =
         also { navOptions.arguments = bundle }
@@ -31,13 +31,7 @@ class NavOptionsBuilder internal constructor() {
         also { navOptions.popExitAnim = popExitAnim }
 
     fun setSharedElements(sharedElements: Map<View, String>) =
-        also {
-            val list = mutableListOf<Pair<View, String>>()
-            for ((view, name) in sharedElements) {
-                list.add(Pair(view, name))
-            }
-            navOptions.sharedElements = list
-        }
+        also { navOptions.sharedElements = sharedElements }
 
     fun build(): NavOptions {
         return navOptions
