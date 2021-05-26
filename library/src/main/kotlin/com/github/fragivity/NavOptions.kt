@@ -5,7 +5,10 @@ import android.view.View
 import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragivityFragmentNavigator.Companion.KEY_POP_SELF
 import androidx.navigation.fragment.FragmentNavigator
+
+private typealias NavigationOptionsBuilder = androidx.navigation.NavOptions.Builder
 
 enum class LaunchMode {
     STANDARD, SINGLE_TOP, SINGLE_TASK
@@ -22,44 +25,49 @@ interface NavOptions {
     @set:JvmSynthetic
     var arguments: Bundle
 
-    @set:AnimRes
-    @set:AnimatorRes
-    @set:JvmSynthetic
+    @set:[JvmSynthetic AnimRes AnimatorRes]
     var enterAnim: Int
 
-    @set:AnimRes
-    @set:AnimatorRes
-    @set:JvmSynthetic
+    @set:[JvmSynthetic AnimRes AnimatorRes]
     var exitAnim: Int
 
-    @set:AnimRes
-    @set:AnimatorRes
-    @set:JvmSynthetic
+    @set:[JvmSynthetic AnimRes AnimatorRes]
     var popEnterAnim: Int
 
-    @set:AnimRes
-    @set:AnimatorRes
-    @set:JvmSynthetic
+    @set:[JvmSynthetic AnimRes AnimatorRes]
     var popExitAnim: Int
 
     @set:JvmSynthetic
-    var sharedElements: List<Pair<View, String>>
-
+    var sharedElements: Map<View, String>
 }
 
-internal class `$NavOptionsDefault` : NavOptions {
-    override var launchMode: LaunchMode = LaunchMode.STANDARD
-    override var popSelf: Boolean = false
-    override var arguments: Bundle = Bundle.EMPTY
-    override var enterAnim = -1
-    override var exitAnim = -1
-    override var popEnterAnim = -1
-    override var popExitAnim = -1
-    override var sharedElements = emptyList<Pair<View, String>>()
-}
+@JvmSynthetic
+internal fun NavOptions.toBundle() =
+    if (popSelf) {
+        Bundle(arguments).apply { putBoolean(KEY_POP_SELF, true) }
+    } else arguments
+
+@JvmSynthetic
+internal fun NavOptions.totOptions(destinationId: Int? = null) =
+    NavigationOptionsBuilder().apply {
+        setEnterAnim(enterAnim)
+        setExitAnim(exitAnim)
+        setPopEnterAnim(popEnterAnim)
+        setPopExitAnim(popExitAnim)
+        setLaunchSingleTop(launchMode == LaunchMode.SINGLE_TOP)
+        if (launchMode == LaunchMode.SINGLE_TASK && destinationId != null) {
+            setPopUpTo(destinationId, true)
+        }
+    }.build()
+
+@JvmSynthetic
+internal fun NavOptions.totExtras() =
+    FragmentNavigator.Extras.Builder()
+        .addSharedElements(sharedElements)
+        .build()
 
 fun NavOptions.applyLaunchMode(mode: LaunchMode) {
-    launchMode = mode
+    this.launchMode = mode
 }
 
 fun NavOptions.applyArguments(vararg args: Pair<String, Any?>) {
@@ -67,7 +75,7 @@ fun NavOptions.applyArguments(vararg args: Pair<String, Any?>) {
 }
 
 fun NavOptions.applySharedElements(vararg sharedElements: Pair<View, String>) {
-    this.sharedElements = sharedElementsOf(*sharedElements)
+    this.sharedElements = mapOf(*sharedElements)
 }
 
 fun NavOptions.applySlideInOut() {
@@ -98,45 +106,17 @@ fun NavOptions.applyHorizontalInOut() {
     popExitAnim = R.anim.h_fragment_pop_exit
 }
 
-internal const val KEY_POP_SELF = "Fragivity:PopSelf"
-
-@JvmSynthetic
-internal fun NavOptions.toBundle(): Bundle =
-    (arguments.takeIf { it != Bundle.EMPTY } ?: Bundle()).apply {
-        putBoolean(KEY_POP_SELF, this@toBundle.popSelf)
-    }
-
-@JvmSynthetic
-internal fun NavOptions.totOptions(
-    destinationId: Int? = null
-): androidx.navigation.NavOptions =
-    androidx.navigation.NavOptions.Builder().apply {
-        setEnterAnim(enterAnim)
-        setExitAnim(exitAnim)
-        setPopEnterAnim(popEnterAnim)
-        setPopExitAnim(popExitAnim)
-        setLaunchSingleTop(launchMode == LaunchMode.SINGLE_TOP)
-        if (launchMode == LaunchMode.SINGLE_TASK && destinationId != null) {
-            setPopUpTo(destinationId, true)
-        }
-    }.build()
-
-
-@JvmSynthetic
-internal fun NavOptions.totExtras(): FragmentNavigator.Extras =
-    FragmentNavigator.Extras.Builder().apply {
-        sharedElements.forEach { (view, name) ->
-            addSharedElement(view, name)
-        }
-    }.build()
-
-fun sharedElementsOf(vararg sharedElements: Pair<View, String>) =
-    mutableListOf<Pair<View, String>>().apply {
-        sharedElements.forEach { (view, name) ->
-            add(view to name)
-        }
-    }
-
 fun navOptions(optionsBuilder: NavOptions.() -> Unit = {}): NavOptions {
-    return `$NavOptionsDefault`().apply(optionsBuilder)
+    return NavOptionsDefault().apply(optionsBuilder)
+}
+
+private class NavOptionsDefault : NavOptions {
+    override var launchMode: LaunchMode = LaunchMode.STANDARD
+    override var popSelf: Boolean = false
+    override var arguments: Bundle = Bundle.EMPTY
+    override var enterAnim = -1
+    override var exitAnim = -1
+    override var popEnterAnim = -1
+    override var popExitAnim = -1
+    override var sharedElements: Map<View, String> = emptyMap()
 }

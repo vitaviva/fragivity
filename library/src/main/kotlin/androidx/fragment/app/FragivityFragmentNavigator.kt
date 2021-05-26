@@ -10,7 +10,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
-import com.github.fragivity.KEY_POP_SELF
 import com.github.fragivity.plusAssign
 import com.github.fragivity.replaceAll
 
@@ -22,6 +21,8 @@ class FragivityFragmentNavigator(
 ) : Navigator<FragmentNavigator.Destination>() {
 
     private val backStack = ArrayDeque<Int>()
+    private val descendingBackStack = backStack.asReversed()
+
     private var mIsPendingAddToBackStackOperation = false
     private var mIsPendingPopBackStackOperation = false
 
@@ -195,7 +196,7 @@ class FragivityFragmentNavigator(
         }
 
         var backStackIndex = fragmentBackStackCount - 1
-        val backStackIterator = backStack.asReversed().iterator()
+        val backStackIterator = descendingBackStack.iterator()
         while (backStackIterator.hasNext() && backStackIndex >= 0) {
             val destId = backStackIterator.next()
             val fragmentDestId = getDestinationId(
@@ -250,7 +251,7 @@ class FragivityFragmentNavigator(
         if (backStack.isEmpty()) return null
 
         var index = backStack.size - 1
-        backStack.asReversed().forEach { destId ->
+        descendingBackStack.forEach { destId ->
             if (destinationId == destId) {
                 return fragmentManager.findFragment(index, destId)
             }
@@ -270,5 +271,6 @@ class FragivityFragmentNavigator(
     companion object {
         private const val TAG = "FragivityNavigator"
         private const val KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds"
+        internal const val KEY_POP_SELF = "Fragivity:PopSelf"
     }
 }
