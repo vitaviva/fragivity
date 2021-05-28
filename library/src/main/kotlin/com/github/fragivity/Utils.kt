@@ -10,6 +10,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import kotlin.reflect.KClass
 
 /**
  * string hash容易冲突，使用System.identityHashCode离散hash，同时确保结果 > 0
@@ -62,4 +64,27 @@ internal fun ArrayDeque<Int>.replaceAll(array: IntArray?) {
     for (value in array) {
         add(value)
     }
+}
+
+internal fun <T : Fragment> findFragment(
+    manager: FragmentManager,
+    clazz: KClass<T>,
+    includeChild: Boolean
+): T? {
+    val fragments = manager.fragments
+    if (fragments.isEmpty()) return null
+
+    fragments.forEach { fragment ->
+        if (fragment.javaClass.name == clazz.java.name) {
+            @Suppress("UNCHECKED_CAST")
+            return fragment as T
+        }
+        if (includeChild) {
+            val childFragment = findFragment(fragment.childFragmentManager, clazz, includeChild)
+            if (childFragment != null) {
+                return childFragment
+            }
+        }
+    }
+    return null
 }

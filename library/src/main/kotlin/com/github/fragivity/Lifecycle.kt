@@ -6,23 +6,23 @@ import androidx.collection.SparseArrayCompat
 import androidx.collection.valueIterator
 import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.*
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import kotlinx.parcelize.Parcelize
 
-internal val Fragment.fragivityHostViewModel: FragivityHostViewModel
-    get() = if (this is NavHostFragment) {
-        navController
-    } else {
-        requireParentFragment().findNavController()
-    }.fragivityHostViewModel
+val Fragment.navigator: FragivityNavHost
+    get() = findNavController().navigator
 
-internal val View.fragivityHostViewModel: FragivityHostViewModel
-    get() = findNavController().fragivityHostViewModel
+val View.navigator: FragivityNavHost
+    get() = findNavController().navigator
+
+val NavController.navigator: FragivityNavHost
+    get() = fragivityHostViewModel.navHost
 
 internal val NavController.fragivityHostViewModel: FragivityHostViewModel
     get() = ViewModelProvider(getViewModelStoreOwner(graph.id))
@@ -37,9 +37,7 @@ class FragivityHostViewModel : ViewModel() {
     }
 }
 
-class FragivityNodeViewModel(
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private lateinit var nodes: SparseArrayCompat<NavDestination>
 
@@ -110,7 +108,4 @@ private fun NavDestination.toBundle(): NavDestinationBundle {
 }
 
 @Parcelize
-private data class NavDestinationBundle(
-    val id: Int,
-    val className: String
-) : Parcelable
+private data class NavDestinationBundle(val id: Int, val className: String) : Parcelable

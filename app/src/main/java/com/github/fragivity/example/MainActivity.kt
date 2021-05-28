@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.proxyFragmentFactory
-import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.composable
 import com.github.fragivity.debug.showDebugView
 import com.github.fragivity.deeplink.handleDeepLink
+import com.github.fragivity.findNavHostFragment
 import com.github.fragivity.loadRoot
 import com.github.fragivity.stringArgument
 
@@ -23,9 +23,7 @@ class MainActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         FragmentManager.enableDebugLogging(true)
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host) as NavHostFragment
-
+        val navHostFragment = findNavHostFragment(R.id.nav_host)
         navHostFragment.loadRoot(HomeFragment::class)
 //        //you also can loadRoot with a factory
 //        navHostFragment.loadRoot { HomeFragment() }

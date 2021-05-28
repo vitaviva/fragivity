@@ -50,5 +50,5 @@ private fun NavHostFragment.composableInternal(
     }
 
     // save destination for rebuild
-    navController.fragivityHostViewModel.navHost.saveToViewModel(node)
+    navController.navigator.saveToViewModel(node)
 }
