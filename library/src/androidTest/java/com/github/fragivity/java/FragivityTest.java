@@ -17,8 +17,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.github.fragivity.Fragivity;
+import com.github.fragivity.FragivityUtil;
 import com.github.fragivity.test.R;
-import com.github.fragivity.FragivityUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -55,7 +55,7 @@ public class FragivityTest {
             Fragivity.loadRoot(fragment, HomeFragment.class);
             assertEquals(
                     Objects.requireNonNull(fragment.getNavController().getCurrentDestination()).getId(),
-                    FragivityUtils.getPositiveHashCode(HomeFragment.class)
+                    FragivityUtil.getPositiveHashCode(HomeFragment.class)
             );
         });
 
@@ -90,7 +90,7 @@ public class FragivityTest {
                         fragment.testPush();
                         assertEquals(
                                 host.getNavController().getCurrentDestination().getId(),
-                                FragivityUtils.getPositiveHashCode(DestFragment.class)
+                                FragivityUtil.getPositiveHashCode(DestFragment.class)
                         );
                     }
                 });
@@ -110,7 +110,7 @@ public class FragivityTest {
                         home.testPushWithFactory();
                         assertEquals(
                                 host.getNavController().getCurrentDestination().getId(),
-                                FragivityUtils.getPositiveHashCode(DestFragment.class)
+                                FragivityUtil.getPositiveHashCode(DestFragment.class)
                         );
                     }
                 });
@@ -160,7 +160,7 @@ public class FragivityTest {
                             Fragivity.of(fragment).pop();
                             assertEquals(
                                     host.getNavController().getCurrentDestination().getId(),
-                                    FragivityUtils.getPositiveHashCode(HomeFragment.class)
+                                    FragivityUtil.getPositiveHashCode(HomeFragment.class)
                             );
                         }
                     });

@@ -1,4 +1,5 @@
-@file:JvmName("FragivityUtils")
+@file:JvmName("FragivityUtil")
+@file:JvmMultifileClass
 
 package com.github.fragivity
 
@@ -16,10 +17,12 @@ import androidx.fragment.app.Fragment
 internal inline val Any.positiveHashCode: Int
     get() = System.identityHashCode(this) and Int.MAX_VALUE
 
+@JvmSynthetic
 internal fun View.appendBackground() {
     background = context.defaultBackground()
 }
 
+@JvmName("getDefaultBackground")
 internal fun Context.defaultBackground(): Drawable? {
     return theme.obtainStyledAttributes(intArrayOf(android.R.attr.windowBackground)).use {
         val background = it.getResourceId(0, 0)
@@ -27,6 +30,7 @@ internal fun Context.defaultBackground(): Drawable? {
     }
 }
 
+@JvmSynthetic
 internal operator fun Bundle?.plus(optionArgs: Bundle?): Bundle? {
     if (optionArgs == null) return this
     if (this == null) return optionArgs
@@ -36,6 +40,7 @@ internal operator fun Bundle?.plus(optionArgs: Bundle?): Bundle? {
     }
 }
 
+@JvmSynthetic
 internal operator fun Fragment.plusAssign(newBundle: Bundle?) {
     if (newBundle == null) {
         return
@@ -50,6 +55,7 @@ internal operator fun Fragment.plusAssign(newBundle: Bundle?) {
     oldArgs.putAll(newBundle)
 }
 
+@JvmSynthetic
 internal fun ArrayDeque<Int>.replaceAll(array: IntArray?) {
     if (array == null) return
     clear()
