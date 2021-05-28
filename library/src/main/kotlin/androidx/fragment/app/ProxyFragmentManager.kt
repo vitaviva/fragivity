@@ -2,12 +2,9 @@
 
 package androidx.fragment.app
 
-import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
-import com.github.fragivity.defaultBackground
-import com.github.fragivity.setupDefaultFragmentBackground
 
 internal class ReportFragmentManager : FragmentManager() {
 
@@ -76,9 +73,6 @@ fun FragmentManager.proxyFragmentFactory() {
     }
 }
 
-fun FragmentActivity.proxyFragmentFactory(
-    defaultBackground: Drawable? = defaultBackground()
-) {
+fun FragmentActivity.proxyFragmentFactory() {
     supportFragmentManager.proxyFragmentFactory()
-    setupDefaultFragmentBackground(defaultBackground)
 }
