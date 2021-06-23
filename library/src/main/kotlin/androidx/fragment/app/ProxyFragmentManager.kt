@@ -56,7 +56,7 @@ private class FragmentFactoryProxy(
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         val fragment = factory.instantiate(classLoader, className)
         if (fragment is NavHostFragment) {
-            fragment.setupFragmentManager(ReportFragmentManager())
+            fragment.setupReportFragmentManager()
         }
         return fragment
     }
@@ -64,6 +64,10 @@ private class FragmentFactoryProxy(
 
 private fun Fragment.setupFragmentManager(manager: FragmentManager) {
     mChildFragmentManager = manager
+}
+
+fun NavHostFragment.setupReportFragmentManager() {
+    setupFragmentManager(ReportFragmentManager())
 }
 
 fun FragmentManager.proxyFragmentFactory() {

@@ -13,6 +13,7 @@ import androidx.core.content.res.use
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commitNow
+import androidx.fragment.app.setupReportFragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
@@ -93,8 +94,13 @@ internal fun <T : Fragment> findFragment(
 }
 
 @JvmSynthetic
-internal fun FragmentManager.createNavHostFragment(@IdRes id: Int): NavHostFragment {
+internal fun FragmentManager.createNavHostFragment(
+    @IdRes id: Int, isReport: Boolean
+): NavHostFragment {
     val navHostFragment = NavHostFragment.create(0)
+    if (isReport) {
+        navHostFragment.setupReportFragmentManager()
+    }
     commitNow(true) {
         setReorderingAllowed(true)
         add(id, navHostFragment)

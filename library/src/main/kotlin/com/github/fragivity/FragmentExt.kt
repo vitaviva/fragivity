@@ -17,10 +17,13 @@ fun Fragment.findNavHostFragment(@IdRes id: Int): NavHostFragment? {
     return childFragmentManager.findFragmentById(id) as? NavHostFragment
 }
 
-fun Fragment.findOrCreateNavHostFragment(@IdRes id: Int): NavHostFragment {
+fun Fragment.findOrCreateNavHostFragment(
+    @IdRes id: Int,
+    isReport: Boolean = true
+): NavHostFragment {
     var navHostFragment = findNavHostFragment(id)
     if (navHostFragment == null) {
-        navHostFragment = childFragmentManager.createNavHostFragment(id)
+        navHostFragment = childFragmentManager.createNavHostFragment(id, isReport)
     }
     return navHostFragment
 }
