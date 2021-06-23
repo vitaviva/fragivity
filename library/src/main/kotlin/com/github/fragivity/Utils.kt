@@ -98,6 +98,7 @@ internal fun FragmentManager.createNavHostFragment(@IdRes id: Int): NavHostFragm
     commitNow(true) {
         setReorderingAllowed(true)
         add(id, navHostFragment)
+        setPrimaryNavigationFragment(navHostFragment)
     }
     return navHostFragment
 }
