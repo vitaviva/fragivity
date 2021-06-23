@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(),
 
         setupDefaultFragmentBackground()
 
-        val navHostFragment = findNavHostFragment(R.id.nav_host)
+        val navHostFragment = findNavHostFragment(R.id.nav_host)!!
         navHostFragment.loadRoot(HomeFragment::class)
         navHostFragment.showDebugView(this)
         navigator = navHostFragment.navigator

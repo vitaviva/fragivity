@@ -9,12 +9,25 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
-fun FragmentActivity.findNavHostFragment(@IdRes id: Int): NavHostFragment {
-    return supportFragmentManager.findFragmentById(id) as NavHostFragment
+fun FragmentActivity.fragmentContainerView(@IdRes id: Int): FragmentContainerView {
+    return FragmentContainerView(this).apply { this.id = id }
+}
+
+fun FragmentActivity.findNavHostFragment(@IdRes id: Int): NavHostFragment? {
+    return supportFragmentManager.findFragmentById(id) as? NavHostFragment
+}
+
+fun FragmentActivity.findOrCreateNavHostFragment(@IdRes id: Int): NavHostFragment {
+    var navHostFragment = findNavHostFragment(id)
+    if (navHostFragment == null) {
+        navHostFragment = supportFragmentManager.createNavHostFragment(id)
+    }
+    return navHostFragment
 }
 
 fun <T : Fragment> FragmentActivity.findFragment(

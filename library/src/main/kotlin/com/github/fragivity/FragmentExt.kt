@@ -5,11 +5,24 @@ package com.github.fragivity
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
-fun Fragment.findNavHostFragment(@IdRes id: Int): NavHostFragment {
-    return childFragmentManager.findFragmentById(id) as NavHostFragment
+fun Fragment.fragmentContainerView(@IdRes id: Int): FragmentContainerView {
+    return FragmentContainerView(requireContext()).apply { this.id = id }
+}
+
+fun Fragment.findNavHostFragment(@IdRes id: Int): NavHostFragment? {
+    return childFragmentManager.findFragmentById(id) as? NavHostFragment
+}
+
+fun Fragment.findOrCreateNavHostFragment(@IdRes id: Int): NavHostFragment {
+    var navHostFragment = findNavHostFragment(id)
+    if (navHostFragment == null) {
+        navHostFragment = childFragmentManager.createNavHostFragment(id)
+    }
+    return navHostFragment
 }
 
 fun <T : Fragment> Fragment.findFragment(

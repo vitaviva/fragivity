@@ -44,10 +44,10 @@ class ShopFragment : Fragment(R.layout.flow_fragment_shop) {
 
         val menus = resources.getStringArray(R.array.array_menu)
 
-        val mMenuListNavHostFragment = findNavHostFragment(R.id.fl_list_container)
+        val mMenuListNavHostFragment = findNavHostFragment(R.id.fl_list_container)!!
         mMenuListNavHostFragment.loadRoot { MenuListFragment.newInstance(menus) }
 
-        val mContentNavHostFragment = findNavHostFragment(R.id.fl_content_container)
+        val mContentNavHostFragment = findNavHostFragment(R.id.fl_content_container)!!
         mContentNavHostFragment.loadRoot { ContentFragment.newInstance(menus[0]) }
         contentNavigator = mContentNavHostFragment.navigator
     }

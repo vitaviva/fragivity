@@ -7,10 +7,13 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commitNow
+import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
 /**
@@ -87,4 +90,14 @@ internal fun <T : Fragment> findFragment(
         }
     }
     return null
+}
+
+@JvmSynthetic
+internal fun FragmentManager.createNavHostFragment(@IdRes id: Int): NavHostFragment {
+    val navHostFragment = NavHostFragment.create(0)
+    commitNow(true) {
+        setReorderingAllowed(true)
+        add(id, navHostFragment)
+    }
+    return navHostFragment
 }
