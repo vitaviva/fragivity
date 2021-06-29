@@ -11,7 +11,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.proxyFragmentFactory
-import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.*
 import com.github.fragivity.debug.showDebugView
 import com.github.fragivity.example.base.showToast
@@ -46,10 +45,13 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         proxyFragmentFactory()
         super.onCreate(savedInstanceState)
+
         binding = FlowActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host) as NavHostFragment
+
+        setupDefaultFragmentBackground()
+
+        val navHostFragment = findNavHostFragment(R.id.nav_host)!!
         navHostFragment.loadRoot(HomeFragment::class)
         navHostFragment.showDebugView(this)
         navigator = navHostFragment.navigator

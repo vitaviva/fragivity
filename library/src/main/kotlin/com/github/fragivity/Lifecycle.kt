@@ -2,27 +2,28 @@ package com.github.fragivity
 
 import android.os.Parcelable
 import android.view.View
-import androidx.collection.SparseArrayCompat
-import androidx.collection.valueIterator
 import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
-import androidx.navigation.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import kotlinx.parcelize.Parcelize
 
-internal val Fragment.fragivityHostViewModel: FragivityHostViewModel
-    get() = if (this is NavHostFragment) {
-        navController
-    } else {
-        requireParentFragment().findNavController()
-    }.fragivityHostViewModel
+val Fragment.navigator: FragivityNavHost
+    get() = findNavController().navigator
 
-internal val View.fragivityHostViewModel: FragivityHostViewModel
-    get() = findNavController().fragivityHostViewModel
+val View.navigator: FragivityNavHost
+    get() = findNavController().navigator
+
+val NavController.navigator: FragivityNavHost
+    get() = fragivityHostViewModel.navHost
 
 internal val NavController.fragivityHostViewModel: FragivityHostViewModel
     get() = ViewModelProvider(getViewModelStoreOwner(graph.id))
@@ -33,60 +34,48 @@ class FragivityHostViewModel : ViewModel() {
     lateinit var navHost: FragivityNavHost
 
     internal fun setUpNavHost(viewModel: FragivityNodeViewModel, navController: NavController) {
-        navHost = FragivityNavHost(viewModel, NavHost { navController })
+        navHost = FragivityNavHost(viewModel) { navController }
     }
 }
 
-class FragivityNodeViewModel(
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-    private lateinit var nodes: SparseArrayCompat<NavDestination>
+class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
     internal fun restoreDestination(navController: NavController, graphBuilder: NavGraphBuilder) {
-        val array = savedStateHandle.get(NAV_DEST_NODES_KEY) as? Array<NavDestinationBundle>?
-        nodes = if (array != null) {
-            SparseArrayCompat<NavDestination>(array.size).apply {
-                array.forEach {
-                    val destination = it.toDestination(navController)
-                    put(it.id, destination)
-
-                    graphBuilder.addDestination(destination)
-                }
-            }
-        } else {
-            SparseArrayCompat()
-        }
+        navDestSequence()
+            .mapNotNull { savedStateHandle.get<NavDestinationBundle>(it) }
+            .map { it.toDestination(navController) }
+            .forEach { graphBuilder.addDestination(it) }
     }
 
     fun putDestination(node: NavDestination) {
-        if (nodes.containsKey(node.id)) return
-        nodes.put(node.id, node)
-        saveNodesInState()
+        val key = NAV_DEST_PREFIX + node.id
+        if (!savedStateHandle.contains(key)) {
+            savedStateHandle.set(key, node.toBundle())
+        }
     }
 
     fun removeDestination(id: Int) {
-        if (!nodes.containsKey(id)) return
-        nodes.remove(id)
-        saveNodesInState()
-    }
-
-    private fun saveNodesInState() {
-        val array = Array<NavDestinationBundle?>(nodes.size()) { null }
-        var i = 0
-        nodes.valueIterator().forEach {
-            array[i++] = it.toBundle()
+        val key = NAV_DEST_PREFIX + id
+        if (savedStateHandle.contains(key)) {
+            savedStateHandle.remove<NavDestinationBundle>(key)
         }
-        savedStateHandle.set(NAV_DEST_NODES_KEY, array)
     }
 
     override fun onCleared() {
         super.onCleared()
-        nodes.clear()
+        navDestSequence().forEach {
+            savedStateHandle.remove<NavDestinationBundle>(it)
+        }
+    }
+
+    private fun navDestSequence(): Sequence<String> {
+        return savedStateHandle.keys()
+            .asSequence()
+            .filter { it.startsWith(NAV_DEST_PREFIX) }
     }
 
     companion object {
-        private const val NAV_DEST_NODES_KEY = "NavDestKey"
+        private const val NAV_DEST_PREFIX = "NavDestKey-"
     }
 }
 
@@ -110,7 +99,4 @@ private fun NavDestination.toBundle(): NavDestinationBundle {
 }
 
 @Parcelize
-private data class NavDestinationBundle(
-    val id: Int,
-    val className: String
-) : Parcelable
+private data class NavDestinationBundle(val id: Int, val className: String) : Parcelable

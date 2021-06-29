@@ -2,12 +2,9 @@
 
 package androidx.fragment.app
 
-import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
-import com.github.fragivity.defaultBackground
-import com.github.fragivity.setupDefaultFragmentBackground
 
 internal class ReportFragmentManager : FragmentManager() {
 
@@ -59,7 +56,7 @@ private class FragmentFactoryProxy(
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         val fragment = factory.instantiate(classLoader, className)
         if (fragment is NavHostFragment) {
-            fragment.setupFragmentManager(ReportFragmentManager())
+            fragment.setupReportFragmentManager()
         }
         return fragment
     }
@@ -69,6 +66,10 @@ private fun Fragment.setupFragmentManager(manager: FragmentManager) {
     mChildFragmentManager = manager
 }
 
+fun NavHostFragment.setupReportFragmentManager() {
+    setupFragmentManager(ReportFragmentManager())
+}
+
 fun FragmentManager.proxyFragmentFactory() {
     val oldFactory = fragmentFactory
     if (oldFactory !is FragmentFactoryProxy) {
@@ -76,9 +77,6 @@ fun FragmentManager.proxyFragmentFactory() {
     }
 }
 
-fun FragmentActivity.proxyFragmentFactory(
-    defaultBackground: Drawable? = defaultBackground()
-) {
+fun FragmentActivity.proxyFragmentFactory() {
     supportFragmentManager.proxyFragmentFactory()
-    setupDefaultFragmentBackground(defaultBackground)
 }

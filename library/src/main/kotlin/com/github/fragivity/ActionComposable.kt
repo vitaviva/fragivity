@@ -8,6 +8,7 @@ import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 
+@JvmSynthetic
 fun NavHostFragment.composable(
     route: String,
     argument: NamedNavArgument,
@@ -16,6 +17,7 @@ fun NavHostFragment.composable(
     composable(route, listOf(argument), factory)
 }
 
+@JvmSynthetic
 fun NavHostFragment.composable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
@@ -48,5 +50,5 @@ private fun NavHostFragment.composableInternal(
     }
 
     // save destination for rebuild
-    navController.fragivityHostViewModel.navHost.saveToViewModel(node)
+    navController.navigator.saveToViewModel(node)
 }

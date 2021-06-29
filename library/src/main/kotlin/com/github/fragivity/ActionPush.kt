@@ -35,6 +35,7 @@ fun FragivityNavHost.push(
     push(clazz, navOptions(optionsBuilder))
 }
 
+@JvmSynthetic
 fun FragivityNavHost.push(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
@@ -53,6 +54,7 @@ inline fun <reified T : Fragment> FragivityNavHost.push(
     push(T::class, navOptions(optionsBuilder), block)
 }
 
+@JvmSynthetic
 fun FragivityNavHost.push(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?,
@@ -147,5 +149,4 @@ private fun FragivityNavHost.pushInternal(
             )
         }
     }
-
 }

@@ -21,6 +21,7 @@ inline fun <reified T : Fragment> NavHostFragment.loadRoot(
     loadRoot(route, T::class, block)
 }
 
+@JvmSynthetic
 fun NavHostFragment.loadRoot(
     clazz: KClass<out Fragment>,
     block: (Bundle) -> Fragment
@@ -28,6 +29,7 @@ fun NavHostFragment.loadRoot(
     loadRoot("root", clazz, block)
 }
 
+@JvmSynthetic
 fun NavHostFragment.loadRoot(
     route: String,
     clazz: KClass<out Fragment>,
@@ -41,10 +43,12 @@ fun NavHostFragment.loadRoot(
 /**
  * Load root fragment
  */
+@JvmSynthetic
 fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
     loadRoot("root", root)
 }
 
+@JvmSynthetic
 fun NavHostFragment.loadRoot(route: String, clazz: KClass<out Fragment>) {
     loadRootInternal(route) {
         navController.createNavDestination(clazz.positiveHashCode, clazz)
@@ -76,4 +80,5 @@ private fun NavHostFragment.loadRootInternal(
     fragivityHostViewModel.setUpNavHost(nodeViewModel, this)
 }
 
+@JvmSynthetic
 internal fun createRoute(route: String) = "android-app://androidx.navigation.fragivity/$route"
