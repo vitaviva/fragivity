@@ -34,7 +34,7 @@ class FragivityHostViewModel : ViewModel() {
     lateinit var navHost: FragivityNavHost
 
     internal fun setUpNavHost(viewModel: FragivityNodeViewModel, navController: NavController) {
-        navHost = FragivityNavHost(viewModel) { navController }
+        navHost = FragivityNavHost(viewModel, navController)
     }
 }
 
@@ -47,11 +47,9 @@ class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : V
             .forEach { graphBuilder.addDestination(it) }
     }
 
-    fun putDestination(node: NavDestination) {
+    fun saveDestination(node: NavDestination) {
         val key = NAV_DEST_PREFIX + node.id
-        if (!savedStateHandle.contains(key)) {
-            savedStateHandle.set(key, node.toBundle())
-        }
+        savedStateHandle.set(key, node.toBundle())
     }
 
     fun removeDestination(id: Int) {

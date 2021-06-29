@@ -38,7 +38,7 @@ private fun FragivityNavHost.putDialog(
             label = clazz.qualifiedName
         }.build()
         graph.plusAssign(destination)
-        saveToViewModel(destination)
+        saveDestination(destination)
     }
     return destination
 }

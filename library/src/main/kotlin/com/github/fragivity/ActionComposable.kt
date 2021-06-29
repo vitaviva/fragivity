@@ -50,5 +50,5 @@ private fun NavHostFragment.composableInternal(
     }
 
     // save destination for rebuild
-    navigator.saveToViewModel(node)
+    navigator.saveDestination(node)
 }
