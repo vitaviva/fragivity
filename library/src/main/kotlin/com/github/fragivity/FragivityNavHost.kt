@@ -1,5 +1,6 @@
 package com.github.fragivity
 
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHost
 
@@ -8,16 +9,20 @@ import androidx.navigation.NavHost
  */
 class FragivityNavHost(
     private val viewModel: FragivityNodeViewModel,
-    navHost: NavHost
-) : NavHost by navHost {
+    private val navController: NavController
+) : NavHost {
 
-    @JvmSynthetic
-    internal fun saveToViewModel(destination: NavDestination) {
-        viewModel.putDestination(destination)
+    override fun getNavController(): NavController {
+        return navController
     }
 
     @JvmSynthetic
-    internal fun removeFromViewModel(id: Int) {
+    internal fun saveDestination(node: NavDestination) {
+        viewModel.saveDestination(node)
+    }
+
+    @JvmSynthetic
+    internal fun removeDestination(id: Int) {
         viewModel.removeDestination(id)
     }
 }

@@ -78,7 +78,7 @@ internal fun FragivityNavHost.putFragment(
             navController.createNavDestination(destId, clazz)
         }
         graph += destination
-        saveToViewModel(destination)
+        saveDestination(destination)
         return destination
     }
     // check destination is valid
@@ -94,7 +94,7 @@ internal fun FragivityNavHost.putFragment(
     }
     // rebuild destination
     graph -= destination
-    removeFromViewModel(destId)
+    removeDestination(destId)
     return putFragment(clazz, factory)
 }
 
