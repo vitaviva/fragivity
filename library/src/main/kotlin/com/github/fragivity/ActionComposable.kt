@@ -31,15 +31,15 @@ private fun NavHostFragment.composableInternal(
     destinationId: Int,
     arguments: List<NamedNavArgument>,
     factory: (Bundle) -> Fragment
-) {
+) = with(navController) {
     val internalRoute = createRoute(route)
 
-    var node = navController.graph.findNode(destinationId)
+    var node = graph.findNode(destinationId)
     if (node is FragivityFragmentDestination) {
         node.factory = factory
     } else {
-        node = navController.createNavDestination(destinationId, factory)
-        navController.graph.addDestination(node)
+        node = createNavDestination(destinationId, factory)
+        graph.addDestination(node)
     }
 
     node.apply {
@@ -50,5 +50,5 @@ private fun NavHostFragment.composableInternal(
     }
 
     // save destination for rebuild
-    navController.navigator.saveToViewModel(node)
+    navigator.saveToViewModel(node)
 }
