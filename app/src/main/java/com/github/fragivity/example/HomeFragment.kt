@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import com.github.fragivity.applySlideInOut
 import com.github.fragivity.dialog.showDialog
 import com.github.fragivity.example.backpress.BackPressFragment
+import com.github.fragivity.example.base.showToast
 import com.github.fragivity.example.communicate.CommFragment
 import com.github.fragivity.example.databinding.FragmentHomeBinding
 import com.github.fragivity.example.deeplink.sendNotification
@@ -26,6 +28,22 @@ import com.github.fragivity.push
 class HomeFragment : AbsBaseFragment(false) {
 
     private val binding by viewBinding(FragmentHomeBinding::bind)
+
+    private var lastClickTime = 0L
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher
+            .addCallback(this) {
+                val current = System.currentTimeMillis()
+                if (current - lastClickTime > 2000) {
+                    showToast("再按一次退出")
+                    lastClickTime = current
+                } else {
+                    finish()
+                }
+            }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
