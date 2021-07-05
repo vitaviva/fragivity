@@ -127,9 +127,9 @@ class FragivityFragmentNavigator(
             if (prevFragment != null) {
                 ft.remove(prevFragment)
                 fragment.mTag = generateBackStackName(backStack.size - 1, destId)
-                val size = fragmentManager.mBackStack.size
-                if (size > 0) {
-                    fragmentManager.mBackStack[size - 1].mOps
+                val backStack = fragmentManager.mBackStack
+                if (backStack != null && backStack.size > 0) {
+                    fragmentManager.mBackStack[backStack.size - 1].mOps
                         .filter { it.mCmd == OP_ADD && it.mFragment == prevFragment }
                         .forEach { it.mFragment = fragment }
                 }

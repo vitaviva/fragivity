@@ -16,7 +16,9 @@ internal fun NavController.findDestinationAndArgs(
 
 @JvmSynthetic
 internal fun NavController.removeLastBackStackEntry() {
-    this.mBackStack.removeLast()
+    if (mBackStack.isNotEmpty()) {
+        mBackStack.removeLast()
+    }
 }
 
 @JvmSynthetic

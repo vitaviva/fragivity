@@ -19,9 +19,9 @@ class MainActivity : AppCompatActivity() {
         FragmentManager.enableDebugLogging(true)
 
         val navHostFragment = findOrCreateNavHostFragment(R.id.nav_host)
-        navHostFragment.loadRoot(HomeFragment::class)
+        navHostFragment.loadRoot(SplashFragment::class)
 //        //you also can loadRoot with a factory
-//        navHostFragment.loadRoot { HomeFragment() }
+//        navHostFragment.loadRoot { SplashFragment() }
 
         navHostFragment.handleDeepLink(intent)
         navHostFragment.showDebugView(this)
