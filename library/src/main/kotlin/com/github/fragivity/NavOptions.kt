@@ -85,13 +85,6 @@ fun NavOptions.applySlideInOut() {
     popExitAnim = R.anim.slide_out_pop
 }
 
-fun NavOptions.applyFadeInOut() {
-    enterAnim = R.anim.nav_default_enter_anim
-    exitAnim = R.anim.nav_default_exit_anim
-    popEnterAnim = R.anim.nav_default_enter_anim
-    popExitAnim = R.anim.nav_default_exit_anim
-}
-
 fun NavOptions.applyVerticalInOut() {
     enterAnim = R.anim.v_fragment_enter
     exitAnim = R.anim.v_fragment_exit
