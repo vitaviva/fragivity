@@ -15,9 +15,20 @@ internal fun NavController.findDestinationAndArgs(
 }
 
 @JvmSynthetic
-internal fun NavController.removeLastBackStackEntry() {
-    if (mBackStack.isNotEmpty()) {
-        mBackStack.removeLast()
+internal fun NavController.removeLastBackStackEntry(): NavBackStackEntry? {
+    if (!isNullRootNode()) {
+        return mBackStack.removeLast()
+    }
+    return null
+}
+
+// ≈ mBackStack.size <= 1
+@JvmSynthetic
+internal fun NavController.isNullRootNode(): Boolean {
+    if (mBackStack.isEmpty()) return true
+    return mBackStack.iterator().run {
+        next() // pass NavGraph
+        hasNext()
     }
 }
 

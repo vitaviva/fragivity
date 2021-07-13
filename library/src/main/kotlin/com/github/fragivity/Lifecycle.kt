@@ -52,8 +52,8 @@ class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : V
         savedStateHandle.set(key, node.toBundle())
     }
 
-    fun removeDestination(id: Int) {
-        val key = NAV_DEST_PREFIX + id
+    fun removeDestination(node: NavDestination) {
+        val key = NAV_DEST_PREFIX + node.id
         if (savedStateHandle.contains(key)) {
             savedStateHandle.remove<NavDestinationBundle>(key)
         }

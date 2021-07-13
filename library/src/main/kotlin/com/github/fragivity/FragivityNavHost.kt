@@ -22,7 +22,7 @@ class FragivityNavHost(
     }
 
     @JvmSynthetic
-    internal fun removeDestination(id: Int) {
-        viewModel.removeDestination(id)
+    internal fun removeDestination(node: NavDestination) {
+        viewModel.removeDestination(node)
     }
 }

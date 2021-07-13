@@ -70,31 +70,31 @@ internal fun FragivityNavHost.putFragment(
 ): FragmentNavigator.Destination {
     val destId = clazz.positiveHashCode
     val graph = navController.graph
-    var destination = graph.findNode(destId) as? FragmentNavigator.Destination
-    if (destination == null) {
-        destination = if (factory != null) {
+    var node = graph.findNode(destId) as? FragmentNavigator.Destination
+    if (node == null) {
+        node = if (factory != null) {
             navController.createNavDestination(destId, factory)
         } else {
             navController.createNavDestination(destId, clazz)
         }
-        graph += destination
-        saveDestination(destination)
-        return destination
+        graph += node
+        saveDestination(node)
+        return node
     }
     // check destination is valid
     if (factory != null) {
-        if (destination is FragivityFragmentDestination) {
-            destination.factory = factory
-            return destination
+        if (node is FragivityFragmentDestination) {
+            node.factory = factory
+            return node
         }
     } else {
-        if (destination !is FragivityFragmentDestination) {
-            return destination
+        if (node !is FragivityFragmentDestination) {
+            return node
         }
     }
     // rebuild destination
-    graph -= destination
-    removeDestination(destId)
+    graph -= node
+    removeDestination(node)
     return putFragment(clazz, factory)
 }
 
@@ -113,7 +113,16 @@ private fun FragivityNavHost.pushInternal(
     // popSelf为true时， mFragmentManager.mBackStack需要与NavController.mBackStack同步更新，
     //  mFragmentManager在Navigator中会处理，NavController需要在此处处理，先删除当前Destination
     if (navOptions.popSelf) {
-        navController.removeLastBackStackEntry()
+        // 删除BackStack的同时也删除graph中的node
+        val oldNode = removeLastBackStackEntry()?.destination
+        if (oldNode != null) {
+            graph.remove(oldNode)
+            removeDestination(oldNode)
+        }
+        // 如果rootNode被删除了，认为新push的node为rootNode
+        if (isNullRootNode()) {
+            node.addDeepLink(createRoute(DEFAULT_ROOT_ROUTE))
+        }
     }
 
     when (navOptions.launchMode) {

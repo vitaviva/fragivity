@@ -11,31 +11,18 @@ import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
+const val DEFAULT_ROOT_ROUTE = "root"
+
 /**
  * Load root fragment by factory
  */
-inline fun <reified T : Fragment> NavHostFragment.loadRoot(
-    route: String = "root",
-    noinline block: (Bundle) -> T
-) {
-    loadRoot(route, T::class, block)
+inline fun <reified T : Fragment> NavHostFragment.loadRoot(noinline block: (Bundle) -> T) {
+    loadRoot(T::class, block)
 }
 
 @JvmSynthetic
-fun NavHostFragment.loadRoot(
-    clazz: KClass<out Fragment>,
-    block: (Bundle) -> Fragment
-) {
-    loadRoot("root", clazz, block)
-}
-
-@JvmSynthetic
-fun NavHostFragment.loadRoot(
-    route: String,
-    clazz: KClass<out Fragment>,
-    block: (Bundle) -> Fragment
-) {
-    loadRootInternal(route) {
+fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>, block: (Bundle) -> Fragment) {
+    loadRootInternal {
         navController.createNavDestination(clazz.positiveHashCode, block)
     }
 }
@@ -44,19 +31,13 @@ fun NavHostFragment.loadRoot(
  * Load root fragment
  */
 @JvmSynthetic
-fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
-    loadRoot("root", root)
-}
-
-@JvmSynthetic
-fun NavHostFragment.loadRoot(route: String, clazz: KClass<out Fragment>) {
-    loadRootInternal(route) {
+fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>) {
+    loadRootInternal {
         navController.createNavDestination(clazz.positiveHashCode, clazz)
     }
 }
 
 private fun NavHostFragment.loadRootInternal(
-    route: String,
     startDestinationFactory: () -> NavDestination
 ) = with(navController) {
     navigatorProvider.addNavigator(
@@ -69,7 +50,7 @@ private fun NavHostFragment.loadRootInternal(
     ).get(FragivityNodeViewModel::class.java)
 
     val startDestination = startDestinationFactory.invoke()
-    startDestination.addDeepLink(createRoute(route))
+    startDestination.addDeepLink(createRoute(DEFAULT_ROOT_ROUTE))
 
     graph = createGraph(startDestination = startDestination.id) {
         addDestination(startDestination)
