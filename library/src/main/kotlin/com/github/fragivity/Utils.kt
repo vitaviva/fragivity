@@ -55,15 +55,6 @@ internal operator fun Fragment.plusAssign(newBundle: Bundle?) {
     oldArgs.putAll(newBundle)
 }
 
-@JvmSynthetic
-internal fun ArrayDeque<Int>.replaceAll(array: IntArray?) {
-    if (array == null) return
-    clear()
-    for (value in array) {
-        add(value)
-    }
-}
-
 internal fun <T : Fragment> findFragment(
     manager: FragmentManager,
     clazz: KClass<T>,

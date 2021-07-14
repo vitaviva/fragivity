@@ -106,18 +106,18 @@ private fun FragivityNavHost.pushInternal(
     // fix https://github.com/vitaviva/fragivity/issues/31
     // popSelf为true时， mFragmentManager.mBackStack需要与NavController.mBackStack同步更新，
     //  mFragmentManager在Navigator中会处理，NavController需要在此处处理，先删除当前Destination
-    if (navOptions.popSelf) {
-        // 删除BackStack的同时也删除graph中的node
-        val oldNode = removeLastBackStackEntry()?.destination
-        if (oldNode != null) {
-            graph.remove(oldNode)
-            removeDestination(oldNode)
-        }
-        // 如果rootNode被删除了，认为新push的node为rootNode
-        if (isNullRootNode()) {
-            node.addDeepLink(wrapDeepRoute(DEFAULT_ROOT_ROUTE))
-        }
-    }
+//    if (navOptions.popSelf) {
+//        // 删除BackStack的同时也删除graph中的node
+//        val oldNode = removeLastBackStackEntry()?.destination
+//        if (oldNode != null) {
+//            graph.remove(oldNode)
+//            removeDestination(oldNode)
+//        }
+//        // 如果rootNode被删除了，认为新push的node为rootNode
+//        if (isNullRootNode()) {
+//            node.addDeepLink(wrapDeepRoute(DEFAULT_ROOT_ROUTE))
+//        }
+//    }
 
     when (navOptions.launchMode) {
         LaunchMode.STANDARD,
@@ -131,17 +131,17 @@ private fun FragivityNavHost.pushInternal(
         }
         LaunchMode.SINGLE_TASK -> {
             // curr == target || try pop to target
-            if (currentDestination?.id == node.id || popBackStack(node.id, false)) {
-                val navigator: Navigator<out NavDestination> =
-                    navigatorProvider.getNavigator(node.navigatorName)
-                if (navigator is FragivityFragmentNavigator) {
-                    navigator.restoreTopFragment(
-                        node.id,
-                        navOptions.toBundle() + matchingArgs
-                    )
-                }
-                return@with
-            }
+//            if (currentDestination?.id == node.id || popBackStack(node.id, false)) {
+//                val navigator: Navigator<out NavDestination> =
+//                    navigatorProvider.getNavigator(node.navigatorName)
+//                if (navigator is FragivityFragmentNavigator) {
+//                    navigator.restoreTopFragment(
+//                        node.id,
+//                        navOptions.toBundle() + matchingArgs
+//                    )
+//                }
+//                return@with
+//            }
 
             // create target
             navigate(

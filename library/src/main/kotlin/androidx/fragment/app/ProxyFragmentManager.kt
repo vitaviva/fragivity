@@ -67,7 +67,7 @@ private fun Fragment.setupFragmentManager(manager: FragmentManager) {
 }
 
 fun NavHostFragment.setupReportFragmentManager() {
-    setupFragmentManager(ReportFragmentManager())
+//    setupFragmentManager(ReportFragmentManager())
 }
 
 fun FragmentManager.proxyFragmentFactory() {
