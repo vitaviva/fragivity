@@ -14,12 +14,6 @@ abstract class AbsBaseFragment(private val _supportBack: Boolean = true) : Fragm
         const val TAG = "Fragivity"
     }
 
-    @Suppress("DEPRECATION")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.e(TAG, "onActivityCreated:" + this.javaClass.simpleName)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e(TAG, "onViewCreated:" + this.javaClass.simpleName)

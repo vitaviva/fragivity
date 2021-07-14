@@ -9,12 +9,8 @@ import androidx.navigation.NavHost
  */
 class FragivityNavHost(
     private val viewModel: FragivityNodeViewModel,
-    private val navController: NavController
+    override val navController: NavController
 ) : NavHost {
-
-    override fun getNavController(): NavController {
-        return navController
-    }
 
     @JvmSynthetic
     internal fun saveDestination(node: NavDestination) {

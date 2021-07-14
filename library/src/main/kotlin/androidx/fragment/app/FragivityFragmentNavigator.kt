@@ -37,8 +37,8 @@ class FragivityFragmentNavigator(
                         // 切到后台时的生命周期
                         val fragment = fragmentManager.fragments[size - 2]
                         // fragment onResume -> onStop
-                        fragmentManager.moveToState(fragment, Fragment.ACTIVITY_CREATED)
-                        fragment.mState = Fragment.STARTED
+                        moveFragmentState(fragmentManager, fragment, Fragment.ACTIVITY_CREATED)
+                        setFragmentState(fragmentManager, fragment, Fragment.STARTED)
                         fragment.mMaxState = Lifecycle.State.STARTED
                     }
                 } else if (mIsPendingPopBackStackOperation) {
@@ -48,7 +48,9 @@ class FragivityFragmentNavigator(
                         ?: return@addOnBackStackChangedListener
                     // fragment (true) ?: onStart : onCreateView -> onResume
                     if (fragment.mState == Fragment.STARTED) {
+                        fragment.mMaxState = Lifecycle.State.RESUMED
                         fragment.mState = Fragment.ACTIVITY_CREATED
+                        moveFragmentState(fragmentManager, fragment, Fragment.RESUMED)
                     }
                     setMaxLifecycle(fragment, Lifecycle.State.RESUMED)
                 }
