@@ -12,13 +12,13 @@ import kotlin.reflect.KClass
 
 @JvmSynthetic
 internal fun NavController.createNavDestination(
-    destinationId: Int,
+    route: String,
     clazz: KClass<out Fragment>
 ): FragmentNavigator.Destination {
     return FragmentNavigator.Destination(
         navigatorProvider[FragivityFragmentNavigator::class]
     ).apply {
-        id = destinationId
+        this.route = route
         setClassName(clazz.java.name)
         label = clazz.qualifiedName
         getRouteUri(clazz)?.let {
@@ -29,13 +29,13 @@ internal fun NavController.createNavDestination(
 
 @JvmSynthetic
 internal fun NavController.createNavDestination(
-    destinationId: Int,
+    route: String,
     factory: ((Bundle) -> Fragment)? = null
 ): FragivityFragmentDestination {
     return FragivityFragmentDestination(
         navigatorProvider[FragivityFragmentNavigator::class]
     ).apply {
-        id = destinationId
+        this.route = route
         this.factory = factory
     }
 }

@@ -19,8 +19,7 @@ fun FragivityNavHost.push(route: String, optionsBuilder: NavOptions.() -> Unit =
 
 @JvmSynthetic
 fun FragivityNavHost.push(route: String, navOptions: NavOptions?) {
-    val request = NavDeepLinkRequest.Builder.fromUri(createRoute(route).toUri()).build()
-    val (node, matchingArgs) = navController.findDestinationAndArgs(request) ?: return
+    val (node, matchingArgs) = navController.findDestinationAndArgs(route.toRequest()) ?: return
     pushInternal(node, navOptions, matchingArgs)
 }
 
@@ -28,18 +27,12 @@ fun FragivityNavHost.push(route: String, navOptions: NavOptions?) {
  * Navigates to fragment of [clazz] by pushing it to back stack
  */
 @JvmSynthetic
-fun FragivityNavHost.push(
-    clazz: KClass<out Fragment>,
-    optionsBuilder: NavOptions.() -> Unit = {}
-) {
+fun FragivityNavHost.push(clazz: KClass<out Fragment>, optionsBuilder: NavOptions.() -> Unit = {}) {
     push(clazz, navOptions(optionsBuilder))
 }
 
 @JvmSynthetic
-fun FragivityNavHost.push(
-    clazz: KClass<out Fragment>,
-    navOptions: NavOptions?
-) {
+fun FragivityNavHost.push(clazz: KClass<out Fragment>, navOptions: NavOptions?) {
     pushInternal(putFragment(clazz), navOptions)
 }
 
@@ -68,14 +61,15 @@ internal fun FragivityNavHost.putFragment(
     clazz: KClass<out Fragment>,
     factory: ((Bundle) -> Fragment)? = null
 ): FragmentNavigator.Destination {
-    val destId = clazz.positiveHashCode
     val graph = navController.graph
-    var node = graph.findNode(destId) as? FragmentNavigator.Destination
+
+    val route = createRoute(clazz)
+    var node = graph.findNode(route) as? FragmentNavigator.Destination
     if (node == null) {
         node = if (factory != null) {
-            navController.createNavDestination(destId, factory)
+            navController.createNavDestination(route, factory)
         } else {
-            navController.createNavDestination(destId, clazz)
+            navController.createNavDestination(route, clazz)
         }
         graph += node
         saveDestination(node)
@@ -121,7 +115,7 @@ private fun FragivityNavHost.pushInternal(
         }
         // 如果rootNode被删除了，认为新push的node为rootNode
         if (isNullRootNode()) {
-            node.addDeepLink(createRoute(DEFAULT_ROOT_ROUTE))
+            node.addDeepLink(wrapDeepRoute(DEFAULT_ROOT_ROUTE))
         }
     }
 

@@ -81,9 +81,9 @@ private fun NavDestinationBundle.toDestination(navController: NavController): Na
     if (className.isNotEmpty()) {
         @Suppress("UNCHECKED_CAST")
         val clazz = Class.forName(className) as Class<Fragment>
-        return navController.createNavDestination(id, clazz.kotlin)
+        return navController.createNavDestination(route, clazz.kotlin)
     }
-    return navController.createNavDestination(id)
+    return navController.createNavDestination(route)
 }
 
 private fun NavDestination.toBundle(): NavDestinationBundle {
@@ -93,8 +93,8 @@ private fun NavDestination.toBundle(): NavDestinationBundle {
         is DialogFragmentNavigator.Destination -> className
         else -> error("Invalid Destination")
     }
-    return NavDestinationBundle(id, clazzName)
+    return NavDestinationBundle(route!!, clazzName)
 }
 
 @Parcelize
-private data class NavDestinationBundle(val id: Int, val className: String) : Parcelable
+private data class NavDestinationBundle(val route: String, val className: String) : Parcelable

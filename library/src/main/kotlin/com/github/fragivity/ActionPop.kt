@@ -3,9 +3,7 @@
 
 package com.github.fragivity
 
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.popBackStack
 import kotlin.reflect.KClass
 
@@ -22,7 +20,7 @@ fun FragivityNavHost.pop(): Boolean {
  */
 @JvmSynthetic
 fun FragivityNavHost.popTo(clazz: KClass<out Fragment>, inclusive: Boolean = false): Boolean {
-    return navController.popBackStack(clazz.positiveHashCode, inclusive)
+    return navController.popBackStack(createRoute(clazz), inclusive)
 }
 
 /**
@@ -31,8 +29,5 @@ fun FragivityNavHost.popTo(clazz: KClass<out Fragment>, inclusive: Boolean = fal
  */
 @JvmSynthetic
 fun FragivityNavHost.popTo(route: String, inclusive: Boolean = false): Boolean {
-    return navController.popBackStack(
-        NavDeepLinkRequest.Builder.fromUri(createRoute(route).toUri()).build(),
-        inclusive
-    )
+    return navController.popBackStack(route.toRequest(), inclusive)
 }
