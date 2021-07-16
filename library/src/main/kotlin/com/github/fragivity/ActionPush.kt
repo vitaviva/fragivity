@@ -4,9 +4,7 @@
 package com.github.fragivity
 
 import android.os.Bundle
-import androidx.core.net.toUri
 import androidx.fragment.app.FragivityFragmentDestination
-import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.fragment.app.Fragment
 import androidx.navigation.*
 import androidx.navigation.fragment.FragmentNavigator
@@ -33,7 +31,7 @@ fun FragivityNavHost.push(clazz: KClass<out Fragment>, optionsBuilder: NavOption
 
 @JvmSynthetic
 fun FragivityNavHost.push(clazz: KClass<out Fragment>, navOptions: NavOptions?) {
-    pushInternal(putFragment(clazz), navOptions)
+    pushInternal(putNode(clazz), navOptions)
 }
 
 /**
@@ -53,16 +51,25 @@ fun FragivityNavHost.push(
     navOptions: NavOptions?,
     factory: (Bundle) -> Fragment
 ) {
-    pushInternal(putFragment(clazz, factory), navOptions)
+    pushInternal(putNode(clazz, factory), navOptions)
 }
 
 @JvmSynthetic
-internal fun FragivityNavHost.putFragment(
+internal fun FragivityNavHost.putNode(
     clazz: KClass<out Fragment>,
     factory: ((Bundle) -> Fragment)? = null
 ): FragmentNavigator.Destination {
-    val graph = navController.graph
+    // 优先放入childGraph
+    val currentNode = navController.currentDestination
+    val graph = currentNode?.parent ?: navController.graph
+    return putNode(graph, clazz, factory)
+}
 
+private fun FragivityNavHost.putNode(
+    graph: NavGraph,
+    clazz: KClass<out Fragment>,
+    factory: ((Bundle) -> Fragment)? = null
+): FragmentNavigator.Destination {
     val route = createRoute(clazz)
     var node = graph.findNode(route) as? FragmentNavigator.Destination
     if (node == null) {
@@ -89,7 +96,7 @@ internal fun FragivityNavHost.putFragment(
     // rebuild destination
     graph -= node
     removeDestination(node)
-    return putFragment(clazz, factory)
+    return putNode(graph, clazz, factory)
 }
 
 @JvmSynthetic
