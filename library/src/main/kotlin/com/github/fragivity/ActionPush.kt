@@ -40,7 +40,7 @@ fun FragivityNavHost.push(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
 ) {
-    pushInternal(putFragment(clazz), navOptions)
+    pushInternal(putNode(clazz), navOptions)
 }
 
 /**
@@ -60,22 +60,22 @@ fun FragivityNavHost.push(
     navOptions: NavOptions?,
     factory: (Bundle) -> Fragment
 ) {
-    pushInternal(putFragment(clazz, factory), navOptions)
+    pushInternal(putNode(clazz, factory), navOptions)
 }
 
 @JvmSynthetic
-internal fun FragivityNavHost.putFragment(
+internal fun FragivityNavHost.putNode(
     clazz: KClass<out Fragment>,
     factory: ((Bundle) -> Fragment)? = null
 ): FragmentNavigator.Destination {
-    val destId = clazz.positiveHashCode
+    val nodeId = clazz.positiveHashCode
     val graph = navController.graph
-    var node = graph.findNode(destId) as? FragmentNavigator.Destination
+    var node = graph.findNode(nodeId) as? FragmentNavigator.Destination
     if (node == null) {
         node = if (factory != null) {
-            navController.createNavDestination(destId, factory)
+            navController.createNode(nodeId, factory)
         } else {
-            navController.createNavDestination(destId, clazz)
+            navController.createNode(nodeId, clazz)
         }
         graph += node
         saveDestination(node)
@@ -95,7 +95,7 @@ internal fun FragivityNavHost.putFragment(
     // rebuild destination
     graph -= node
     removeDestination(node)
-    return putFragment(clazz, factory)
+    return putNode(clazz, factory)
 }
 
 @JvmSynthetic
