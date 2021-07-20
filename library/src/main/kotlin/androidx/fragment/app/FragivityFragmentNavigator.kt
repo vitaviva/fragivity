@@ -155,6 +155,8 @@ class FragivityFragmentNavigator(
         ft.commit()
 
         if (isPopSelf) {
+            backStack.removeLast()
+            backStack.add(destId)
             return destination
         }
 

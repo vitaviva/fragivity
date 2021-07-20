@@ -10,3 +10,11 @@ internal fun NavController.createGraph(
     addDestination(startNode)
     block()
 }
+
+@JvmSynthetic
+internal fun NavController.createGraph(
+    startNodeId: Int,
+    block: NavGraphBuilder.() -> Unit = {}
+): NavGraph = createGraph(startDestination = startNodeId) {
+    block()
+}

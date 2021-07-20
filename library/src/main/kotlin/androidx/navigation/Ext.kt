@@ -16,10 +16,7 @@ internal fun NavController.findDestinationAndArgs(
 
 @JvmSynthetic
 internal fun NavController.removeLastBackStackEntry(): NavBackStackEntry? {
-    if (!isNullRootNode()) {
-        return mBackStack.removeLast()
-    }
-    return null
+    return mBackStack.removeLast()
 }
 
 // ≈ mBackStack.size <= 1

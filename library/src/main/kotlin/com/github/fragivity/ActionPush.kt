@@ -122,6 +122,9 @@ private fun FragivityNavHost.pushInternal(
         // 如果rootNode被删除了，认为新push的node为rootNode
         if (isNullRootNode()) {
             node.addDeepLink(createRoute(DEFAULT_ROOT_ROUTE))
+
+            // 记录开始id用于重建
+            viewModel.startNodeId = node.id
         }
     }
 

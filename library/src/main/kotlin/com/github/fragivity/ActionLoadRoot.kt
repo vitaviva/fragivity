@@ -8,6 +8,7 @@ import androidx.fragment.app.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDestination
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
@@ -63,10 +64,18 @@ private fun NavHostFragment.loadRootInternal(
 private fun NavHostFragment.setupGraph(startNode: NavDestination) {
     val nodeViewModel = getViewModel<FragivityNodeViewModel>()
     with(navController) {
-        graph = createGraph(startNode) {
+        val block: NavGraphBuilder.() -> Unit = {
             // restore destination from vm for NavController#mBackStackToRestore
             nodeViewModel.restoreDestination(this@with, this)
         }
+
+        val startNodeId = nodeViewModel.startNodeId
+        graph = if (startNodeId != null) {
+            createGraph(startNodeId, block)
+        } else {
+            createGraph(startNode, block)
+        }
+
         fragivityHostViewModel.setUpNavHost(nodeViewModel, this)
     }
 }

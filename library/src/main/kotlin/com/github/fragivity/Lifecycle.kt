@@ -40,6 +40,12 @@ class FragivityHostViewModel : ViewModel() {
 
 class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
+    var startNodeId: Int?
+        set(value) {
+            savedStateHandle.set(NAV_DEST_START_NODE, value)
+        }
+        get() = savedStateHandle.get<Int>(NAV_DEST_START_NODE)
+
     internal fun restoreDestination(navController: NavController, graphBuilder: NavGraphBuilder) {
         navDestSequence()
             .mapNotNull { savedStateHandle.get<NavDestinationBundle>(it) }
@@ -74,6 +80,7 @@ class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : V
 
     companion object {
         private const val NAV_DEST_PREFIX = "NavDestKey-"
+        private const val NAV_DEST_START_NODE = "NavDestKey#StartNodeId"
     }
 }
 
