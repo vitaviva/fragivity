@@ -18,10 +18,10 @@ import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
 /**
- * string hash容易冲突，使用System.identityHashCode离散hash，同时确保结果 > 0
+ * string hash容易冲突，使用System.identityHashCode离散hash
  */
 internal inline val Any.positiveHashCode: Int
-    get() = System.identityHashCode(this) and Int.MAX_VALUE
+    get() = System.identityHashCode(this)
 
 @JvmSynthetic
 internal fun View.appendBackground() {

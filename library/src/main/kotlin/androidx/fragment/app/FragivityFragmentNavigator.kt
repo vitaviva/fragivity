@@ -167,11 +167,11 @@ class FragivityFragmentNavigator(
     }
 
     private fun generateBackStackName(backStackIndex: Int, destinationId: Int): String {
-        return "${backStackIndex}-${destinationId}"
+        return "${backStackIndex}#${destinationId}"
     }
 
     private fun getDestinationId(backStackName: String): Int {
-        val split = backStackName.split("-")
+        val split = backStackName.split("#")
         if (split.size != 2) {
             throw IllegalStateException(
                 "Invalid back stack entry on the "
