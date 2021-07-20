@@ -23,7 +23,7 @@ val View.navigator: FragivityNavHost
     get() = findNavController().navigator
 
 val NavController.navigator: FragivityNavHost
-    get() = fragivityHostViewModel.navHost
+    get() = fragivityHostViewModel.navHost!!
 
 internal val NavController.fragivityHostViewModel: FragivityHostViewModel
     get() = ViewModelProvider(getViewModelStoreOwner(graph.id))
@@ -31,10 +31,15 @@ internal val NavController.fragivityHostViewModel: FragivityHostViewModel
 
 class FragivityHostViewModel : ViewModel() {
 
-    lateinit var navHost: FragivityNavHost
+    var navHost: FragivityNavHost? = null
 
     internal fun setUpNavHost(viewModel: FragivityNodeViewModel, navController: NavController) {
         navHost = FragivityNavHost(viewModel, navController)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        navHost?.onCleared()
     }
 }
 
@@ -53,12 +58,12 @@ class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : V
             .forEach { graphBuilder.addDestination(it) }
     }
 
-    fun saveDestination(node: NavDestination) {
+    fun addNode(node: NavDestination) {
         val key = NAV_DEST_PREFIX + node.id
         savedStateHandle.set(key, node.toBundle())
     }
 
-    fun removeDestination(node: NavDestination) {
+    fun removeNode(node: NavDestination) {
         val key = NAV_DEST_PREFIX + node.id
         if (savedStateHandle.contains(key)) {
             savedStateHandle.remove<NavDestinationBundle>(key)
@@ -67,6 +72,10 @@ class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : V
 
     override fun onCleared() {
         super.onCleared()
+        clearNodes()
+    }
+
+    fun clearNodes() {
         navDestSequence().forEach {
             savedStateHandle.remove<NavDestinationBundle>(it)
         }

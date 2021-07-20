@@ -8,21 +8,31 @@ import androidx.navigation.NavHost
  * NavHost with viewModel to store NavDestination
  */
 class FragivityNavHost(
-    private val viewModel: FragivityNodeViewModel,
-    private val navController: NavController
+    @JvmSynthetic
+    internal var _viewModel: FragivityNodeViewModel?,
+    private var _navController: NavController?
 ) : NavHost {
 
+    val viewModel: FragivityNodeViewModel
+        get() = _viewModel!!
+
     override fun getNavController(): NavController {
-        return navController
+        return _navController!!
     }
 
     @JvmSynthetic
-    internal fun saveDestination(node: NavDestination) {
-        viewModel.saveDestination(node)
+    internal fun addNode(node: NavDestination) {
+        viewModel.addNode(node)
     }
 
     @JvmSynthetic
-    internal fun removeDestination(node: NavDestination) {
-        viewModel.removeDestination(node)
+    internal fun removeNode(node: NavDestination) {
+        viewModel.removeNode(node)
+    }
+
+    @JvmSynthetic
+    internal fun onCleared() {
+        _viewModel = null
+        _navController = null
     }
 }

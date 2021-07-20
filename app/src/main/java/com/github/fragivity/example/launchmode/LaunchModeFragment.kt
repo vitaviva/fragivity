@@ -55,6 +55,10 @@ class LaunchModeFragment : AbsBaseFragment() {
         binding.btnPoptohome.setOnClickListener {
             navigator.popTo(HomeFragment::class)
         }
+
+        binding.btnPushtohome.setOnClickListener {
+            navigator.pushTo(HomeFragment::class)
+        }
     }
 
     override val titleName: String

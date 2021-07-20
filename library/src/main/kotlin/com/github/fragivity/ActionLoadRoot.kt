@@ -61,7 +61,8 @@ private fun NavHostFragment.loadRootInternal(
     })
 }
 
-private fun NavHostFragment.setupGraph(startNode: NavDestination) {
+@JvmSynthetic
+internal fun NavHostFragment.setupGraph(startNode: NavDestination) {
     val nodeViewModel = getViewModel<FragivityNodeViewModel>()
     with(navController) {
         val block: NavGraphBuilder.() -> Unit = {

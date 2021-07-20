@@ -5,11 +5,9 @@ package com.github.fragivity
 
 import android.os.Bundle
 import androidx.core.net.toUri
-import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.fragment.app.Fragment
 import androidx.navigation.*
-import androidx.navigation.fragment.FragmentNavigator
 import kotlin.reflect.KClass
 
 @JvmSynthetic
@@ -40,7 +38,7 @@ fun FragivityNavHost.push(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
 ) {
-    pushInternal(putNode(clazz), navOptions)
+    pushInternal(getOrCreateNode(clazz), navOptions)
 }
 
 /**
@@ -60,46 +58,11 @@ fun FragivityNavHost.push(
     navOptions: NavOptions?,
     factory: (Bundle) -> Fragment
 ) {
-    pushInternal(putNode(clazz, factory), navOptions)
+    pushInternal(getOrCreateNode(clazz, factory), navOptions)
 }
 
 @JvmSynthetic
-internal fun FragivityNavHost.putNode(
-    clazz: KClass<out Fragment>,
-    factory: ((Bundle) -> Fragment)? = null
-): FragmentNavigator.Destination {
-    val nodeId = clazz.positiveHashCode
-    val graph = navController.graph
-    var node = graph.findNode(nodeId) as? FragmentNavigator.Destination
-    if (node == null) {
-        node = if (factory != null) {
-            navController.createNode(nodeId, factory)
-        } else {
-            navController.createNode(nodeId, clazz)
-        }
-        graph += node
-        saveDestination(node)
-        return node
-    }
-    // check destination is valid
-    if (factory != null) {
-        if (node is FragivityFragmentDestination) {
-            node.factory = factory
-            return node
-        }
-    } else {
-        if (node !is FragivityFragmentDestination) {
-            return node
-        }
-    }
-    // rebuild destination
-    graph -= node
-    removeDestination(node)
-    return putNode(clazz, factory)
-}
-
-@JvmSynthetic
-private fun FragivityNavHost.pushInternal(
+internal fun FragivityNavHost.pushInternal(
     node: NavDestination,
     navOptions: NavOptions?,
     matchingArgs: Bundle? = null
@@ -117,7 +80,7 @@ private fun FragivityNavHost.pushInternal(
         val oldNode = removeLastBackStackEntry()?.destination
         if (oldNode != null) {
             graph.remove(oldNode)
-            removeDestination(oldNode)
+            removeNode(oldNode)
         }
         // 如果rootNode被删除了，认为新push的node为rootNode
         if (isNullRootNode()) {

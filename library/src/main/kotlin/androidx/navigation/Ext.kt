@@ -19,6 +19,11 @@ internal fun NavController.removeLastBackStackEntry(): NavBackStackEntry? {
     return mBackStack.removeLast()
 }
 
+@JvmSynthetic
+internal fun NavController.clearBackStackEntry() {
+    mBackStack.clear()
+}
+
 // ≈ mBackStack.size <= 1
 @JvmSynthetic
 internal fun NavController.isNullRootNode(): Boolean {

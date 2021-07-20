@@ -109,7 +109,14 @@ class FragivityFragmentNavigator(
         val fragment = createFragment(destination, args)
         ft.add(containerId, fragment, generateBackStackName(backStack.size, destId))
 
-        val prevFragment = fragmentManager.primaryNavigationFragment
+        val isPushTo = args?.getBoolean(KEY_PUSH_TO, false) == true
+        val prevFragment = if (isPushTo) {
+            fragmentManager.fragments.forEach { ft.remove(it) }
+            null
+        } else {
+            fragmentManager.primaryNavigationFragment
+        }
+
         ft.setPrimaryNavigationFragment(fragment)
 
         val isSingleTopReplacement = !initialNavigation
@@ -273,6 +280,8 @@ class FragivityFragmentNavigator(
     companion object {
         private const val TAG = "FragivityNavigator"
         private const val KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds"
+
         internal const val KEY_POP_SELF = "Fragivity:PopSelf"
+        internal const val KEY_PUSH_TO = "Fragivity:PushTo"
     }
 }
