@@ -88,7 +88,7 @@ internal fun FragivityNavHost.pushInternal(
             node.appendRootRoute()
 
             // 记录开始id用于重建
-            viewModel.startNodeId = node.id
+            setStartNode(node.id)
         }
     }
 

@@ -1,6 +1,7 @@
 package androidx.navigation
 
 import android.os.Bundle
+import androidx.collection.valueIterator
 
 @JvmSynthetic
 internal fun NavController.findDestination(request: NavDeepLinkRequest): NavDestination? {
@@ -38,4 +39,14 @@ internal fun NavController.isNullRootNode(): Boolean {
 internal fun NavController.popBackStack(request: NavDeepLinkRequest, inclusive: Boolean): Boolean {
     val destination = findDestination(request) ?: return false
     return popBackStack(destination.id, inclusive)
+}
+
+@JvmSynthetic
+internal fun NavController.graphNodes(): List<NavDestination> {
+    val result = mutableListOf<NavDestination>()
+    graph.mNodes.valueIterator().forEach { node ->
+        node.parent = null
+        result.add(node)
+    }
+    return result
 }

@@ -81,7 +81,7 @@ internal fun NavHostFragment.setupGraph(startNode: NavDestination) {
             createGraph(startNode, block)
         }
 
-        fragivityHostViewModel.setUpNavHost(nodeViewModel, this)
+        setupNodeSaver(nodeViewModel)
     }
 }
 

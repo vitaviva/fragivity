@@ -4,6 +4,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragivityFragmentNavigator.Companion.KEY_PUSH_TO
 import androidx.fragment.app.Fragment
 import androidx.navigation.clearBackStackEntry
+import androidx.navigation.graphNodes
 import kotlin.reflect.KClass
 
 /**
@@ -11,38 +12,31 @@ import kotlin.reflect.KClass
  */
 @JvmSynthetic
 fun FragivityNavHost.pushTo(clazz: KClass<out Fragment>) {
-
     val node = getOrCreateNode(clazz)
-
-    // 删除原有parent(NavGraph)
     node.parent?.remove(node)
+    node.appendRootRoute()
 
-    // 清空所有node
-    viewModel.clearNodes()
-
-    // 重新保存
-    addNode(node)
+    val nodeSaver = nodeSaver
+    val navController = navController
 
     // 主动清空旧NavHost防止内存泄漏
-    val viewModel = viewModel
-    val navController = navController
     onCleared()
 
     // 修改开始id用于重建
-    viewModel.startNodeId = node.id
+    setStartNode(node.id)
 
     with(navController) {
         // 清空返回栈
         clearBackStackEntry()
 
-        node.appendRootRoute()
+        val oldNodes = graphNodes()
 
         // 重建graph
-        setGraph(createGraph(node), bundleOf(
-            KEY_PUSH_TO to true
-        ))
+        setGraph(createGraph(node) {
+            oldNodes.filterNot { it.hasRootRoute() }
+                .forEach { addDestination(it) }
+        }, bundleOf(KEY_PUSH_TO to true))
 
-        // 重新绑定nav范围的viewModel
-        fragivityHostViewModel.setUpNavHost(viewModel, this)
+        setupNodeSaver(nodeSaver)
     }
 }

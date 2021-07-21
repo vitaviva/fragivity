@@ -11,7 +11,7 @@ internal fun createRoute(route: String) = "android-app://androidx.navigation.fra
 
 @JvmSynthetic
 internal fun NavDestination.appendRootRoute() {
-    if (!hasDeepLink(DEFAULT_ROOT_ROUTE)) {
+    if (!hasRootRoute()) {
         appendDeepRoute(DEFAULT_ROOT_ROUTE)
     }
 }
@@ -27,7 +27,9 @@ internal fun NavDestination.hasDeepLink(route: String): Boolean {
 }
 
 @JvmSynthetic
-internal fun rootRequest() = DEFAULT_ROOT_ROUTE.toRequest()
+internal fun NavDestination.hasRootRoute(): Boolean {
+    return hasDeepLink(DEFAULT_ROOT_ROUTE)
+}
 
 @JvmSynthetic
 internal fun String.toRequest(): NavDeepLinkRequest {
