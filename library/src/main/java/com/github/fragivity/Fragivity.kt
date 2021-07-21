@@ -32,7 +32,7 @@ object Fragivity {
         fragmentClazz: Class<T>,
         factory: Function<Bundle, T>
     ) {
-        navHost.loadRoot(DEFAULT_ROOT_ROUTE, fragmentClazz.kotlin) { factory.apply(it) }
+        navHost.loadRoot(fragmentClazz.kotlin) { factory.apply(it) }
     }
 
     @JvmStatic

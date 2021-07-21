@@ -27,9 +27,13 @@ class LaunchModeFragment : AbsBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val num = arguments?.getInt(ARGUMENTS_NUM) ?: 0
+
         binding.btnStandard.setOnClickListener {
             navigator.push(LaunchModeFragment::class) {
-                applyArguments(ARGUMENTS_FROM to "Launch with Standard")
+                applyArguments(
+                    ARGUMENTS_NUM to num + 1
+                )
             }
         }
 
@@ -37,7 +41,10 @@ class LaunchModeFragment : AbsBaseFragment() {
             navigator.push(LaunchModeFragment::class) {
                 applySlideInOut()
                 applyLaunchMode(LaunchMode.SINGLE_TOP)
-                applyArguments(ARGUMENTS_FROM to "Launch with SingleTop")
+                applyArguments(
+                    ARGUMENTS_FROM to "SingleTop",
+                    ARGUMENTS_NUM to num
+                )
             }
         }
 
@@ -46,9 +53,21 @@ class LaunchModeFragment : AbsBaseFragment() {
                 ToNextFragment {
                     navigator.push(LaunchModeFragment::class) {
                         applyLaunchMode(LaunchMode.SINGLE_TASK)
-                        applyArguments(ARGUMENTS_FROM to "Launch with SingleTask")
+                        applyArguments(
+                            ARGUMENTS_FROM to "SingleTask",
+                            ARGUMENTS_NUM to num
+                        )
                     }
                 }
+            }
+        }
+
+        binding.btnPopSelf.setOnClickListener {
+            navigator.push(LaunchModeFragment::class) {
+                applyArguments(
+                    ARGUMENTS_NUM to num + 1
+                )
+                popSelf = true
             }
         }
 
@@ -62,8 +81,14 @@ class LaunchModeFragment : AbsBaseFragment() {
     }
 
     override val titleName: String
-        get() = arguments?.getString(ARGUMENTS_FROM) ?: "Launch Mode"
+        get() = "Launch ${arguments?.getString(ARGUMENTS_FROM, "Standard")} (${
+            arguments?.getInt(
+                ARGUMENTS_NUM,
+                0
+            )
+        })"
 
 }
 
 const val ARGUMENTS_FROM = "from"
+const val ARGUMENTS_NUM = "num"

@@ -12,8 +12,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
-const val DEFAULT_ROOT_ROUTE = "root"
-
 /**
  * Load root fragment by factory
  */
@@ -30,6 +28,14 @@ inline fun <reified T : Fragment> NavHostFragment.loadRoot(
 @JvmSynthetic
 fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>) {
     loadRoot(DEFAULT_ROOT_ROUTE, clazz)
+}
+
+@JvmSynthetic
+internal fun NavHostFragment.loadRoot(
+    clazz: KClass<out Fragment>,
+    block: ((Bundle) -> Fragment)? = null
+) {
+    loadRoot(DEFAULT_ROOT_ROUTE, clazz, block)
 }
 
 @JvmSynthetic
@@ -54,10 +60,8 @@ private fun NavHostFragment.loadRootInternal(
 ) {
     addFragivityNavigator()
     setupGraph(startNodeFactory().apply {
-        addDeepLink(createRoute(DEFAULT_ROOT_ROUTE))
-        if (DEFAULT_ROOT_ROUTE != route) {
-            addDeepLink(createRoute(route))
-        }
+        appendDeepRoute(route)
+        appendRootRoute()
     })
 }
 
@@ -90,6 +94,3 @@ private fun NavHostFragment.addFragivityNavigator() {
 private inline fun <reified T : ViewModel> NavHostFragment.getViewModel(): T {
     return ViewModelProvider(this, defaultViewModelProviderFactory).get(T::class.java)
 }
-
-@JvmSynthetic
-internal fun createRoute(route: String) = "android-app://androidx.navigation.fragivity/$route"

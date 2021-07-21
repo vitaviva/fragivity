@@ -52,10 +52,16 @@ class FragivityNodeViewModel(private val savedStateHandle: SavedStateHandle) : V
         get() = savedStateHandle.get<Int>(NAV_DEST_START_NODE)
 
     internal fun restoreDestination(navController: NavController, graphBuilder: NavGraphBuilder) {
+        val startNodeId = startNodeId
         navDestSequence()
             .mapNotNull { savedStateHandle.get<NavDestinationBundle>(it) }
             .map { it.toDestination(navController) }
-            .forEach { graphBuilder.addDestination(it) }
+            .forEach {
+                if (startNodeId == it.id) {
+                    it.appendRootRoute()
+                }
+                graphBuilder.addDestination(it)
+            }
     }
 
     fun addNode(node: NavDestination) {

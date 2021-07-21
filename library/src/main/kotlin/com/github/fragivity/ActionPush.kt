@@ -4,7 +4,6 @@
 package com.github.fragivity
 
 import android.os.Bundle
-import androidx.core.net.toUri
 import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.fragment.app.Fragment
 import androidx.navigation.*
@@ -17,8 +16,7 @@ fun FragivityNavHost.push(route: String, optionsBuilder: NavOptions.() -> Unit =
 
 @JvmSynthetic
 fun FragivityNavHost.push(route: String, navOptions: NavOptions?) {
-    val request = NavDeepLinkRequest.Builder.fromUri(createRoute(route).toUri()).build()
-    val (node, matchingArgs) = navController.findDestinationAndArgs(request) ?: return
+    val (node, matchingArgs) = navController.findDestinationAndArgs(route.toRequest()) ?: return
     pushInternal(node, navOptions, matchingArgs)
 }
 
@@ -78,13 +76,16 @@ internal fun FragivityNavHost.pushInternal(
     if (navOptions.popSelf) {
         // 删除BackStack的同时也删除graph中的node
         val oldNode = removeLastBackStackEntry()?.destination
-        if (oldNode != null) {
-            graph.remove(oldNode)
-            removeNode(oldNode)
-        }
+
         // 如果rootNode被删除了，认为新push的node为rootNode
         if (isNullRootNode()) {
-            node.addDeepLink(createRoute(DEFAULT_ROOT_ROUTE))
+            // 删除旧的rootNode
+            if (oldNode != null) {
+                graph.remove(oldNode)
+                removeNode(oldNode)
+            }
+
+            node.appendRootRoute()
 
             // 记录开始id用于重建
             viewModel.startNodeId = node.id

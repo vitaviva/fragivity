@@ -34,6 +34,12 @@
         android:text="PopBack To Home"/>
 
     <Button
+        android:id="@+id/btn_pop_self"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Push with popSelf"/>
+
+    <Button
         android:id="@+id/btn_pushtohome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

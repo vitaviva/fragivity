@@ -30,7 +30,7 @@ internal fun NavController.isNullRootNode(): Boolean {
     if (mBackStack.isEmpty()) return true
     return mBackStack.iterator().run {
         next() // pass NavGraph
-        hasNext()
+        hasNext().not()
     }
 }
 

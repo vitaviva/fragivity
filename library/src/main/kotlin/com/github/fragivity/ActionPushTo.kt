@@ -35,6 +35,8 @@ fun FragivityNavHost.pushTo(clazz: KClass<out Fragment>) {
         // 清空返回栈
         clearBackStackEntry()
 
+        node.appendRootRoute()
+
         // 重建graph
         setGraph(createGraph(node), bundleOf(
             KEY_PUSH_TO to true
