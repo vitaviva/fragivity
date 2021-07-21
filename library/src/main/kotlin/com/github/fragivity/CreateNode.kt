@@ -25,20 +25,24 @@ internal fun NavController.createNode(
 
 @JvmSynthetic
 internal fun NavController.createNode(
-    nodeId: Int, block: ((Bundle) -> Fragment)? = null
+    nodeId: Int, block: ((Bundle) -> Fragment)?,
+    label: CharSequence?
 ) = FragivityFragmentDestination(
     navigatorProvider[FragivityFragmentNavigator::class]
 ).apply {
     id = nodeId
     this.factory = block
+    this.label = label
 }
 
-private fun NavController.createNode(
+@JvmSynthetic
+internal fun NavController.createNode(
     nodeId: Int,
     clazz: KClass<out Fragment>,
-    block: ((Bundle) -> Fragment)? = null
+    block: ((Bundle) -> Fragment)? = null,
+    label: CharSequence? = clazz.qualifiedName
 ) = if (block != null) {
-    createNode(nodeId, block)
+    createNode(nodeId, block, label)
 } else {
     createNode(nodeId, clazz)
 }
@@ -48,10 +52,9 @@ internal fun FragivityNavHost.getOrCreateNode(
     clazz: KClass<out Fragment>,
     block: ((Bundle) -> Fragment)? = null
 ): FragmentNavigator.Destination {
-    val nodeId = clazz.positiveHashCode
-
     val graph = navController.graph
 
+    val nodeId = clazz.positiveHashCode
     var node = graph.findNode(nodeId) as? FragmentNavigator.Destination
     if (node == null) {
         node = navController.createNode(nodeId, clazz, block)

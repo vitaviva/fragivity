@@ -32,18 +32,16 @@ private fun NavHostFragment.composableInternal(
     arguments: List<NamedNavArgument>,
     factory: (Bundle) -> Fragment
 ) = with(navController) {
-    val internalRoute = createRoute(route)
-
     var node = graph.findNode(nodeId)
     if (node is FragivityFragmentDestination) {
         node.factory = factory
     } else {
-        node = createNode(nodeId, factory)
+        node = createNode(nodeId, factory, label = route)
         graph.addDestination(node)
     }
 
     node.apply {
-        addDeepLink(internalRoute)
+        appendDeepRoute(route)
         arguments.forEach { (argumentName, argument) ->
             addArgument(argumentName, argument)
         }

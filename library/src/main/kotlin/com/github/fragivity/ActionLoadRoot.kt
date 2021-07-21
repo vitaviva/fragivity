@@ -46,11 +46,7 @@ fun NavHostFragment.loadRoot(
 ) {
     loadRootInternal(route) {
         val id = clazz.positiveHashCode
-        if (block != null) {
-            navController.createNode(id, block)
-        } else {
-            navController.createNode(id, clazz)
-        }
+        navController.createNode(id, clazz, block, label = route)
     }
 }
 

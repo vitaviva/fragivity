@@ -79,7 +79,7 @@ private fun NavDestinationBundle.toDestination(navController: NavController): Na
         val clazz = Class.forName(className) as Class<Fragment>
         return navController.createNode(id, clazz.kotlin)
     }
-    return navController.createNode(id)
+    return navController.createNode(id, null, label)
 }
 
 private fun NavDestination.toBundle(): NavDestinationBundle {
@@ -89,8 +89,12 @@ private fun NavDestination.toBundle(): NavDestinationBundle {
         is DialogFragmentNavigator.Destination -> className
         else -> error("Invalid Destination")
     }
-    return NavDestinationBundle(id, clazzName)
+    return NavDestinationBundle(id, clazzName, label)
 }
 
 @Parcelize
-private data class NavDestinationBundle(val id: Int, val className: String) : Parcelable
+private data class NavDestinationBundle(
+    val id: Int,
+    val className: String,
+    val label: CharSequence?
+) : Parcelable
