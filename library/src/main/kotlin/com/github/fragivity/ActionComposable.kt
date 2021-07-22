@@ -48,5 +48,5 @@ private fun NavHostFragment.composableInternal(
     }
 
     // save destination for rebuild
-    navigator.addNode(node)
+    nodeSaver.addNode(node)
 }

@@ -48,18 +48,19 @@ internal fun NavController.createNode(
 }
 
 @JvmSynthetic
-internal fun FragivityNavHost.getOrCreateNode(
+internal fun NavController.getOrCreateNode(
     clazz: KClass<out Fragment>,
     block: ((Bundle) -> Fragment)? = null
 ): FragmentNavigator.Destination {
-    val graph = navController.graph
+    val graph = graph
+    val nodeSaver = nodeSaver
 
     val nodeId = clazz.positiveHashCode
     var node = graph.findNode(nodeId) as? FragmentNavigator.Destination
     if (node == null) {
-        node = navController.createNode(nodeId, clazz, block)
+        node = createNode(nodeId, clazz, block)
         graph += node
-        addNode(node)
+        nodeSaver.addNode(node)
         return node
     }
 
@@ -77,10 +78,10 @@ internal fun FragivityNavHost.getOrCreateNode(
 
     // rebuild destination
     graph -= node
-    removeNode(node)
+    nodeSaver.removeNode(node)
 
-    node = navController.createNode(nodeId, clazz, block)
+    node = createNode(nodeId, clazz, block)
     graph += node
-    addNode(node)
+    nodeSaver.addNode(node)
     return node
 }

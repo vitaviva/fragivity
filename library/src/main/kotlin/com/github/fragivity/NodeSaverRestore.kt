@@ -5,37 +5,48 @@ import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.NavHostFragment
 import kotlinx.parcelize.Parcelize
 
-sealed interface NodeSaver {
-    fun addNode(node: NavDestination)
-    fun removeNode(node: NavDestination)
-    fun setStartNode(nodeId: Int)
+val NavHostFragment.nodeSaver: RestoreNodeSaver
+    get() = ViewModelProvider(this, defaultViewModelProviderFactory)
+        .get(RestoreNodeSaverImpl::class.java)
+
+internal val RestoreNodeSaver.startNodeId: Int?
+    get() = (this as RestoreNodeSaverImpl).startNodeId
+
+@JvmSynthetic
+internal fun RestoreNodeSaver.restoreNodes(
+    navController: NavController,
+    graphBuilder: NavGraphBuilder
+) {
+    (this as RestoreNodeSaverImpl).restoreNodes(navController, graphBuilder)
 }
 
-class FragivityNodeViewModel(
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel(), NodeSaver {
+sealed interface RestoreNodeSaver : NodeSaver
 
-    val startNodeId: Int?
+class RestoreNodeSaverImpl(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel(), RestoreNodeSaver {
+
+    internal val startNodeId: Int?
         get() = savedStateHandle.get<Int>(NAV_DEST_START_NODE)
 
-    internal fun restoreDestination(navController: NavController, graphBuilder: NavGraphBuilder) {
-        val startNodeId = startNodeId
-        navDestSequence()
+    private val navDestSequence: Sequence<String>
+        get() = savedStateHandle.keys().asSequence()
+            .filter { it.startsWith(NAV_DEST_PREFIX) }
+
+    internal fun restoreNodes(navController: NavController, graphBuilder: NavGraphBuilder) {
+        navDestSequence
             .mapNotNull { savedStateHandle.get<NavDestinationBundle>(it) }
             .map { it.toDestination(navController) }
-            .forEach {
-                if (startNodeId == it.id) {
-                    it.appendRootRoute()
-                }
-                graphBuilder.addDestination(it)
-            }
+            .forEach { graphBuilder.addDestination(it) }
     }
 
     override fun addNode(node: NavDestination) {
@@ -56,15 +67,9 @@ class FragivityNodeViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        navDestSequence().forEach {
+        navDestSequence.forEach {
             savedStateHandle.remove<NavDestinationBundle>(it)
         }
-    }
-
-    private fun navDestSequence(): Sequence<String> {
-        return savedStateHandle.keys()
-            .asSequence()
-            .filter { it.startsWith(NAV_DEST_PREFIX) }
     }
 
     companion object {

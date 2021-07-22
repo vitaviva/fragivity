@@ -10,13 +10,13 @@ import androidx.navigation.*
 import kotlin.reflect.KClass
 
 @JvmSynthetic
-fun FragivityNavHost.push(route: String, optionsBuilder: NavOptions.() -> Unit = {}) {
+fun NavController.push(route: String, optionsBuilder: NavOptions.() -> Unit = {}) {
     push(route, navOptions(optionsBuilder))
 }
 
 @JvmSynthetic
-fun FragivityNavHost.push(route: String, navOptions: NavOptions?) {
-    val (node, matchingArgs) = navController.findDestinationAndArgs(route.toRequest()) ?: return
+fun NavController.push(route: String, navOptions: NavOptions?) {
+    val (node, matchingArgs) = findDestinationAndArgs(route.toRequest()) ?: return
     pushInternal(node, navOptions, matchingArgs)
 }
 
@@ -24,7 +24,7 @@ fun FragivityNavHost.push(route: String, navOptions: NavOptions?) {
  * Navigates to fragment of [clazz] by pushing it to back stack
  */
 @JvmSynthetic
-fun FragivityNavHost.push(
+fun NavController.push(
     clazz: KClass<out Fragment>,
     optionsBuilder: NavOptions.() -> Unit = {}
 ) {
@@ -32,7 +32,7 @@ fun FragivityNavHost.push(
 }
 
 @JvmSynthetic
-fun FragivityNavHost.push(
+fun NavController.push(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?
 ) {
@@ -43,7 +43,7 @@ fun FragivityNavHost.push(
  * Navigates to a fragment by its factory
  */
 @JvmSynthetic
-inline fun <reified T : Fragment> FragivityNavHost.push(
+inline fun <reified T : Fragment> NavController.push(
     noinline optionsBuilder: NavOptions.() -> Unit = {},
     noinline block: (Bundle) -> T
 ) {
@@ -51,7 +51,7 @@ inline fun <reified T : Fragment> FragivityNavHost.push(
 }
 
 @JvmSynthetic
-fun FragivityNavHost.push(
+fun NavController.push(
     clazz: KClass<out Fragment>,
     navOptions: NavOptions?,
     factory: (Bundle) -> Fragment
@@ -60,15 +60,17 @@ fun FragivityNavHost.push(
 }
 
 @JvmSynthetic
-internal fun FragivityNavHost.pushInternal(
+internal fun NavController.pushInternal(
     node: NavDestination,
     navOptions: NavOptions?,
     matchingArgs: Bundle? = null
-) = with(navController) {
+) {
     if (navOptions == null) {
         navigate(node.id)
-        return@with
+        return
     }
+
+    val nodeSaver = nodeSaver
 
     // fix https://github.com/vitaviva/fragivity/issues/31
     // popSelf为true时， mFragmentManager.mBackStack需要与NavController.mBackStack同步更新，
@@ -82,13 +84,13 @@ internal fun FragivityNavHost.pushInternal(
             // 删除旧的rootNode
             if (oldNode != null) {
                 graph.remove(oldNode)
-                removeNode(oldNode)
+                nodeSaver.removeNode(oldNode)
             }
 
             node.appendRootRoute()
 
             // 记录开始id用于重建
-            setStartNode(node.id)
+            nodeSaver.setStartNode(node.id)
         }
     }
 
@@ -113,7 +115,7 @@ internal fun FragivityNavHost.pushInternal(
                         navOptions.toBundle() + matchingArgs
                     )
                 }
-                return@with
+                return
             }
 
             // create target

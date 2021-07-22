@@ -4,9 +4,8 @@
 package com.github.fragivity
 
 import android.os.Bundle
-import androidx.fragment.app.*
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.FragivityFragmentNavigator
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.fragment.NavHostFragment
@@ -63,30 +62,26 @@ private fun NavHostFragment.loadRootInternal(
 
 @JvmSynthetic
 internal fun NavHostFragment.setupGraph(startNode: NavDestination) {
-    val nodeViewModel = getViewModel<FragivityNodeViewModel>()
-    with(navController) {
-        val block: NavGraphBuilder.() -> Unit = {
-            // restore destination from vm for NavController#mBackStackToRestore
-            nodeViewModel.restoreDestination(this@with, this)
-        }
+    val nodeSaver = nodeSaver
 
-        val startNodeId = nodeViewModel.startNodeId
+    val block: NavGraphBuilder.() -> Unit = {
+        nodeSaver.restoreNodes(navController, this)
+    }
+
+    with(navController) {
+        val startNodeId = nodeSaver.startNodeId
         graph = if (startNodeId != null) {
             createGraph(startNodeId, block)
         } else {
             createGraph(startNode, block)
         }
-
-        setupNodeSaver(nodeViewModel)
     }
+
+    navController.bridge(nodeSaver)
 }
 
 private fun NavHostFragment.addFragivityNavigator() {
     navController.navigatorProvider.addNavigator(
         FragivityFragmentNavigator(requireContext(), childFragmentManager, id)
     )
-}
-
-private inline fun <reified T : ViewModel> NavHostFragment.getViewModel(): T {
-    return ViewModelProvider(this, defaultViewModelProviderFactory).get(T::class.java)
 }
