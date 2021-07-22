@@ -1,3 +1,6 @@
+@file:JvmName("FragivityUtil")
+@file:JvmMultifileClass
+
 package com.github.fragivity
 
 import android.os.Bundle
