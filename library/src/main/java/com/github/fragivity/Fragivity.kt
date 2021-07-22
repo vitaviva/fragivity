@@ -99,6 +99,23 @@ object Fragivity {
         }
 
         @JvmOverloads
+        fun <T : Fragment> pushTo(
+            fragmentClazz: Class<T>,
+            navOptions: NavOptions? = null
+        ) {
+            _fragment.navigator.pushTo(fragmentClazz.kotlin, navOptions)
+        }
+
+        @JvmOverloads
+        fun <T : Fragment> pushTo(
+            fragmentClazz: Class<T>,
+            factory: Function<Bundle, T>,
+            navOptions: NavOptions? = null
+        ) {
+            _fragment.navigator.pushTo(fragmentClazz.kotlin, navOptions) { factory.apply(it) }
+        }
+
+        @JvmOverloads
         fun <T : DialogFragment> showDialog(
             fragmentClazz: Class<T>,
             args: Bundle? = null
