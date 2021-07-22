@@ -60,7 +60,7 @@ fun NavController.push(
 }
 
 @JvmSynthetic
-internal fun NavController.pushInternal(
+private fun NavController.pushInternal(
     node: NavDestination,
     navOptions: NavOptions?,
     matchingArgs: Bundle? = null
