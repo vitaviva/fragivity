@@ -76,7 +76,9 @@ class LaunchModeFragment : AbsBaseFragment() {
         }
 
         binding.btnPushtohome.setOnClickListener {
-            navigator.pushTo(HomeFragment::class)
+            navigator.pushTo(HomeFragment::class) {
+                applySlideInOut()
+            }
         }
     }
 

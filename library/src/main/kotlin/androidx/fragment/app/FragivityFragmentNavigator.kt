@@ -91,10 +91,23 @@ class FragivityFragmentNavigator(
 
         val ft = fragmentManager.beginTransaction()
 
-        var enterAnim = navOptions?.enterAnim ?: -1
-        var exitAnim = navOptions?.exitAnim ?: -1
-        var popEnterAnim = navOptions?.popEnterAnim ?: -1
-        var popExitAnim = navOptions?.popExitAnim ?: -1
+        val isPushTo = args?.getBoolean(KEY_PUSH_TO, false) == true
+        var enterAnim: Int
+        var exitAnim: Int
+        var popEnterAnim: Int
+        var popExitAnim: Int
+        if (isPushTo) {
+            enterAnim = args?.getInt(KEY_ENTER_ANIM) ?: -1
+            exitAnim = args?.getInt(KEY_EXIT_ANIM) ?: -1
+            popEnterAnim = args?.getInt(KEY_POP_ENTER_ANIM) ?: -1
+            popExitAnim = args?.getInt(KEY_POP_EXIT_ANIM) ?: -1
+        } else {
+            enterAnim = navOptions?.enterAnim ?: -1
+            exitAnim = navOptions?.exitAnim ?: -1
+            popEnterAnim = navOptions?.popEnterAnim ?: -1
+            popExitAnim = navOptions?.popExitAnim ?: -1
+        }
+
         if (enterAnim != -1 || exitAnim != -1 || popEnterAnim != -1 || popExitAnim != -1) {
             enterAnim = if (enterAnim != -1) enterAnim else 0
             exitAnim = if (exitAnim != -1) exitAnim else 0
@@ -109,7 +122,6 @@ class FragivityFragmentNavigator(
         val fragment = createFragment(destination, args)
         ft.add(containerId, fragment, generateBackStackName(backStack.size, destId))
 
-        val isPushTo = args?.getBoolean(KEY_PUSH_TO, false) == true
         val prevFragment = if (isPushTo) {
             fragmentManager.fragments.forEach { ft.remove(it) }
             null
@@ -283,5 +295,10 @@ class FragivityFragmentNavigator(
 
         internal const val KEY_POP_SELF = "Fragivity:PopSelf"
         internal const val KEY_PUSH_TO = "Fragivity:PushTo"
+
+        internal const val KEY_ENTER_ANIM = "Fragivity:enterAnim"
+        internal const val KEY_EXIT_ANIM = "Fragivity:exitAnim"
+        internal const val KEY_POP_ENTER_ANIM = "Fragivity:popEnterAnim"
+        internal const val KEY_POP_EXIT_ANIM = "Fragivity:popExitAnim"
     }
 }
