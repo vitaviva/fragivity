@@ -19,9 +19,11 @@ import kotlin.reflect.KClass
 
 /**
  * string hash容易冲突，使用System.identityHashCode离散hash
+ * 2021.08.06:
+ *  修改系统字体大小以后，System.identityHashCode结果会不同，暂时换回hashCode()
  */
 internal inline val Any.positiveHashCode: Int
-    get() = System.identityHashCode(this)
+    get() = this.hashCode()
 
 @JvmSynthetic
 internal fun View.appendBackground() {
