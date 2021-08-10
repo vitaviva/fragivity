@@ -28,27 +28,25 @@ fun NavHostFragment.composable(
 
 private fun NavHostFragment.composableInternal(
     route: String,
-    destinationId: Int,
+    nodeId: Int,
     arguments: List<NamedNavArgument>,
     factory: (Bundle) -> Fragment
-) {
-    val internalRoute = createRoute(route)
-
-    var node = navController.graph.findNode(destinationId)
+) = with(navController) {
+    var node = graph.findNode(nodeId)
     if (node is FragivityFragmentDestination) {
         node.factory = factory
     } else {
-        node = navController.createNavDestination(destinationId, factory)
-        navController.graph.addDestination(node)
+        node = createNode(nodeId, factory, label = route)
+        graph.addDestination(node)
     }
 
     node.apply {
-        addDeepLink(internalRoute)
+        appendDeepRoute(route)
         arguments.forEach { (argumentName, argument) ->
             addArgument(argumentName, argument)
         }
     }
 
     // save destination for rebuild
-    navController.navigator.saveToViewModel(node)
+    nodeSaver.addNode(node)
 }

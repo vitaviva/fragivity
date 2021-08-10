@@ -4,10 +4,10 @@
 package com.github.fragivity
 
 import android.os.Bundle
-import androidx.fragment.app.*
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.FragivityFragmentNavigator
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavDestination
-import androidx.navigation.createGraph
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
@@ -15,70 +15,73 @@ import kotlin.reflect.KClass
  * Load root fragment by factory
  */
 inline fun <reified T : Fragment> NavHostFragment.loadRoot(
-    route: String = "root",
+    route: String = DEFAULT_ROOT_ROUTE,
     noinline block: (Bundle) -> T
 ) {
     loadRoot(route, T::class, block)
-}
-
-@JvmSynthetic
-fun NavHostFragment.loadRoot(
-    clazz: KClass<out Fragment>,
-    block: (Bundle) -> Fragment
-) {
-    loadRoot("root", clazz, block)
-}
-
-@JvmSynthetic
-fun NavHostFragment.loadRoot(
-    route: String,
-    clazz: KClass<out Fragment>,
-    block: (Bundle) -> Fragment
-) {
-    loadRootInternal(route) {
-        navController.createNavDestination(clazz.positiveHashCode, block)
-    }
 }
 
 /**
  * Load root fragment
  */
 @JvmSynthetic
-fun NavHostFragment.loadRoot(root: KClass<out Fragment>) {
-    loadRoot("root", root)
+fun NavHostFragment.loadRoot(clazz: KClass<out Fragment>) {
+    loadRoot(DEFAULT_ROOT_ROUTE, clazz)
 }
 
 @JvmSynthetic
-fun NavHostFragment.loadRoot(route: String, clazz: KClass<out Fragment>) {
+internal fun NavHostFragment.loadRoot(
+    clazz: KClass<out Fragment>,
+    block: ((Bundle) -> Fragment)? = null
+) {
+    loadRoot(DEFAULT_ROOT_ROUTE, clazz, block)
+}
+
+@JvmSynthetic
+fun NavHostFragment.loadRoot(
+    route: String,
+    clazz: KClass<out Fragment>,
+    block: ((Bundle) -> Fragment)? = null
+) {
     loadRootInternal(route) {
-        navController.createNavDestination(clazz.positiveHashCode, clazz)
+        val id = clazz.positiveHashCode
+        navController.createNode(id, clazz, block, label = route)
     }
 }
 
 private fun NavHostFragment.loadRootInternal(
     route: String,
-    startDestinationFactory: () -> NavDestination
-) = with(navController) {
-    navigatorProvider.addNavigator(
-        FragivityFragmentNavigator(requireContext(), childFragmentManager, id)
-    )
-
-    val nodeViewModel = ViewModelProvider(
-        this@loadRootInternal,
-        defaultViewModelProviderFactory
-    ).get(FragivityNodeViewModel::class.java)
-
-    val startDestination = startDestinationFactory.invoke()
-    startDestination.addDeepLink(createRoute(route))
-
-    graph = createGraph(startDestination = startDestination.id) {
-        addDestination(startDestination)
-        // restore destination from vm for NavController#mBackStackToRestore
-        nodeViewModel.restoreDestination(this@with, this)
-    }
-
-    fragivityHostViewModel.setUpNavHost(nodeViewModel, this)
+    startNodeFactory: () -> NavDestination
+) {
+    addFragivityNavigator()
+    setupGraph(startNodeFactory().apply {
+        appendDeepRoute(route)
+        appendRootRoute()
+    })
 }
 
 @JvmSynthetic
-internal fun createRoute(route: String) = "android-app://androidx.navigation.fragivity/$route"
+internal fun NavHostFragment.setupGraph(startNode: NavDestination) {
+    val nodeSaver = nodeSaver
+
+    val block: NavGraphBuilder.() -> Unit = {
+        nodeSaver.restoreNodes(navController, this)
+    }
+
+    with(navController) {
+        val startNodeId = nodeSaver.startNodeId
+        graph = if (startNodeId != null) {
+            createGraph(startNodeId, block)
+        } else {
+            createGraph(startNode, block)
+        }
+    }
+
+    navController.bridge(nodeSaver)
+}
+
+private fun NavHostFragment.addFragivityNavigator() {
+    navController.navigatorProvider.addNavigator(
+        FragivityFragmentNavigator(requireContext(), childFragmentManager, id)
+    )
+}

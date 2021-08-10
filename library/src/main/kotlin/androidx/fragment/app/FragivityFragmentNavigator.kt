@@ -91,10 +91,23 @@ class FragivityFragmentNavigator(
 
         val ft = fragmentManager.beginTransaction()
 
-        var enterAnim = navOptions?.enterAnim ?: -1
-        var exitAnim = navOptions?.exitAnim ?: -1
-        var popEnterAnim = navOptions?.popEnterAnim ?: -1
-        var popExitAnim = navOptions?.popExitAnim ?: -1
+        val isPushTo = args?.getBoolean(KEY_PUSH_TO, false) == true
+        var enterAnim: Int
+        var exitAnim: Int
+        var popEnterAnim: Int
+        var popExitAnim: Int
+        if (isPushTo) {
+            enterAnim = args?.getInt(KEY_ENTER_ANIM) ?: -1
+            exitAnim = args?.getInt(KEY_EXIT_ANIM) ?: -1
+            popEnterAnim = args?.getInt(KEY_POP_ENTER_ANIM) ?: -1
+            popExitAnim = args?.getInt(KEY_POP_EXIT_ANIM) ?: -1
+        } else {
+            enterAnim = navOptions?.enterAnim ?: -1
+            exitAnim = navOptions?.exitAnim ?: -1
+            popEnterAnim = navOptions?.popEnterAnim ?: -1
+            popExitAnim = navOptions?.popExitAnim ?: -1
+        }
+
         if (enterAnim != -1 || exitAnim != -1 || popEnterAnim != -1 || popExitAnim != -1) {
             enterAnim = if (enterAnim != -1) enterAnim else 0
             exitAnim = if (exitAnim != -1) exitAnim else 0
@@ -109,7 +122,13 @@ class FragivityFragmentNavigator(
         val fragment = createFragment(destination, args)
         ft.add(containerId, fragment, generateBackStackName(backStack.size, destId))
 
-        val prevFragment = fragmentManager.primaryNavigationFragment
+        val prevFragment = if (isPushTo) {
+            fragmentManager.fragments.forEach { ft.remove(it) }
+            null
+        } else {
+            fragmentManager.primaryNavigationFragment
+        }
+
         ft.setPrimaryNavigationFragment(fragment)
 
         val isSingleTopReplacement = !initialNavigation
@@ -127,9 +146,9 @@ class FragivityFragmentNavigator(
             if (prevFragment != null) {
                 ft.remove(prevFragment)
                 fragment.mTag = generateBackStackName(backStack.size - 1, destId)
-                val size = fragmentManager.mBackStack.size
-                if (size > 0) {
-                    fragmentManager.mBackStack[size - 1].mOps
+                val backStack = fragmentManager.mBackStack
+                if (backStack != null && backStack.size > 0) {
+                    fragmentManager.mBackStack[backStack.size - 1].mOps
                         .filter { it.mCmd == OP_ADD && it.mFragment == prevFragment }
                         .forEach { it.mFragment = fragment }
                 }
@@ -155,6 +174,8 @@ class FragivityFragmentNavigator(
         ft.commit()
 
         if (isPopSelf) {
+            backStack.removeLast()
+            backStack.add(destId)
             return destination
         }
 
@@ -167,11 +188,11 @@ class FragivityFragmentNavigator(
     }
 
     private fun generateBackStackName(backStackIndex: Int, destinationId: Int): String {
-        return "${backStackIndex}-${destinationId}"
+        return "${backStackIndex}#${destinationId}"
     }
 
     private fun getDestinationId(backStackName: String): Int {
-        val split = backStackName.split("-")
+        val split = backStackName.split("#")
         if (split.size != 2) {
             throw IllegalStateException(
                 "Invalid back stack entry on the "
@@ -271,6 +292,13 @@ class FragivityFragmentNavigator(
     companion object {
         private const val TAG = "FragivityNavigator"
         private const val KEY_BACK_STACK_IDS = "myFragmentNavigator:backStackIds"
+
         internal const val KEY_POP_SELF = "Fragivity:PopSelf"
+        internal const val KEY_PUSH_TO = "Fragivity:PushTo"
+
+        internal const val KEY_ENTER_ANIM = "Fragivity:enterAnim"
+        internal const val KEY_EXIT_ANIM = "Fragivity:exitAnim"
+        internal const val KEY_POP_ENTER_ANIM = "Fragivity:popEnterAnim"
+        internal const val KEY_POP_EXIT_ANIM = "Fragivity:popExitAnim"
     }
 }

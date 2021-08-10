@@ -18,10 +18,17 @@ import androidx.navigation.fragment.NavHostFragment
 import kotlin.reflect.KClass
 
 /**
- * string hash容易冲突，使用System.identityHashCode离散hash，同时确保结果 > 0
+ * string hash容易冲突，使用System.identityHashCode离散hash
+ * 2021.08.06:
+ *  修改系统字体大小以后，System.identityHashCode结果会不同，暂时换回hashCode()
+ * 2021.08.06v2:
+ *  修改系统显示大小以后，KClass<out Fragment>.hashCode()也会不同，暂时使用this.java.name.hashCode()
  */
+internal inline val KClass<out Fragment>.positiveHashCode: Int
+    get() = this.java.name.hashCode()
+
 internal inline val Any.positiveHashCode: Int
-    get() = System.identityHashCode(this) and Int.MAX_VALUE
+    get() = this.hashCode()
 
 @JvmSynthetic
 internal fun View.appendBackground() {
