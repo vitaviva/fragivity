@@ -1,3 +1,7 @@
+## 0.3.0
+fix https://github.com/vitaviva/fragivity/issues/48
+fix https://github.com/vitaviva/fragivity/issues/49
+
 ## 0.2.9
 1. no need to use activity_main.xml 
 2. fix https://github.com/vitaviva/fragivity/issues/43
