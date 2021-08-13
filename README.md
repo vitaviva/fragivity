@@ -76,6 +76,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         proxyFragmentFactory()
+        // with java
+        // Fragivity.proxyFragmentFactory(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -90,6 +93,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
+
+> !Note: Add `proxyFragmentFactory()` to ensure that the fragments can run to `onStart/onStop`，before `super.onCreate()`
 
 ### 3. navigate to destination Fragment
 
