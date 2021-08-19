@@ -33,16 +33,16 @@ class HomeFragment : AbsBaseFragment(false) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher
-            .addCallback(this) {
-                val current = System.currentTimeMillis()
-                if (current - lastClickTime > 2000) {
-                    showToast("再按一次退出")
-                    lastClickTime = current
-                } else {
-                    finish()
-                }
-            }
+//        requireActivity().onBackPressedDispatcher
+//            .addCallback(this) {
+//                val current = System.currentTimeMillis()
+//                if (current - lastClickTime > 2000) {
+//                    showToast("再按一次退出")
+//                    lastClickTime = current
+//                } else {
+//                    finish()
+//                }
+//            }
     }
 
     override fun onCreateView(
