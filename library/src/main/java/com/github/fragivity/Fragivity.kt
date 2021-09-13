@@ -8,6 +8,10 @@ import com.github.fragivity.dialog.showDialog
 
 object Fragivity {
 
+    fun setNavOptionsFactory(factory: NavOptions.Factory?) {
+        NavOptions.setNavOptionsFactory(factory)
+    }
+
     @JvmStatic
     fun proxyFragmentFactory(activity: FragmentActivity) {
         activity.proxyFragmentFactory()
