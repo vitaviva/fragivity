@@ -1,3 +1,6 @@
+## 0.3.1
+resolve #56 ：add global NavOptions.Factory
+
 ## 0.3.0
 fix https://github.com/vitaviva/fragivity/issues/48
 fix https://github.com/vitaviva/fragivity/issues/49
