@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         FragmentManager.enableDebugLogging(true)
 
+        setupDefaultFragmentBackground()
+
         val navHostFragment = findOrCreateNavHostFragment(R.id.nav_host)
         navHostFragment.loadRoot(SplashFragment::class)
 //        //you also can loadRoot with a factory

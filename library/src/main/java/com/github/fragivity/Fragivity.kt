@@ -2,12 +2,30 @@ package com.github.fragivity
 
 import android.os.Bundle
 import androidx.arch.core.util.Function
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.*
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.dialog.showDialog
 
 object Fragivity {
+
+    fun setNavOptionsFactory(factory: NavOptions.Factory?) {
+        NavOptions.setNavOptionsFactory(factory)
+    }
+
+    @JvmStatic
+    fun proxyFragmentFactory(activity: FragmentActivity) {
+        activity.proxyFragmentFactory()
+    }
+
+    @JvmStatic
+    fun proxyFragmentFactory(manager: FragmentManager) {
+        manager.proxyFragmentFactory()
+    }
+
+    @JvmStatic
+    fun setupReportFragmentManager(navHost: NavHostFragment) {
+        navHost.setupReportFragmentManager()
+    }
 
     @JvmStatic
     fun <T : Fragment> loadRoot(

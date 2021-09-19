@@ -117,7 +117,7 @@ class FragivityFragmentNavigator(
         }
 
         val destId = destination.id
-        val initialNavigation = backStack.isEmpty()
+        val initialNavigation = backStack.isEmpty() || isPushTo
 
         val fragment = createFragment(destination, args)
         ft.add(containerId, fragment, generateBackStackName(backStack.size, destId))
@@ -172,6 +172,11 @@ class FragivityFragmentNavigator(
 
         ft.setReorderingAllowed(true)
         ft.commit()
+
+        if (isPushTo) {
+            // pushTo情况下清空返回栈
+            fragmentManager.mBackStack?.clear()
+        }
 
         if (isPopSelf) {
             backStack.removeLast()

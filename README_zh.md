@@ -81,6 +81,10 @@ Like `Navigation`, Fragivity needs a `NavHostFragment` as the host of ChildFragm
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        proxyFragmentFactory()
+        // with java
+        // Fragivity.proxyFragmentFactory(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -95,6 +99,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
+
+> !Note: 添加`proxyFragmentFactory()`确保fragments正常走到`onStart/onStop`，放在`super.onCreate()`之前
 
 ### 3. navigate to destination Fragment
 

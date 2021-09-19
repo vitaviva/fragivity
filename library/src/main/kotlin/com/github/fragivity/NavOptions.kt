@@ -39,6 +39,24 @@ interface NavOptions {
 
     @set:JvmSynthetic
     var sharedElements: Map<View, String>
+
+
+    fun interface Factory {
+        fun create(): NavOptions
+    }
+
+    companion object : Factory {
+
+        private var navOptionsFactory: Factory? = null
+
+        fun setNavOptionsFactory(factory: Factory?) {
+            navOptionsFactory = factory
+        }
+
+        override fun create(): NavOptions {
+            return navOptionsFactory?.create() ?: navOptions(isRaw = true)
+        }
+    }
 }
 
 @JvmSynthetic
@@ -100,7 +118,11 @@ fun NavOptions.applyHorizontalInOut() {
 }
 
 fun navOptions(optionsBuilder: NavOptions.() -> Unit = {}): NavOptions {
-    return NavOptionsDefault().apply(optionsBuilder)
+    return NavOptions.create().apply(optionsBuilder)
+}
+
+fun navOptions(isRaw: Boolean, optionsBuilder: NavOptions.() -> Unit = {}): NavOptions {
+    return (if (isRaw) NavOptionsDefault() else NavOptions.create()).apply(optionsBuilder)
 }
 
 private class NavOptionsDefault : NavOptions {
