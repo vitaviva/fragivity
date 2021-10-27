@@ -5,7 +5,6 @@ apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion Build.compile_sdk_version
-    buildToolsVersion Build.build_tool_version
     defaultConfig {
         applicationId "com.github.fragivity.example"
         minSdkVersion Build.min_sdk_version
@@ -14,11 +13,6 @@ android {
         versionName "1.0"
         multiDexEnabled = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath = true
-            }
-        }
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -30,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = "1.8"

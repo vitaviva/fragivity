@@ -3,6 +3,8 @@
     package="com.github.fragivity.example.flow">
 
     <application>
-        <activity android:name=".ui.MainActivity" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false" />
     </application>
 </manifest>
