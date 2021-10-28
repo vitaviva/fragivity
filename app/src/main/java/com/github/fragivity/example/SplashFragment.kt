@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.github.fragivity.applySlideInOut
 import com.github.fragivity.navigator
-import com.github.fragivity.push
+import com.github.fragivity.pushTo
 import kotlinx.coroutines.delay
 
 class SplashFragment : Fragment() {
@@ -33,7 +33,7 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launchWhenResumed {
             delay(500)
-            navigator.push(HomeFragment::class) {
+            navigator.pushTo(HomeFragment::class) {
                 popSelf = true
                 applySlideInOut()
             }
