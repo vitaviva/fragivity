@@ -123,7 +123,7 @@ class FragivityFragmentNavigator(
         ft.add(containerId, fragment, generateBackStackName(backStack.size, destId))
 
         val prevFragment = if (isPushTo) {
-            backStack.removeLast()
+            backStack.clear()
             fragmentManager.fragments.forEach { ft.remove(it) }
             fragmentManager.mBackStack?.clear()
             null
