@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.fragivity.example.AbsBaseFragment
+import com.github.fragivity.example.HomeFragment
 import com.github.fragivity.example.R
 import com.github.fragivity.example.databinding.FragmentCommBinding
 import com.github.fragivity.example.viewbinding.viewBinding
 import com.github.fragivity.navigator
 import com.github.fragivity.push
+import com.github.fragivity.pushTo
 
 
 class CommFragment : AbsBaseFragment() {
@@ -37,6 +39,9 @@ class CommFragment : AbsBaseFragment() {
 
         binding.btnCallback.setOnClickListener {
             navigator.push(com.github.fragivity.example.communicate.callback.CheckListFragment::class)
+        }
+        binding.btnGoHome.setOnClickListener {
+            navigator.pushTo(HomeFragment::class)
         }
     }
 
