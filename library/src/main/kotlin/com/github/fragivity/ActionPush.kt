@@ -15,12 +15,12 @@ import androidx.navigation.removeLastBackStackEntry
 import kotlin.reflect.KClass
 
 @JvmSynthetic
-fun NavController.push(route: String, optionsBuilder: NavOptions.() -> Unit = {}) {
-    push(route, navOptions(optionsBuilder))
+fun NavController.push(route: String, optionsBuilder: MoreNavOptionsBuilder.() -> Unit = {}) {
+    push(route, moreNavOptions(optionsBuilder))
 }
 
 @JvmSynthetic
-fun NavController.push(route: String, navOptions: NavOptions?) {
+fun NavController.push(route: String, navOptions: MoreNavOptions?) {
     val (node, matchingArgs) = findDestinationAndArgs(route.toRequest()) ?: return
     pushInternal(node, navOptions, matchingArgs)
 }
@@ -31,15 +31,15 @@ fun NavController.push(route: String, navOptions: NavOptions?) {
 @JvmSynthetic
 fun NavController.push(
     clazz: KClass<out Fragment>,
-    optionsBuilder: NavOptions.() -> Unit = {}
+    optionsBuilder: MoreNavOptionsBuilder.() -> Unit = {}
 ) {
-    push(clazz, navOptions(optionsBuilder))
+    push(clazz, moreNavOptions(optionsBuilder))
 }
 
 @JvmSynthetic
 fun NavController.push(
     clazz: KClass<out Fragment>,
-    navOptions: NavOptions?
+    navOptions: MoreNavOptions?
 ) {
     pushInternal(getOrCreateNode(clazz), navOptions)
 }
@@ -49,16 +49,16 @@ fun NavController.push(
  */
 @JvmSynthetic
 inline fun <reified T : Fragment> NavController.push(
-    noinline optionsBuilder: NavOptions.() -> Unit = {},
+    noinline optionsBuilder: MoreNavOptionsBuilder.() -> Unit = {},
     noinline block: (Bundle) -> T
 ) {
-    push(T::class, navOptions(optionsBuilder), block)
+    push(T::class, moreNavOptions(optionsBuilder), block)
 }
 
 @JvmSynthetic
 fun NavController.push(
     clazz: KClass<out Fragment>,
-    navOptions: NavOptions?,
+    navOptions: MoreNavOptions?,
     factory: (Bundle) -> Fragment
 ) {
     pushInternal(getOrCreateNode(clazz, factory), navOptions)
@@ -67,7 +67,7 @@ fun NavController.push(
 @JvmSynthetic
 private fun NavController.pushInternal(
     node: NavDestination,
-    navOptions: NavOptions?,
+    navOptions: MoreNavOptions?,
     matchingArgs: Bundle? = null
 ) {
     if (navOptions == null) {

@@ -18,12 +18,12 @@ import androidx.navigation.graphNodes
 import kotlin.reflect.KClass
 
 @JvmSynthetic
-fun NavController.pushTo(route: String, optionsBuilder: NavOptions.() -> Unit = {}) {
-    pushTo(route, navOptions(optionsBuilder))
+fun NavController.pushTo(route: String, optionsBuilder: MoreNavOptionsBuilder.() -> Unit = {}) {
+    pushTo(route, moreNavOptions(optionsBuilder))
 }
 
 @JvmSynthetic
-fun NavController.pushTo(route: String, navOptions: NavOptions?) {
+fun NavController.pushTo(route: String, navOptions: MoreNavOptions?) {
     val (node, matchingArgs) = findDestinationAndArgs(route.toRequest()) ?: return
     pushToInternal(node, navOptions, matchingArgs)
 }
@@ -31,28 +31,28 @@ fun NavController.pushTo(route: String, navOptions: NavOptions?) {
 @JvmSynthetic
 fun NavController.pushTo(
     clazz: KClass<out Fragment>,
-    optionsBuilder: NavOptions.() -> Unit = {}
+    optionsBuilder: MoreNavOptionsBuilder.() -> Unit = {}
 ) {
-    pushTo(clazz, navOptions(optionsBuilder))
+    pushTo(clazz, moreNavOptions(optionsBuilder))
 }
 
 @JvmSynthetic
-fun NavController.pushTo(clazz: KClass<out Fragment>, navOptions: NavOptions?) {
+fun NavController.pushTo(clazz: KClass<out Fragment>, navOptions: MoreNavOptions?) {
     pushToInternal(getOrCreateNode(clazz), navOptions)
 }
 
 @JvmSynthetic
 inline fun <reified T : Fragment> NavController.pushTo(
-    noinline optionsBuilder: NavOptions.() -> Unit = {},
+    noinline optionsBuilder: MoreNavOptionsBuilder.() -> Unit = {},
     noinline block: (Bundle) -> T
 ) {
-    pushTo(T::class, navOptions(optionsBuilder), block)
+    pushTo(T::class, moreNavOptions(optionsBuilder), block)
 }
 
 @JvmSynthetic
 fun NavController.pushTo(
     clazz: KClass<out Fragment>,
-    navOptions: NavOptions?,
+    navOptions: MoreNavOptions?,
     factory: (Bundle) -> Fragment
 ) {
     pushToInternal(getOrCreateNode(clazz, factory), navOptions)
@@ -63,7 +63,7 @@ fun NavController.pushTo(
  */
 private fun NavController.pushToInternal(
     node: NavDestination,
-    navOptions: NavOptions?,
+    navOptions: MoreNavOptions?,
     matchingArgs: Bundle? = null
 ) {
     node.parent?.remove(node)

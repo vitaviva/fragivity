@@ -3,9 +3,9 @@ package com.github.fragivity.example
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
-import com.github.fragivity.NavOptions
+import com.github.fragivity.MoreNavOptions
 import com.github.fragivity.applyHorizontalInOut
-import com.github.fragivity.navOptions
+import com.github.fragivity.setFactory
 
 class DemoApp : Application() {
     override fun attachBaseContext(base: Context?) {
@@ -15,10 +15,8 @@ class DemoApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        NavOptions.setNavOptionsFactory {
-            navOptions(isRaw = true) {
-                applyHorizontalInOut()
-            }
+        MoreNavOptions.setFactory {
+            applyHorizontalInOut()
         }
     }
 }
