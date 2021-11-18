@@ -6,7 +6,8 @@ import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
 
 class NavOptionsBuilder internal constructor() {
-    private val navOptions = navOptions()
+
+    private val navOptions: MoreNavOptionsBuilder = Fragivity.factoryBuilder.navOptions.copy()
 
     fun setLaunchMode(mode: LaunchMode) =
         also { navOptions.launchMode = mode }
@@ -18,21 +19,21 @@ class NavOptionsBuilder internal constructor() {
         also { navOptions.arguments = bundle }
 
     fun setEnterAnim(@AnimRes @AnimatorRes enterAnim: Int) =
-        also { navOptions.enterAnim = enterAnim }
+        also { navOptions.anim.enter = enterAnim }
 
     fun setExitAnim(@AnimRes @AnimatorRes exitAnim: Int) =
-        also { navOptions.exitAnim = exitAnim }
+        also { navOptions.anim.exit = exitAnim }
 
     fun setPopEnterAnim(@AnimRes @AnimatorRes popEnterAnim: Int) =
-        also { navOptions.popEnterAnim = popEnterAnim }
+        also { navOptions.anim.popEnter = popEnterAnim }
 
     fun setPopExitAnim(@AnimRes @AnimatorRes popExitAnim: Int) =
-        also { navOptions.popExitAnim = popExitAnim }
+        also { navOptions.anim.popExit = popExitAnim }
 
     fun setSharedElements(sharedElements: Map<View, String>) =
         also { navOptions.sharedElements = sharedElements }
 
-    fun build(): NavOptions {
-        return navOptions
+    fun build(): MoreNavOptions {
+        return navOptions.build()
     }
 }

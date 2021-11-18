@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragivityFragmentNavigator.Companion.KEY_POP_SELF
+import androidx.navigation.AnimBuilder
 import androidx.navigation.NavOptionsBuilder
 
 fun moreNavOptions(builder: MoreNavOptionsFactory = {}): MoreNavOptions {
     return MoreNavOptionsBuilder(builder).build()
 }
 
-class MoreNavOptionsBuilder internal constructor(factory: MoreNavOptionsFactory) {
+class MoreNavOptionsBuilder internal constructor(factory: MoreNavOptionsFactory = {}) {
 
     private var optionsBuilders: List<NavOptionsBuilder.() -> Unit> = emptyList()
     var launchMode: LaunchMode = LaunchMode.STANDARD
     var popSelf: Boolean = false
     var arguments: Bundle = Bundle.EMPTY
     var sharedElements: Map<View, String> = emptyMap()
+    var anim = AnimBuilder()
 
     init {
         MoreNavOptions.commonFactory(this)
@@ -25,6 +27,17 @@ class MoreNavOptionsBuilder internal constructor(factory: MoreNavOptionsFactory)
 
     fun navOptions(optionsBuilder: NavOptionsBuilder.() -> Unit) = also {
         it.optionsBuilders += optionsBuilder
+    }
+
+    internal fun copy(): MoreNavOptionsBuilder {
+        return MoreNavOptionsBuilder().also {
+            it.optionsBuilders = optionsBuilders
+            it.launchMode = launchMode
+            it.popSelf = popSelf
+            it.arguments = arguments
+            it.sharedElements = sharedElements
+            it.anim = anim
+        }
     }
 
     internal fun build(): MoreNavOptions {
@@ -41,7 +54,8 @@ class MoreNavOptionsBuilder internal constructor(factory: MoreNavOptionsFactory)
             launchMode = launchMode,
             popSelf = popSelf,
             arguments = arguments,
-            sharedElements = sharedElements
+            sharedElements = sharedElements,
+            anim = anim
         )
     }
 }
@@ -59,7 +73,7 @@ fun MoreNavOptionsBuilder.applySharedElements(vararg sharedElements: Pair<View, 
 }
 
 fun MoreNavOptionsBuilder.applySlideInOut() = navOptions {
-    anim {
+    anim.run {
         enter = R.anim.slide_in
         exit = R.anim.slide_out
         popEnter = R.anim.slide_in_pop
@@ -68,7 +82,7 @@ fun MoreNavOptionsBuilder.applySlideInOut() = navOptions {
 }
 
 fun MoreNavOptionsBuilder.applyVerticalInOut() = navOptions {
-    anim {
+    anim.run {
         enter = R.anim.v_fragment_enter
         exit = R.anim.v_fragment_exit
         popEnter = R.anim.v_fragment_pop_enter
@@ -77,7 +91,7 @@ fun MoreNavOptionsBuilder.applyVerticalInOut() = navOptions {
 }
 
 fun MoreNavOptionsBuilder.applyHorizontalInOut() = navOptions {
-    anim {
+    anim.run {
         enter = R.anim.h_fragment_enter
         exit = R.anim.h_fragment_exit
         popEnter = R.anim.h_fragment_pop_enter

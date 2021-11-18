@@ -13,8 +13,11 @@ import com.github.fragivity.dialog.showDialog
 
 object Fragivity {
 
-    fun setNavOptionsFactory(factory: NavOptions.Factory?) {
-        NavOptions.setNavOptionsFactory(factory)
+    internal var factoryBuilder = NavOptionsBuilder()
+
+    @JvmStatic
+    fun setNavOptionsFactory(factory: NavOptionsBuilder) {
+        factoryBuilder = factory
     }
 
     @JvmStatic
@@ -107,7 +110,7 @@ object Fragivity {
         @JvmOverloads
         fun <T : Fragment> push(
             fragmentClazz: Class<T>,
-            navOptions: NavOptions? = null
+            navOptions: MoreNavOptions? = null
         ) {
             _fragment.navigator.push(fragmentClazz.kotlin, navOptions)
         }
@@ -116,7 +119,7 @@ object Fragivity {
         fun <T : Fragment> push(
             fragmentClazz: Class<T>,
             factory: Function<Bundle, T>,
-            navOptions: NavOptions? = null
+            navOptions: MoreNavOptions? = null
         ) {
             _fragment.navigator.push(fragmentClazz.kotlin, navOptions) { factory.apply(it) }
         }
@@ -124,7 +127,7 @@ object Fragivity {
         @JvmOverloads
         fun <T : Fragment> pushTo(
             fragmentClazz: Class<T>,
-            navOptions: NavOptions? = null
+            navOptions: MoreNavOptions? = null
         ) {
             _fragment.navigator.pushTo(fragmentClazz.kotlin, navOptions)
         }
@@ -133,7 +136,7 @@ object Fragivity {
         fun <T : Fragment> pushTo(
             fragmentClazz: Class<T>,
             factory: Function<Bundle, T>,
-            navOptions: NavOptions? = null
+            navOptions: MoreNavOptions? = null
         ) {
             _fragment.navigator.pushTo(fragmentClazz.kotlin, navOptions) { factory.apply(it) }
         }
@@ -147,7 +150,7 @@ object Fragivity {
         }
 
         @JvmOverloads
-        fun push(route: String, navOptions: NavOptions? = null) {
+        fun push(route: String, navOptions: MoreNavOptions? = null) {
             _fragment.navigator.push(route, navOptions)
         }
 

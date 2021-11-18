@@ -3,6 +3,7 @@ package com.github.fragivity
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.IdRes
+import androidx.navigation.AnimBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.fragment.FragmentNavigator
 
@@ -15,7 +16,8 @@ class MoreNavOptions internal constructor(
     val launchMode: LaunchMode,
     val popSelf: Boolean,
     val arguments: Bundle,
-    val sharedElements: Map<View, String>
+    val sharedElements: Map<View, String>,
+    val anim: AnimBuilder,
 ) {
     companion object {
         internal var commonFactory: MoreNavOptionsFactory = {}
@@ -28,11 +30,19 @@ internal fun MoreNavOptions.toBundle() = arguments
 @JvmSynthetic
 internal fun MoreNavOptions.totOptions(@IdRes destinationId: Int? = null) = androidx.navigation.navOptions {
     optionsBuilders.forEach { builder -> builder() }
+
     launchSingleTop = launchMode == LaunchMode.SINGLE_TOP
     if (launchMode == LaunchMode.SINGLE_TASK && destinationId != null) {
         popUpTo(destinationId) {
             inclusive = true
         }
+    }
+
+    anim {
+        enter = anim.enter
+        exit = anim.exit
+        popEnter = anim.popEnter
+        popExit = anim.popExit
     }
 }
 

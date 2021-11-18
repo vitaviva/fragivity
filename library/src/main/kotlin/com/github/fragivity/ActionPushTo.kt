@@ -84,10 +84,10 @@ private fun NavController.pushToInternal(
     bundle.putBoolean(KEY_PUSH_TO, true)
     if (navOptions != null) {
         bundle.putAll(navOptions.arguments)
-        bundle.putInt(KEY_ENTER_ANIM, navOptions.enterAnim)
-        bundle.putInt(KEY_EXIT_ANIM, navOptions.exitAnim)
-        bundle.putInt(KEY_POP_ENTER_ANIM, navOptions.popEnterAnim)
-        bundle.putInt(KEY_POP_EXIT_ANIM, navOptions.popExitAnim)
+        bundle.putInt(KEY_ENTER_ANIM, navOptions.anim.enter)
+        bundle.putInt(KEY_EXIT_ANIM, navOptions.anim.exit)
+        bundle.putInt(KEY_POP_ENTER_ANIM, navOptions.anim.popEnter)
+        bundle.putInt(KEY_POP_EXIT_ANIM, navOptions.anim.popExit)
     }
     if (matchingArgs != null) {
         bundle.putAll(matchingArgs)
