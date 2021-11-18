@@ -6,7 +6,12 @@ package com.github.fragivity
 import android.os.Bundle
 import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.fragment.app.Fragment
-import androidx.navigation.*
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.Navigator
+import androidx.navigation.findDestinationAndArgs
+import androidx.navigation.isNullRootNode
+import androidx.navigation.removeLastBackStackEntry
 import kotlin.reflect.KClass
 
 @JvmSynthetic

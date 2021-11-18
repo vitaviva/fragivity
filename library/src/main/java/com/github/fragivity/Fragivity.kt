@@ -2,7 +2,12 @@ package com.github.fragivity
 
 import android.os.Bundle
 import androidx.arch.core.util.Function
-import androidx.fragment.app.*
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.proxyFragmentFactory
+import androidx.fragment.app.setupReportFragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.github.fragivity.dialog.showDialog
 

@@ -5,7 +5,6 @@ import android.view.View
 import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
 
-
 class NavOptionsBuilder internal constructor() {
     private val navOptions = navOptions()
 

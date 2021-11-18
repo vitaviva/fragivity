@@ -3,7 +3,11 @@
 
 package com.github.fragivity
 
-import androidx.navigation.*
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.createGraph
 
 @JvmSynthetic
 internal fun NavController.createGraph(

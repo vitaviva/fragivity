@@ -14,7 +14,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.res.use
 import com.github.fragivity.R
-import java.util.*
+import java.util.ArrayDeque
 
 internal class DebugHierarchyViewContainer @JvmOverloads constructor(
     context: Context,

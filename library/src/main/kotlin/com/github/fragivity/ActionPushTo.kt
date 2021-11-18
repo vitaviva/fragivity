@@ -10,7 +10,11 @@ import androidx.fragment.app.FragivityFragmentNavigator.Companion.KEY_POP_ENTER_
 import androidx.fragment.app.FragivityFragmentNavigator.Companion.KEY_POP_EXIT_ANIM
 import androidx.fragment.app.FragivityFragmentNavigator.Companion.KEY_PUSH_TO
 import androidx.fragment.app.Fragment
-import androidx.navigation.*
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.clearBackStackEntry
+import androidx.navigation.findDestinationAndArgs
+import androidx.navigation.graphNodes
 import kotlin.reflect.KClass
 
 @JvmSynthetic

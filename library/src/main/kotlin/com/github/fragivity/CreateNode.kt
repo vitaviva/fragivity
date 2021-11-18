@@ -7,8 +7,11 @@ import android.os.Bundle
 import androidx.fragment.app.FragivityFragmentDestination
 import androidx.fragment.app.FragivityFragmentNavigator
 import androidx.fragment.app.Fragment
-import androidx.navigation.*
+import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.get
+import androidx.navigation.minusAssign
+import androidx.navigation.plusAssign
 import com.github.fragivity.deeplink.getRouteUri
 import kotlin.reflect.KClass
 
