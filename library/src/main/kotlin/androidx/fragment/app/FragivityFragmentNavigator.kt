@@ -124,7 +124,13 @@ class FragivityFragmentNavigator(
 
         val prevFragment = if (isPushTo) {
             backStack.clear()
-            fragmentManager.fragments.forEach { ft.remove(it) }
+            fragmentManager.fragments.reversed().forEach {
+                ft.remove(it)
+                if (it.mState == Fragment.STARTED) {
+                    it.mState = Fragment.ACTIVITY_CREATED
+                }
+                fragmentManager.moveToState(it, Fragment.INITIALIZING)
+            }
             fragmentManager.mBackStack?.clear()
             null
         } else {
