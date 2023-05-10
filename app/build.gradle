@@ -5,7 +5,7 @@ apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion Build.compile_sdk_version
-    buildToolsVersion Build.build_tool_version
+//    buildToolsVersion Build.build_tool_version
     defaultConfig {
         applicationId "com.github.fragivity.example"
         minSdkVersion Build.min_sdk_version
@@ -62,11 +62,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
 }
 
 
 //TODO：高版本Fragment，当同时应用Transition和applySlideIn时动画失效(原因待调查)，暂时降到1.3.0-alpha07
-configurations.all {
-    resolutionStrategy.force "androidx.fragment:fragment:1.3.0-alpha07"
-}
+//configurations.all {
+//    resolutionStrategy.force "androidx.fragment:fragment:1.3.0-alpha07"
+//}
