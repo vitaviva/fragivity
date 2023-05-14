@@ -37,7 +37,7 @@ class FragivityFragmentNavigator(
                         // 切到后台时的生命周期
                         val fragment = fragmentManager.fragments[size - 2]
                         // fragment onResume -> onStop
-                        fragmentManager.moveToState(fragment, Fragment.ACTIVITY_CREATED)
+                        fragmentManager.moveToState(Fragment.ACTIVITY_CREATED, false)
                         fragment.mState = Fragment.STARTED
                         fragment.mMaxState = Lifecycle.State.STARTED
                     }

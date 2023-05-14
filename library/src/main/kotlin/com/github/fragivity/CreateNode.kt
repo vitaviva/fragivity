@@ -19,7 +19,7 @@ internal fun NavController.createNode(
     navigatorProvider[FragivityFragmentNavigator::class]
 ).apply {
     id = nodeId
-    className = clazz.java.name
+    setClassName(clazz.java.name)
     label = clazz.qualifiedName
     getRouteUri(clazz)?.let {
         addDeepLink(it)

@@ -79,4 +79,7 @@ fun FragmentManager.proxyFragmentFactory() {
 
 fun FragmentActivity.proxyFragmentFactory() {
     supportFragmentManager.proxyFragmentFactory()
+    supportFragmentManager.setSpecialEffectsControllerFactory {
+        FragivityEffectsController(it)
+    }
 }

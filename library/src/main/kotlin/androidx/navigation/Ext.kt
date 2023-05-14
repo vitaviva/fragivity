@@ -17,19 +17,19 @@ internal fun NavController.findDestinationAndArgs(
 
 @JvmSynthetic
 internal fun NavController.removeLastBackStackEntry(): NavBackStackEntry? {
-    return mBackStack.removeLast()
+    return backQueue.removeLast()
 }
 
 @JvmSynthetic
 internal fun NavController.clearBackStackEntry() {
-    mBackStack.clear()
+    backQueue.clear()
 }
 
-// ≈ mBackStack.size <= 1
+// ≈ backQueue.size <= 1
 @JvmSynthetic
 internal fun NavController.isNullRootNode(): Boolean {
-    if (mBackStack.isEmpty()) return true
-    return mBackStack.iterator().run {
+    if (backQueue.isEmpty()) return true
+    return backQueue.iterator().run {
         next() // pass NavGraph
         hasNext().not()
     }
@@ -44,7 +44,7 @@ internal fun NavController.popBackStack(request: NavDeepLinkRequest, inclusive: 
 @JvmSynthetic
 internal fun NavController.graphNodes(): List<NavDestination> {
     val result = mutableListOf<NavDestination>()
-    graph.mNodes.valueIterator().forEach { node ->
+    graph.nodes.valueIterator().forEach { node ->
         node.parent = null
         result.add(node)
     }
